@@ -1,0 +1,201 @@
+<?php
+/**
+ * ACF Custom Fields Logic & Helper Functions.
+ *
+ * @package Custom_Theme
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Helper function to safely get an ACF field with fallback default.
+ *
+ * @param string $field_name Field key or name.
+ * @param mixed  $post_id    Post ID or option name.
+ * @param mixed  $default    Default fallback value.
+ * @return mixed
+ */
+function custom_theme_get_field( $field_name, $post_id = false, $default = '' ) {
+	if ( function_exists( 'get_field' ) ) {
+		$value = get_field( $field_name, $post_id );
+		return ! empty( $value ) ? $value : $default;
+	}
+	return $default;
+}
+
+/**
+ * Helper function to safely get an ACF sub field with fallback default.
+ *
+ * @param string $field_name Sub field key or name.
+ * @param mixed  $default    Default fallback value.
+ * @return mixed
+ */
+function custom_theme_get_sub_field( $field_name, $default = '' ) {
+	if ( function_exists( 'get_sub_field' ) ) {
+		$value = get_sub_field( $field_name );
+		return ! empty( $value ) ? $value : $default;
+	}
+	return $default;
+}
+
+/**
+ * Helper function to safely parse cloned Heading Fields.
+ *
+ * @param string $prefix Optional prefix for cloned sub fields.
+ * @return array
+ */
+function custom_theme_get_heading_fields( $prefix = '' ) {
+	$eyebrow    = custom_theme_get_sub_field( $prefix . 'eyebrow' );
+	$heading    = custom_theme_get_sub_field( $prefix . 'heading' );
+	$subheading = custom_theme_get_sub_field( $prefix . 'subheading' );
+
+	if ( empty( $eyebrow ) ) {
+		$eyebrow = custom_theme_get_field( $prefix . 'eyebrow' );
+	}
+	if ( empty( $heading ) ) {
+		$heading = custom_theme_get_field( $prefix . 'heading' );
+	}
+	if ( empty( $subheading ) ) {
+		$subheading = custom_theme_get_field( $prefix . 'subheading' );
+	}
+
+	return array(
+		'eyebrow'    => $eyebrow,
+		'heading'    => $heading,
+		'subheading' => $subheading,
+	);
+}
+
+/**
+ * Helper function to safely parse cloned Button Fields.
+ *
+ * @param string $prefix Optional prefix for cloned sub fields.
+ * @return array
+ */
+function custom_theme_get_button_fields( $prefix = '' ) {
+	$text    = custom_theme_get_sub_field( $prefix . 'button_text' );
+	$link    = custom_theme_get_sub_field( $prefix . 'button_link' );
+	$style   = custom_theme_get_sub_field( $prefix . 'button_style' );
+	$new_tab = custom_theme_get_sub_field( $prefix . 'new_tab' );
+
+	if ( empty( $text ) ) {
+		$text = custom_theme_get_field( $prefix . 'button_text' );
+	}
+	if ( empty( $link ) ) {
+		$link = custom_theme_get_field( $prefix . 'button_link' );
+	}
+	if ( empty( $style ) ) {
+		$style = custom_theme_get_field( $prefix . 'button_style', false, 'primary' );
+	}
+
+	return array(
+		'text'   => $text,
+		'link'   => $link,
+		'style'  => $style,
+		'target' => $new_tab ? '_blank' : '_self',
+	);
+}
+
+/**
+ * Helper function to safely parse cloned Section Settings.
+ *
+ * @param string $prefix Optional prefix for cloned sub fields.
+ * @return array
+ */
+function custom_theme_get_section_settings( $prefix = '' ) {
+	$id             = custom_theme_get_sub_field( $prefix . 'section_id' );
+	$bg_color       = custom_theme_get_sub_field( $prefix . 'background_color' );
+	$spacing_top    = custom_theme_get_sub_field( $prefix . 'spacing_top' );
+	$spacing_bottom = custom_theme_get_sub_field( $prefix . 'spacing_bottom' );
+
+	if ( empty( $id ) ) {
+		$id = custom_theme_get_field( $prefix . 'section_id' );
+	}
+	if ( empty( $bg_color ) ) {
+		$bg_color = custom_theme_get_field( $prefix . 'background_color', false, 'default' );
+	}
+	if ( empty( $spacing_top ) ) {
+		$spacing_top = custom_theme_get_field( $prefix . 'spacing_top', false, 'default' );
+	}
+	if ( empty( $spacing_bottom ) ) {
+		$spacing_bottom = custom_theme_get_field( $prefix . 'spacing_bottom', false, 'default' );
+	}
+
+	$classes = array();
+	if ( ! empty( $bg_color ) && 'default' !== $bg_color ) {
+		$classes[] = 'section-bg-' . sanitize_html_class( $bg_color );
+	}
+	if ( ! empty( $spacing_top ) && 'default' !== $spacing_top && 'normal' !== $spacing_top ) {
+		$classes[] = 'section-pt-' . sanitize_html_class( $spacing_top );
+	}
+	if ( ! empty( $spacing_bottom ) && 'default' !== $spacing_bottom && 'normal' !== $spacing_bottom ) {
+		$classes[] = 'section-pb-' . sanitize_html_class( $spacing_bottom );
+	}
+
+	return array(
+		'id'             => $id,
+		'bg_color'       => $bg_color,
+		'spacing_top'    => $spacing_top,
+		'spacing_bottom' => $spacing_bottom,
+		'class'          => implode( ' ', $classes ),
+	);
+}
+
+/**
+ * Helper function to safely parse cloned Image Settings.
+ *
+ * @param string $prefix Optional prefix for cloned sub fields.
+ * @return array
+ */
+function custom_theme_get_image_fields( $prefix = '' ) {
+	$image    = custom_theme_get_sub_field( $prefix . 'image' );
+	$alt      = custom_theme_get_sub_field( $prefix . 'alt_text' );
+	$caption  = custom_theme_get_sub_field( $prefix . 'caption' );
+	$position = custom_theme_get_sub_field( $prefix . 'image_position' );
+
+	if ( empty( $image ) ) {
+		$image = custom_theme_get_field( $prefix . 'image' );
+	}
+
+	return array(
+		'image'          => $image,
+		'alt_text'       => $alt,
+		'caption'        => $caption,
+		'image_position' => ! empty( $position ) ? $position : 'left',
+	);
+}
+
+/**
+ * Clean up duplicate ACF field group posts in the database.
+ * Ensures exactly one DB post exists per field group key, preventing duplicate rows in admin.
+ */
+add_action( 'admin_init', function() {
+	global $wpdb;
+
+	if ( ! isset( $wpdb->posts ) ) {
+		return;
+	}
+
+	$duplicates = $wpdb->get_results( "
+		SELECT post_name, GROUP_CONCAT(ID ORDER BY ID DESC) as ids, COUNT(*) as cnt
+		FROM {$wpdb->posts}
+		WHERE post_type = 'acf-field-group' AND post_status != 'trash'
+		GROUP BY post_name
+		HAVING cnt > 1
+	" );
+
+	if ( ! empty( $duplicates ) ) {
+		foreach ( $duplicates as $row ) {
+			$ids = explode( ',', $row->ids );
+			// Keep the newest post ID ($ids[0]) and delete all older duplicate IDs.
+			array_shift( $ids );
+			foreach ( $ids as $delete_id ) {
+				wp_delete_post( (int) $delete_id, true );
+			}
+		}
+	}
+} );
+
+

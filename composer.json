@@ -1,0 +1,21 @@
+{
+    "name": "bhakti/custom-theme",
+    "authors": [
+        {
+            "name": "Bhakti",
+            "email": "patilbhakti2003@gmail.com"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.7"
+    },
+    "scripts": {
+        "lint": "phpcs",
+        "lint:fix": "phpcbf"
+    }
+}

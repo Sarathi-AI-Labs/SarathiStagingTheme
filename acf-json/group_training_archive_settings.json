@@ -1,0 +1,46 @@
+{
+    "key": "group_training_archive_settings",
+    "title": "Training Archive Settings",
+    "fields": [
+        {
+            "key": "field_tr_archive_heading_clone",
+            "label": "Heading Fields",
+            "name": "heading_fields",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "Configure Eyebrow, Heading Title, and Subheading for the Training Archive page.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "clone": [
+                "group_clone_heading"
+            ],
+            "display": "seamless",
+            "prefix_name": 0,
+            "prefix_label": 0,
+            "layout": "block"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "training-archive-settings"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "ACF Fields for Training Archive Hero Header using group_clone_heading",
+    "show_in_rest": 0
+}

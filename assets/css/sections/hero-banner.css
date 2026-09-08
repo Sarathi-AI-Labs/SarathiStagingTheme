@@ -1,0 +1,352 @@
+/* ============================================================
+   HERO BANNER SECTION — Sarathi AI Labs
+   ============================================================ */
+
+.sarathi-hero-banner {
+	position: relative;
+	width: 100%;
+	min-height: calc(100vh - 80px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f8fafc;
+	overflow: hidden;
+	margin-top: -66px;
+	padding-top: 120px;
+	padding-bottom: 90px;
+	box-sizing: border-box;
+}
+
+@media (min-width: 992px) {
+	.sarathi-hero-banner {
+		min-height: calc(100vh - 80px);
+		margin-top: -80px;
+		padding-top: 135px;
+		padding-bottom: 105px;
+	}
+}
+
+.admin-bar .sarathi-hero-banner {
+	margin-top: -66px;
+}
+
+@media (min-width: 992px) {
+	.admin-bar .sarathi-hero-banner {
+		margin-top: -80px;
+	}
+}
+
+/* ------------------------------------------------------------
+   BACKGROUND DECORATIONS & FLOATING LOGO WATERMARK
+   ------------------------------------------------------------ */
+.sarathi-hero-background {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 1;
+	overflow: hidden;
+}
+
+/* Radial Glow Behind Content */
+.sarathi-hero-radial-glow {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	max-width: 1100px;
+	height: 100%;
+	background: radial-gradient(circle at center, rgba(7, 182, 213, 0.10) 0%, rgba(7, 182, 213, 0.02) 50%, transparent 75%);
+	pointer-events: none;
+}
+
+/* ============================================================
+   BACKGROUND LOGO WATERMARK SIZE & OPACITY CONTROLS
+   Modify 'width', 'max-height', or 'opacity' below to scale logo:
+   ============================================================ */
+.sarathi-hero-floating-logo-wrap {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: min(92vw, 1050px);
+	/* ADJUST WATERMARK WIDTH HERE */
+	height: auto;
+	max-height: 98vh;
+	/* ADJUST MAX HEIGHT HERE */
+	opacity: 0.14;
+	/* ADJUST WATERMARK OPACITY HERE (e.g. 0.10 to 0.20) */
+	pointer-events: none;
+	user-select: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	animation: floatLogo 10s ease-in-out infinite alternate;
+	will-change: transform;
+}
+
+@media (min-width: 992px) {
+	.sarathi-hero-floating-logo-wrap {
+		top: 50%;
+		width: min(92vw, 1050px);
+		/* DESKTOP WATERMARK WIDTH */
+	}
+}
+
+.sarathi-hero-floating-logo {
+	width: 100%;
+	height: auto;
+	max-height: 920px;
+	/* ADJUST LOGO MAX IMAGE HEIGHT HERE */
+	display: block;
+	object-fit: contain;
+	filter: contrast(106%);
+}
+
+/* Floating Animation */
+@keyframes floatLogo {
+	0% {
+		transform: translate(-50%, -50%);
+	}
+
+	50% {
+		transform: translate(-50%, calc(-50% - 14px));
+	}
+
+	100% {
+		transform: translate(-50%, -50%);
+	}
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+	.sarathi-hero-floating-logo-wrap {
+		animation: none;
+	}
+}
+
+/* ------------------------------------------------------------
+   BOTTOM WAVE & DOT GRAPHIC DECORATION
+   ------------------------------------------------------------ */
+.sarathi-hero-wave-decoration {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 220px;
+	pointer-events: none;
+	z-index: 1;
+	overflow: hidden;
+}
+
+.sarathi-hero-wave-svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+/* ------------------------------------------------------------
+   HERO CONTENT LAYER
+   ------------------------------------------------------------ */
+.sarathi-hero-container {
+	position: relative;
+	z-index: 2;
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.sarathi-hero-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	max-width: 960px;
+	margin: 0 auto;
+}
+
+/* Eyebrow: Sarathi AI Labs */
+.sarathi-hero-eyebrow {
+	font-family: var(--font-body, 'Inter', sans-serif);
+	font-size: clamp(20px, 2.4vw, 30px);
+	font-weight: 600;
+	color: #07B6D5;
+	line-height: 36px;
+	letter-spacing: 3px;
+	text-transform: uppercase;
+	margin-top: 0;
+	margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+	.sarathi-hero-eyebrow {
+		margin-bottom: 28px;
+	}
+}
+
+/* Main Heading: Space Grotesk 700 72px -1.8px letter-spacing */
+.sarathi-hero-heading {
+	font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+	font-size: clamp(38px, 5.5vw, 72px);
+	font-weight: 700;
+	line-height: 72px;
+	margin-top: 0;
+	margin-bottom: 20px;
+	letter-spacing: -1.8px;
+	text-wrap: balance;
+}
+
+@media (min-width: 768px) {
+	.sarathi-hero-heading {
+		margin-bottom: 26px;
+	}
+}
+
+/* 4-Line Block Wrap Rule */
+.sarathi-hero-line {
+	display: block;
+	width: 100%;
+}
+
+/* Gradient Text Span ("Empowering People" / "and Businesses") */
+.sarathi-hero-gradient-text {
+	color: #07B6D5;
+	background-image: linear-gradient(135deg, #07b6d5 0%, #14b8aa 50%, #13a4ec 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	display: block;
+}
+
+/* Dark Charcoal Span ("Through Intelligent" / "Technology") */
+.sarathi-hero-dark-text {
+	color: #1A1C23;
+	display: block;
+}
+
+/* Subheading / Secondary Heading */
+.sarathi-hero-subheading {
+	font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+	font-size: clamp(26px, 3.5vw, 48px);
+	font-weight: 700;
+	color: #1A1C23;
+	line-height: 1.15;
+	margin-top: 0;
+	margin-bottom: 24px;
+	letter-spacing: -1.2px;
+}
+
+/* Description: Inter 300 24px 32px line-height 0px spacing */
+.sarathi-hero-description {
+	font-family: var(--font-body, 'Inter', sans-serif);
+	font-size: clamp(17px, 1.8vw, 24px);
+	font-weight: 300;
+	color: #6B7280;
+	line-height: 32px;
+	letter-spacing: 0px;
+	max-width: 740px;
+	margin-top: 0;
+	margin-bottom: 36px;
+}
+
+@media (min-width: 768px) {
+	.sarathi-hero-description {
+		margin-bottom: 44px;
+	}
+}
+
+/* Action Buttons */
+.sarathi-hero-actions {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 16px;
+	width: 100%;
+}
+
+@media (min-width: 480px) {
+	.sarathi-hero-actions {
+		flex-direction: row;
+		gap: 20px;
+	}
+}
+
+/* Primary CTA Button */
+.sarathi-hero-btn-primary {
+	background-color: #07B6D5;
+	color: #ffffff;
+	padding: 14px 32px;
+	font-size: 16px;
+	font-weight: 600;
+	border-radius: 50px;
+	box-shadow: 0 4px 14px rgba(7, 182, 213, 0.28);
+	transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+	border: 1px solid transparent;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.sarathi-hero-btn-primary:hover,
+.sarathi-hero-btn-primary:focus-visible {
+	background-color: #0596b0;
+	color: #ffffff;
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(7, 182, 213, 0.38);
+	outline: none;
+}
+
+/* Secondary CTA Button */
+.sarathi-hero-btn-secondary {
+	background-color: #ffffff;
+	color: #1f2937;
+	padding: 14px 32px;
+	font-size: 16px;
+	font-weight: 600;
+	border-radius: 50px;
+	border: 1px solid #e5e7eb;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+	transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+.sarathi-hero-btn-secondary .btn-arrow {
+	transition: transform 0.25s ease;
+	display: inline-block;
+}
+
+.sarathi-hero-btn-secondary:hover,
+.sarathi-hero-btn-secondary:focus-visible {
+	background-color: #ffffff;
+	color: #07B6D5;
+	border-color: #07B6D5;
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+	outline: none;
+}
+
+.sarathi-hero-btn-secondary:hover .btn-arrow,
+.sarathi-hero-btn-secondary:focus-visible .btn-arrow {
+	transform: translateX(4px);
+}
+
+/* Focus styles for keyboard accessibility */
+.sarathi-hero-btn-primary:focus-visible,
+.sarathi-hero-btn-secondary:focus-visible {
+	outline: 2px solid #07B6D5;
+	outline-offset: 2px;
+}

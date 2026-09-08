@@ -1,0 +1,721 @@
+/* ==========================================================================
+   FORM SECTION STYLES
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. SECTION BASE & CONTAINERS
+   -------------------------------------------------------------------------- */
+.sarathi-form-section {
+	width: 100%;
+	position: relative;
+	padding: 40px 20px;
+	background-color: var(--bg-white);
+	color: var(--text-main);
+	overflow: hidden;
+}
+
+.sarathi-form-section-container {
+	max-width: 1440px;
+	margin: 0 auto;
+	width: 100%;
+}
+
+.sarathi-form-section-centered-wrapper {
+	max-width: 800px;
+	margin: 0 auto;
+	width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   2. TYPOGRAPHY & HEADINGS
+   -------------------------------------------------------------------------- */
+.sarathi-form-header {
+	margin-bottom: 40px;
+}
+
+.sarathi-form-header.sarathi-text-center,
+.sarathi-text-center {
+	text-align: center;
+}
+
+.sarathi-form-eyebrow {
+	display: inline-block;
+	font-family: var(--font-body);
+	font-size: 14px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color: var(--color-primary);
+	margin-bottom: 8px;
+}
+
+.sarathi-form-title {
+	font-family: var(--font-heading);
+	font-size: 36px;
+	font-weight: 700;
+	color: var(--text-main);
+	line-height: 1.2;
+	margin: 0 0 16px 0;
+}
+
+@media (min-width: 768px) {
+	.sarathi-form-title {
+		font-size: 42px;
+	}
+}
+
+.sarathi-form-subheading {
+	font-family: var(--font-body);
+	font-size: 20px;
+	color: var(--text-muted);
+	line-height: 1.5;
+	margin: 0 0 16px 0;
+}
+
+.sarathi-form-description {
+	font-size: 18px;
+	color: var(--text-muted);
+	line-height: 1.6;
+	margin-bottom: 24px;
+}
+
+.sarathi-form-description p {
+	margin: 0 0 16px 0;
+}
+
+.sarathi-form-description p:last-child {
+	margin-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   3. BUTTON STYLES
+   -------------------------------------------------------------------------- */
+.sarathi-form-btn-wrapper {
+	margin-top: 24px;
+}
+
+.sarathi-form-btn-wrapper.sarathi-text-center {
+	text-align: center;
+}
+
+.sarathi-form-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 14px 32px;
+	font-family: var(--font-body);
+	font-size: 16px;
+	font-weight: 600;
+	text-decoration: none;
+	border-radius: 50px;
+	transition: all 0.3s ease;
+	cursor: pointer;
+	border: 2px solid transparent;
+	line-height: 1;
+}
+
+.sarathi-btn-primary {
+	background-color: var(--color-primary);
+	color: var(--bg-white);
+	border-color: var(--color-primary);
+}
+
+.sarathi-btn-primary:hover {
+	background-color: var(--color-primary-dark);
+	border-color: var(--color-primary-dark);
+	color: var(--bg-white);
+	box-shadow: var(--shadow-md);
+}
+
+.sarathi-btn-secondary {
+	background-color: var(--text-main);
+	color: var(--bg-white);
+	border-color: var(--text-main);
+}
+
+.sarathi-btn-secondary:hover {
+	background-color: var(--text-muted);
+	border-color: var(--text-muted);
+	color: var(--bg-white);
+	box-shadow: var(--shadow-md);
+}
+
+.sarathi-btn-outline {
+	background-color: transparent;
+	color: var(--text-main);
+	border-color: var(--border-color);
+}
+
+.sarathi-btn-outline:hover {
+	background-color: var(--bg-light);
+	color: var(--color-primary);
+	border-color: var(--color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   4. LAYOUT GRIDS & COLUMNS
+   -------------------------------------------------------------------------- */
+.sarathi-form-grid {
+	display: flex;
+	gap: 48px;
+	align-items: flex-start;
+	width: 100%;
+}
+
+.sarathi-form-content-col,
+.sarathi-form-image-col,
+.sarathi-form-box-col {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+/* Column Swapping for Form Left Layouts (Desktop) */
+@media (min-width: 992px) {
+	.sarathi-form-layout-form_left_content_right .sarathi-form-grid,
+	.sarathi-form-layout-form_left_image_right .sarathi-form-grid {
+		flex-direction: row-reverse;
+	}
+}
+
+/* --------------------------------------------------------------------------
+   5. IMAGE CONTAINER
+   -------------------------------------------------------------------------- */
+.sarathi-form-image-wrapper {
+	margin: 0;
+	width: 100%;
+	border-radius: var(--border-radius-lg);
+	overflow: hidden;
+	box-shadow: var(--shadow-md);
+	background-color: var(--bg-light);
+}
+
+.sarathi-form-image-wrapper img {
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+	display: block;
+}
+
+.sarathi-form-image-caption {
+	padding: 12px 16px;
+	font-size: 14px;
+	color: var(--text-muted);
+	background-color: var(--bg-light);
+	font-style: italic;
+	border-top: 1px solid var(--border-color);
+}
+
+/* --------------------------------------------------------------------------
+   6. FORM CARD / BOX WRAPPER
+   -------------------------------------------------------------------------- */
+.sarathi-form-box {
+	background-color: var(--bg-white);
+	border-radius: var(--border-radius-lg);
+	padding: 40px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+	border: 1px solid var(--border-color);
+	transition: box-shadow 0.3s ease;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.sarathi-form-box:hover {
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Placeholder Notice */
+.sarathi-form-placeholder-notice {
+	background-color: var(--bg-light);
+	border: 1px dashed var(--color-primary);
+	border-radius: var(--border-radius-md);
+	padding: 20px;
+	color: var(--color-primary);
+	font-size: 14px;
+	text-align: center;
+}
+
+.sarathi-form-placeholder-notice p {
+	margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   7. CONTACT FORM 7 COMPREHENSIVE STYLING OVERRIDES
+   -------------------------------------------------------------------------- */
+.sarathi-form-box .wpcf7 {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.sarathi-form-box p {
+    margin-bottom: 24px;
+}
+
+/* CF7 Grid Layout Classes */
+.sarathi-cf7-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+    .sarathi-cf7-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sarathi-cf7-col {
+    width: 100%;
+}
+
+.sarathi-cf7-full {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.sarathi-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.sarathi-input-wrapper i {
+    position: absolute;
+    left: 16px;
+    top: 24px;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 16px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.sarathi-textarea-wrapper i {
+    top: 24px;
+    transform: none;
+}
+
+.sarathi-input-wrapper .wpcf7-form-control {
+    padding-left: 44px !important;
+}
+
+.sarathi-form-box label {
+	display: block;
+	font-family: var(--font-body);
+	font-size: 15px;
+	font-weight: 600;
+	color: var(--text-main);
+	margin-bottom: 8px;
+}
+
+.sarathi-form-box .wpcf7-form-control.wpcf7-text,
+.sarathi-form-box .wpcf7-form-control.wpcf7-email,
+.sarathi-form-box .wpcf7-form-control.wpcf7-url,
+.sarathi-form-box .wpcf7-form-control.wpcf7-tel,
+.sarathi-form-box .wpcf7-form-control.wpcf7-number,
+.sarathi-form-box .wpcf7-form-control.wpcf7-select,
+.sarathi-form-box .wpcf7-form-control.wpcf7-textarea {
+	width: 100%;
+	padding: 12px 16px;
+	font-family: var(--font-body);
+	font-size: 15px;
+	color: var(--text-main);
+	background-color: var(--bg-white);
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius-md);
+	transition: all 0.2s ease-in-out;
+	outline: none;
+}
+
+.sarathi-form-box .wpcf7-form-control.wpcf7-textarea {
+    resize: vertical;
+    height: 120px;
+    min-height: 100px;
+}
+
+.sarathi-form-box .wpcf7-form-control:not(.wpcf7-submit):focus {
+	background-color: var(--bg-white);
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 3px rgba(0, 204, 255, 0.15); /* cyan glow */
+}
+
+
+
+/* Submit Button Container */
+.sarathi-cf7-submit-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.sarathi-cf7-submit-btn-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.sarathi-cf7-submit-btn-wrapper i {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--bg-white);
+    pointer-events: none;
+}
+
+.sarathi-form-box .wpcf7-submit {
+	padding: 12px 36px 12px 24px !important;
+	font-family: var(--font-body);
+	font-size: 16px;
+	font-weight: 600;
+	color: #ffffff;
+	background-color: var(--color-primary);
+	border: none;
+	border-radius: 50px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	text-align: center;
+	display: inline-block;
+    position: relative;
+    z-index: 1;
+}
+
+.sarathi-form-box .wpcf7-submit:hover {
+	background-color: var(--color-primary-dark, #003d99);
+	box-shadow: 0 4px 12px rgba(7, 182, 213, 0.3);
+}
+
+.sarathi-form-box .wpcf7-spinner {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0 0 16px;
+    width: 24px;
+    height: 24px;
+}
+
+.sarathi-cf7-secure-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sarathi-cf7-secure-text > i {
+    color: #0052cc; /* Blue color for check icon */
+    font-size: 16px;
+}
+
+/* Validation Errors & Notices */
+.sarathi-form-box .wpcf7-not-valid-tip,
+.sarathi-custom-error {
+	font-size: 14px;
+	color: #e11d48;
+	margin-top: 6px;
+    display: block;
+}
+
+.sarathi-input-wrapper.has-error .wpcf7-form-control,
+.sarathi-textarea-wrapper.has-error .wpcf7-form-control {
+    border-color: #e11d48 !important;
+}
+
+.sarathi-cf7-secure-text.has-error .sarathi-checkmark {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(0, 204, 255, 0.2);
+    animation: pulse-primary 1.5s infinite;
+}
+
+@keyframes pulse-primary {
+    0% { box-shadow: 0 0 0 0 rgba(0, 204, 255, 0.4); }
+    70% { box-shadow: 0 0 0 6px rgba(0, 204, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 204, 255, 0); }
+}
+
+/* Custom Checkbox for Secure Text */
+.sarathi-custom-checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    font-size: 0;
+    user-select: none;
+    line-height: 1;
+}
+
+.sarathi-custom-checkbox-label .sarathi-consent-checkbox {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.sarathi-custom-checkbox-label .sarathi-checkmark {
+    height: 20px;
+    width: 20px;
+    background-color: #fff;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.sarathi-custom-checkbox-label:hover .sarathi-consent-checkbox ~ .sarathi-checkmark {
+    border-color: #0052cc;
+}
+
+.sarathi-custom-checkbox-label .sarathi-consent-checkbox:checked ~ .sarathi-checkmark {
+    background-color: #0052cc;
+    border-color: #0052cc;
+}
+
+.sarathi-custom-checkbox-label .sarathi-checkmark i {
+    display: none;
+    color: white;
+    font-size: 12px;
+}
+
+.sarathi-custom-checkbox-label .sarathi-consent-checkbox:checked ~ .sarathi-checkmark i {
+    display: block;
+}
+
+.sarathi-custom-checkbox-label .sarathi-consent-checkbox:focus-visible ~ .sarathi-checkmark {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.sarathi-form-box .wpcf7-response-output {
+	background-color: #fef2f2;
+	border: 1px solid #fca5a5;
+	border-radius: var(--border-radius-md);
+	padding: 16px;
+	color: #991b1b;
+	font-size: 14px;
+	margin: 24px 0 0 0 !important;
+}
+
+.sarathi-form-box .wpcf7-form.sent .wpcf7-response-output {
+    background-color: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #15803d;
+}
+
+/* --------------------------------------------------------------------------
+   8. CONTACT CARD VARIANT STYLES
+   -------------------------------------------------------------------------- */
+.sarathi-contact-card-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* approx 70/30 split */
+    gap: 48px;
+    align-items: start;
+}
+
+.sarathi-contact-card-grid .sarathi-form-box-col,
+.sarathi-contact-card-grid .sarathi-form-content-col {
+    width: 100%;
+    flex: none;
+    min-width: 0;
+}
+
+@media (max-width: 991px) {
+    .sarathi-contact-card-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sarathi-contact-card-wrapper {
+    background-color: var(--bg-white);
+    border-radius: var(--border-radius-lg);
+    padding: 40px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.sarathi-contact-card-title {
+    font-family: var(--font-heading);
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 32px 0;
+    color: var(--text-main);
+}
+
+.sarathi-contact-card-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.sarathi-contact-card-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sarathi-contact-card-item:first-child {
+    padding-top: 0;
+}
+
+.sarathi-contact-card-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.sarathi-contact-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f0f5ff; /* Light blue background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sarathi-contact-icon i {
+    color: var(--color-primary); /* Dark blue icon */
+    font-size: 18px;
+}
+
+.sarathi-contact-card-text {
+    flex: 1;
+}
+
+.sarathi-contact-card-text strong {
+    display: block;
+    font-size: 16px;
+    color: var(--text-main);
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.sarathi-contact-card-text p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.sarathi-contact-card-text a {
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.sarathi-contact-card-text a:hover {
+    color: var(--color-primary);
+}
+
+.sarathi-social-links {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.sarathi-social-links a {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.sarathi-social-links a i {
+    margin: 0;
+    font-size: 14px;
+    color: inherit;
+}
+
+.sarathi-social-links a:hover {
+    background-color: var(--color-primary);
+    color: var(--bg-white);
+    border-color: var(--color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   8b. GOOGLE MAP
+   -------------------------------------------------------------------------- */
+.sarathi-form-map-wrapper {
+    margin-top: 48px;
+    width: 100%;
+    height: 300px;
+    border-radius: var(--border-radius-lg, 12px);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+}
+
+.sarathi-form-map-iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+
+/* --------------------------------------------------------------------------
+   9. RESPONSIVE DESIGN & MOBILE STYLES
+   -------------------------------------------------------------------------- */
+@media (max-width: 991px) {
+	.sarathi-form-section {
+		padding: 60px 16px;
+	}
+
+	.sarathi-form-grid {
+		flex-direction: column !important;
+		gap: 40px;
+	}
+
+	.sarathi-form-content-col,
+	.sarathi-form-image-col,
+	.sarathi-form-box-col {
+		width: 100%;
+		flex: none;
+	}
+
+	.sarathi-form-box {
+		padding: 32px 24px;
+	}
+}
+
+@media (max-width: 576px) {
+	.sarathi-form-section {
+		padding: 40px 16px;
+	}
+
+	.sarathi-form-title {
+		font-size: 32px;
+	}
+
+	.sarathi-form-subheading {
+		font-size: 18px;
+	}
+
+	.sarathi-form-box {
+		padding: 24px 20px;
+		border-radius: var(--border-radius-md);
+	}
+
+	.sarathi-form-btn {
+		width: 100%;
+	}
+}
+
+/* Full Width Submit Button Wrapper */
+.sarathi-cf7-submit-btn-wrapper.sarathi-full-width {
+    width: 100%;
+}
+.sarathi-cf7-submit-btn-wrapper.sarathi-full-width .wpcf7-submit {
+    width: 100%;
+}

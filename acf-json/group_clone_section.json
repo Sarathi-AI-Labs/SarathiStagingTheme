@@ -1,0 +1,221 @@
+{
+    "key": "group_clone_section",
+    "title": "Clone: Section Settings",
+    "fields": [
+        {
+            "key": "field_clone_section_id",
+            "label": "Section Anchor ID",
+            "name": "section_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Custom HTML ID for anchor navigation (e.g. welcome-area)",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_clone_background_type",
+            "label": "Background Style",
+            "name": "background_type",
+            "type": "select",
+            "instructions": "Choose a background style for this section",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "default": "Default",
+                "color": "Color",
+                "image": "Image"
+            },
+            "default_value": "default",
+            "return_format": "value"
+        },
+        {
+            "key": "field_clone_custom_bg_color",
+            "label": "Custom Background Color",
+            "name": "custom_bg_color",
+            "type": "color_picker",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_clone_background_type",
+                        "operator": "==",
+                        "value": "color"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "enable_opacity": 0,
+            "return_format": "string"
+        },
+        {
+            "key": "field_clone_background_image",
+            "label": "Background Image",
+            "name": "background_image",
+            "type": "image",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_clone_background_type",
+                        "operator": "==",
+                        "value": "image"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all"
+        },
+        {
+            "key": "field_clone_background_color",
+            "label": "Background Style",
+            "name": "background_color",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Section background color theme",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_clone_background_type",
+                        "operator": "==",
+                        "value": "legacy_hidden_value"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "default": "Default",
+                "light": "Light Gray",
+                "dark": "Dark Blue",
+                "primary": "Primary Accent"
+            },
+            "default_value": "default",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 1,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_clone_spacing_top",
+            "label": "Top Spacing",
+            "name": "spacing_top",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "E.g., 80px, 4rem. Leave blank for default.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_clone_spacing_bottom",
+            "label": "Bottom Spacing",
+            "name": "spacing_bottom",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "E.g., 80px, 4rem. Leave blank for default.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_clone_text_color",
+            "label": "Text Color",
+            "name": "text_color",
+            "type": "color_picker",
+            "instructions": "Optional text color override",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "enable_opacity": 0,
+            "return_format": "string"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "clone",
+                "operator": "==",
+                "value": "group_clone_section"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Reusable section settings fields (section_id, background_color, spacing_top, spacing_bottom)",
+    "show_in_rest": 0,
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1787219704
+}
