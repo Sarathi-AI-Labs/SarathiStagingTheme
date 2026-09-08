@@ -1,0 +1,162 @@
+/* ============================================================
+   INTRO TEXT SECTION
+   ============================================================ */
+
+.sarathi-intro-text {
+	width: 100%;
+	padding: 60px 20px;
+	background-color: var(--bg-white);
+	font-family: var(--font-body);
+	color: var(--text-main);
+	box-sizing: border-box;
+}
+
+.sarathi-intro-text-container {
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+/* Typography */
+.sarathi-intro-text-eyebrow {
+	display: block;
+	font-family: var(--font-body);
+	font-size: 16px;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var(--color-primary);
+	margin-bottom: 12px;
+	letter-spacing: 0.05em;
+}
+
+.sarathi-intro-text-heading {
+	font-family: var(--font-heading);
+	font-size: 40px;
+	font-weight: 700;
+	color: var(--text-main);
+	margin: 0 0 16px 0;
+	line-height: 1.2;
+}
+
+.sarathi-intro-text-subheading {
+	font-family: var(--font-body);
+	font-style: normal;
+	font-size: 22px;
+	font-weight: 400;
+	color: var(--text-muted);
+	margin: 0 0 24px 0;
+	line-height: 1.4;
+}
+
+.sarathi-intro-text-description {
+	font-size: 18px;
+	line-height: 1.6;
+	color: var(--text-muted);
+}
+
+.sarathi-intro-text-description p {
+	margin: 0 0 20px;
+}
+
+.sarathi-intro-text-description p:last-child {
+	margin-bottom: 0;
+}
+
+/* CTA Button */
+.sarathi-intro-text-cta {
+	margin-top: 32px;
+}
+
+.sarathi-intro-text-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--color-primary);
+	color: var(--bg-white);
+	font-family: var(--font-body);
+	font-size: 16px;
+	font-weight: 600;
+	text-decoration: none;
+	padding: 14px 32px;
+	border-radius: 50px;
+	transition: all 0.3s ease;
+	letter-spacing: 0.02em;
+	border: 2px solid var(--color-primary);
+}
+
+.sarathi-intro-text-btn:hover {
+	background-color: var(--color-primary-dark);
+	border-color: var(--color-primary-dark);
+	box-shadow: var(--shadow-md);
+}
+
+/* Alignments */
+.text-align-left {
+	text-align: left;
+}
+.text-align-left .sarathi-intro-text-container {
+	margin-left: 0;
+}
+
+.text-align-center {
+	text-align: center;
+}
+
+.text-align-right {
+	text-align: right;
+}
+.text-align-right .sarathi-intro-text-container {
+	margin-right: 0;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1024px) {
+	.sarathi-intro-text {
+		padding: 50px 20px;
+	}
+	
+	.sarathi-intro-text-heading {
+		font-size: 32px;
+	}
+	
+	.sarathi-intro-text-subheading {
+		font-size: 20px;
+	}
+	
+	.sarathi-intro-text-description {
+		font-size: 16px;
+	}
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+	.sarathi-intro-text {
+		padding: 40px 16px;
+	}
+	
+	.sarathi-intro-text-heading {
+		font-size: 28px;
+	}
+	
+	.sarathi-intro-text-subheading {
+		font-size: 18px;
+	}
+	
+	.sarathi-intro-text-description {
+		font-size: 16px;
+	}
+}
+
+/* Responsive - Small Mobile */
+@media (max-width: 480px) {
+	.sarathi-intro-text {
+		padding: 30px 16px;
+	}
+	
+	.sarathi-intro-text-heading {
+		font-size: 24px;
+	}
+	
+	.sarathi-intro-text-subheading {
+		font-size: 16px;
+	}
+}

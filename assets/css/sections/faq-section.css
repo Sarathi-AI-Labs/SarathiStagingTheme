@@ -1,0 +1,211 @@
+/* ============================================================
+   FAQ SECTION (Custom Accordion)
+   ============================================================ */
+
+.sarathi-faq-section {
+    width: 100%;
+    padding: 70px 20px;
+    background: var(--bg-white);
+    box-sizing: border-box;
+}
+
+.sarathi-faq-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.sarathi-faq-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.sarathi-faq-eyebrow {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+    font-family: var(--font-body);
+}
+
+.sarathi-faq-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0 0 12px 0;
+    line-height: 1.25;
+    font-family: var(--font-heading);
+}
+
+.sarathi-faq-subheading {
+    font-size: 18px;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+    font-family: var(--font-body);
+}
+
+.sarathi-faq-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.sarathi-faq-item {
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
+}
+
+.sarathi-faq-item:first-child {
+    border-top: 1px solid var(--border-color);
+}
+
+.sarathi-faq-question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-main);
+    text-align: left;
+    gap: 24px;
+    outline: none;
+    transition: color 0.2s ease;
+}
+
+.sarathi-faq-question:hover {
+    color: var(--color-primary);
+}
+
+.sarathi-faq-question-text {
+    flex: 1;
+}
+
+.sarathi-faq-icon {
+    position: relative;
+    flex-basis: 32px;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--bg-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, background-color 0.2s ease;
+}
+
+.sarathi-faq-icon span {
+    position: absolute;
+    background: var(--text-main);
+    border-radius: 2px;
+    transition: transform 0.3s ease, background-color 0.2s ease;
+}
+
+/* Horizontal line */
+.sarathi-faq-icon span:first-child {
+    width: 12px;
+    height: 2px;
+}
+
+/* Vertical line */
+.sarathi-faq-icon span:last-child {
+    width: 2px;
+    height: 12px;
+}
+
+/* Active State */
+.sarathi-faq-item.is-active .sarathi-faq-question {
+    color: var(--color-primary);
+}
+
+.sarathi-faq-item.is-active .sarathi-faq-icon {
+    background: var(--color-primary);
+    transform: rotate(180deg);
+}
+
+.sarathi-faq-item.is-active .sarathi-faq-icon span {
+    background: var(--bg-white);
+}
+
+.sarathi-faq-item.is-active .sarathi-faq-icon span:last-child {
+    transform: scaleY(0);
+}
+
+/* Answer */
+.sarathi-faq-answer {
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.sarathi-faq-answer[hidden] {
+    display: none;
+}
+
+.sarathi-faq-answer-inner {
+    padding: 0 48px 24px 0;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+}
+
+.sarathi-faq-answer-inner p {
+    margin: 0 0 12px;
+}
+
+.sarathi-faq-answer-inner p:last-child {
+    margin-bottom: 0;
+}
+
+.sarathi-faq-answer-inner ul,
+.sarathi-faq-answer-inner ol {
+    margin: 0 0 12px 20px;
+    padding: 0;
+}
+
+.sarathi-faq-answer-inner a {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+.sarathi-faq-answer-inner a:hover {
+    color: var(--color-primary-dark);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sarathi-faq-section {
+        padding: 45px 16px;
+    }
+
+    .sarathi-faq-title {
+        font-size: 24px;
+    }
+
+    .sarathi-faq-question {
+        padding: 18px 0;
+        font-size: 16px;
+        gap: 16px;
+    }
+
+    .sarathi-faq-icon {
+        flex-basis: 28px;
+        width: 28px;
+        height: 28px;
+    }
+
+    .sarathi-faq-answer-inner {
+        padding: 0 32px 18px 0;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+}

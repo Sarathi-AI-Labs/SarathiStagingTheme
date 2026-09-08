@@ -1,0 +1,305 @@
+/* ============================================================
+	INSTAGRAM SECTION
+	============================================================ */
+
+/* Import a script font for the signature */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&display=swap');
+
+.sarathi-instagram-section {
+	padding: 5rem 1rem;
+	background-color: var(--bg-light, #f4f2ef); 
+	color: var(--text-main, #1f2937);
+	overflow: hidden;
+}
+
+.sarathi-instagram-section-container {
+	display: flex;
+	align-items: flex-start;
+	max-width: 1300px;
+	margin: 0 auto;
+	gap: 4rem;
+}
+
+/* -------------------------------------------------------------
+	LEFT COLUMN & ANIMATIONS
+------------------------------------------------------------- */
+.sarathi-instagram-left {
+	flex: 0 0 32%;
+	padding-right: 1rem;
+	position: sticky;
+	top: 100px;
+}
+
+/* Subtle entrance animations */
+@keyframes fadeInUp {
+	from { opacity: 0; transform: translateY(20px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+.sarathi-instagram-left > .sarathi-instagram-content > * {
+	opacity: 0;
+	animation: fadeInUp 0.8s ease forwards;
+}
+.sarathi-instagram-left > .sarathi-instagram-content > *:nth-child(1) { animation-delay: 0.1s; }
+.sarathi-instagram-left > .sarathi-instagram-content > *:nth-child(2) { animation-delay: 0.2s; }
+.sarathi-instagram-left > .sarathi-instagram-content > *:nth-child(3) { animation-delay: 0.3s; }
+.sarathi-instagram-left > .sarathi-instagram-content > *:nth-child(4) { animation-delay: 0.4s; }
+.sarathi-instagram-left > .sarathi-instagram-content > *:nth-child(5) { animation-delay: 0.5s; }
+.sarathi-instagram-left > .sarathi-instagram-content > *:nth-child(6) { animation-delay: 0.6s; }
+
+.sarathi-instagram-section .sarathi-hero-eyebrow-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 0.5rem;
+}
+
+.sarathi-instagram-section .sarathi-hero-eyebrow {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #ff7a45;
+    margin: 0;
+}
+
+.sarathi-instagram-heading {
+	font-family: var(--font-heading);
+	font-size: 42px;
+	font-weight: 700;
+	line-height: 1.15;
+	margin: 0 0 1.25rem;
+	color: var(--text-main, #1f2937);
+}
+
+.sarathi-instagram-subheading {
+	font-family: var(--font-body);
+	font-size: 20px;
+	margin: 0 0 1rem;
+	opacity: 0.9;
+}
+
+.sarathi-instagram-description {
+	font-family: var(--font-body);
+	font-size: 16px;
+	line-height: 1.6;
+	margin-bottom: 2.5rem;
+	color: var(--text-muted, #6b7280);
+}
+
+/* CTA Gradient Button */
+.sarathi-instagram-cta {
+	margin-bottom: 3.5rem;
+}
+
+.sarathi-instagram-cta .sarathi-btn-gradient {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 28px;
+	background: linear-gradient(135deg, #ff7a45 0%, #a944a9 100%);
+	color: #ffffff;
+	border-radius: 8px;
+	font-family: var(--font-body);
+	font-size: 15px;
+	font-weight: 600;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	border: none;
+	box-shadow: 0 4px 15px rgba(169, 68, 169, 0.3);
+}
+
+.sarathi-instagram-cta .sarathi-btn-gradient:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(169, 68, 169, 0.4);
+}
+
+/* Features List */
+.sarathi-instagram-features {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	margin-bottom: 4rem;
+}
+
+.sarathi-insta-feature-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 15px;
+}
+
+.sarathi-insta-feature-icon {
+	flex: 0 0 24px;
+	width: 24px;
+	height: 24px;
+	margin-top: 2px;
+}
+
+.sarathi-insta-feature-icon img {
+	width: 100%;
+	height: auto;
+	filter: grayscale(100%) contrast(150%) brightness(50%);
+}
+
+.sarathi-insta-feature-title {
+	font-family: var(--font-body);
+	font-size: 15px;
+	font-weight: 700;
+	color: var(--text-main, #1f2937);
+	margin: 0 0 2px;
+}
+
+.sarathi-insta-feature-subtitle {
+	font-family: var(--font-body);
+	font-size: 14px;
+	color: var(--text-muted, #6b7280);
+	margin: 0;
+}
+
+/* Signature Text */
+.sarathi-instagram-signature {
+	font-family: 'Caveat', cursive;
+	font-size: 32px;
+	color: #d8c9bc;
+	line-height: 1.2;
+	transform: rotate(-3deg);
+	max-width: 200px;
+}
+
+/* -------------------------------------------------------------
+	RIGHT COLUMN: INSTAGRAM PROFILE GRID
+------------------------------------------------------------- */
+.sarathi-instagram-right {
+	flex: 1;
+}
+
+.sarathi-instagram-feed-wrapper {
+	width: 100%;
+	animation: fadeInUp 0.8s ease forwards;
+	animation-delay: 0.3s;
+	opacity: 0;
+}
+
+/* Override Smash Balloon Defaults */
+.sarathi-instagram-feed-wrapper #sb_instagram {
+	padding-bottom: 0 !important;
+}
+
+.sarathi-instagram-feed-wrapper #sb_instagram .sb_instagram_header,
+.sarathi-instagram-feed-wrapper #sb_instagram .sb_instagram_header_2,
+.sarathi-instagram-feed-wrapper #sb_instagram #sbi_load {
+	display: none !important;
+}
+
+/* The Grid Container */
+.sarathi-instagram-feed-wrapper #sbi_images {
+	display: grid !important;
+	grid-template-columns: repeat(3, 1fr) !important;
+	gap: 4px !important; /* Instagram's classic small gap */
+	padding: 0 !important;
+}
+
+/* Instagram Square Item */
+.sarathi-instagram-feed-wrapper .sbi_item {
+	padding: 0 !important;
+	background: transparent !important;
+	border-radius: 0 !important; /* Authentic Instagram doesn't round images in the grid */
+	overflow: hidden !important;
+	display: block !important;
+	aspect-ratio: 1 / 1 !important; /* Force perfect squares */
+	position: relative !important;
+	cursor: pointer;
+}
+
+/* Un-span the first item */
+.sarathi-instagram-feed-wrapper .sbi_item:nth-child(1) {
+	grid-column: auto !important;
+	grid-row: auto !important;
+}
+
+/* Image Wrapper */
+.sarathi-instagram-feed-wrapper .sbi_photo_wrap,
+.sarathi-instagram-feed-wrapper .sbi_photo {
+	width: 100% !important;
+	height: 100% !important;
+	padding-bottom: 0 !important;
+	display: block !important;
+	position: relative;
+}
+
+.sarathi-instagram-feed-wrapper .sbi_photo img {
+	object-fit: cover !important;
+	width: 100% !important;
+	height: 100% !important;
+	transition: transform 0.3s ease;
+}
+
+/* Hide native plugin meta entirely to favor our hover overlay */
+.sarathi-instagram-feed-wrapper .sbi_info_wrapper {
+	display: none !important;
+}
+
+/* -------------------------------------------------------------
+	HOVER OVERLAY (Injected via JS)
+------------------------------------------------------------- */
+.sarathi-insta-hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+}
+
+.sarathi-instagram-feed-wrapper .sbi_item:hover .sarathi-insta-hover-overlay {
+	opacity: 1;
+}
+
+.sarathi-insta-hover-content {
+	display: flex;
+	gap: 20px;
+	color: #fff;
+}
+
+.sarathi-insta-stat {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	font-size: 16px;
+}
+
+.sarathi-insta-stat strong {
+	font-weight: 600;
+}
+
+/* -------------------------------------------------------------
+	RESPONSIVE
+------------------------------------------------------------- */
+@media (max-width: 991px) {
+	.sarathi-instagram-section-container {
+		flex-direction: column;
+		gap: 3rem;
+	}
+	
+	.sarathi-instagram-left {
+		flex: 1;
+		width: 100%;
+		position: static;
+		padding-right: 0;
+	}
+}
+
+@media (max-width: 768px) {
+	.sarathi-instagram-feed-wrapper #sbi_images {
+		grid-template-columns: repeat(3, 1fr) !important;
+		gap: 2px !important;
+	}
+}

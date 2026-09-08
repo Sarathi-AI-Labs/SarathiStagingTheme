@@ -1,0 +1,604 @@
+{
+    "key": "group_footer_settings",
+    "title": "Footer Settings",
+    "fields": [
+        {
+            "key": "field_footer_tab_layout",
+            "label": "Footer Layout",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_footer_column_count",
+            "label": "Footer Column Count",
+            "name": "footer_column_count",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Select the number of columns to display in the footer layout.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "3": "3 Columns (Brand + 1 Menu + Consultation)",
+                "4": "4 Columns (Brand + 2 Menus + Consultation)",
+                "5": "5 Columns (Brand + 3 Menus + Consultation)",
+                "6": "6 Columns (Brand + 4 Menus + Consultation)"
+            },
+            "default_value": "6",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 1,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_footer_tab_col1",
+            "label": "Column 1 (Brand & Social)",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_footer_logo",
+            "label": "Footer Logo",
+            "name": "footer_logo",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "Upload custom footer logo image. Defaults to theme/header logo if empty.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_footer_brand_name",
+            "label": "Brand / Company Name",
+            "name": "footer_brand_name",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Brand name displayed next to the logo (e.g. Sarathi AI Labs).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Sarathi AI Labs",
+            "placeholder": "Sarathi AI Labs"
+        },
+        {
+            "key": "field_footer_social_links",
+            "label": "Social Media Links",
+            "name": "footer_social_links",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Add social platforms to show in Column 1 below the logo.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "collapsed": "field_footer_social_name",
+            "button_label": "Add Social Link",
+            "sub_fields": [
+                {
+                    "key": "field_footer_social_name",
+                    "label": "Platform Name",
+                    "name": "name",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "e.g. LinkedIn, X, YouTube, Email, Facebook, Instagram",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "35",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placeholder": "LinkedIn"
+                },
+                {
+                    "key": "field_footer_social_url",
+                    "label": "Profile / Action URL",
+                    "name": "url",
+                    "aria-label": "",
+                    "type": "url",
+                    "instructions": "URL or mailto: link",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "45",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placeholder": "https://linkedin.com/company/..."
+                },
+                {
+                    "key": "field_footer_social_icon",
+                    "label": "Custom Icon (Optional)",
+                    "name": "icon",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "Optional custom icon override. Built-in clean SVGs are used by default.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "20",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "preview_size": "thumbnail"
+                }
+            ]
+        },
+        {
+            "key": "field_footer_tab_menus",
+            "label": "Menu Columns",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_footer_menu_col_1_title",
+            "label": "Menu Column 1 Title",
+            "name": "footer_menu_col_1_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Title for the 1st menu column (e.g. Company).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Company",
+            "placeholder": "Company"
+        },
+        {
+            "key": "field_footer_menu_col_1",
+            "label": "Menu Column 1 Menu",
+            "name": "footer_menu_col_1",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Select WordPress menu for Column 1.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {},
+            "default_value": "",
+            "allow_null": 1,
+            "ui": 1,
+            "ajax": 0,
+            "placeholder": "Select a menu..."
+        },
+        {
+            "key": "field_footer_menu_col_2_title",
+            "label": "Menu Column 2 Title",
+            "name": "footer_menu_col_2_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Title for the 2nd menu column (e.g. Services).",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_footer_column_count",
+                        "operator": "==",
+                        "value": "4"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_footer_column_count",
+                        "operator": "==",
+                        "value": "5"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_footer_column_count",
+                        "operator": "==",
+                        "value": "6"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Services",
+            "placeholder": "Services"
+        },
+        {
+            "key": "field_footer_menu_col_2",
+            "label": "Menu Column 2 Menu",
+            "name": "footer_menu_col_2",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Select WordPress menu for Column 2.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_footer_column_count",
+                        "operator": "==",
+                        "value": "4"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_footer_column_count",
+                        "operator": "==",
+                        "value": "5"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_footer_column_count",
+                        "operator": "==",
+                        "value": "6"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {},
+            "default_value": "",
+            "allow_null": 1,
+            "ui": 1,
+            "ajax": 0,
+            "placeholder": "Select a menu..."
+        },
+        {
+            "key": "field_footer_menu_col_3_title",
+            "label": "Menu Column 3 Title",
+            "name": "footer_menu_col_3_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Title for the 3rd menu column (e.g. Solutions).",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_footer_column_count",
+                        "operator": "==",
+                        "value": "5"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_footer_column_count",
+                        "operator": "==",
+                        "value": "6"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Solutions",
+            "placeholder": "Solutions"
+        },
+        {
+            "key": "field_footer_menu_col_3",
+            "label": "Menu Column 3 Menu",
+            "name": "footer_menu_col_3",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Select WordPress menu for Column 3.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_footer_column_count",
+                        "operator": "==",
+                        "value": "5"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_footer_column_count",
+                        "operator": "==",
+                        "value": "6"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {},
+            "default_value": "",
+            "allow_null": 1,
+            "ui": 1,
+            "ajax": 0,
+            "placeholder": "Select a menu..."
+        },
+        {
+            "key": "field_footer_menu_col_4_title",
+            "label": "Menu Column 4 Title",
+            "name": "footer_menu_col_4_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Title for the 4th menu column (e.g. Resources).",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_footer_column_count",
+                        "operator": "==",
+                        "value": "6"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Resources",
+            "placeholder": "Resources"
+        },
+        {
+            "key": "field_footer_menu_col_4",
+            "label": "Menu Column 4 Menu",
+            "name": "footer_menu_col_4",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Select WordPress menu for Column 4.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_footer_column_count",
+                        "operator": "==",
+                        "value": "6"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {},
+            "default_value": "",
+            "allow_null": 1,
+            "ui": 1,
+            "ajax": 0,
+            "placeholder": "Select a menu..."
+        },
+        {
+            "key": "field_footer_tab_cta",
+            "label": "Consultation CTA",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_footer_cta_title",
+            "label": "Consultation Title",
+            "name": "footer_cta_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Title for the Book a Consultation section.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Book a Consultation",
+            "placeholder": "Book a Consultation"
+        },
+        {
+            "key": "field_footer_cta_description",
+            "label": "Short Description",
+            "name": "footer_cta_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Brief descriptive copy.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Schedule a meeting with our experts to discuss your requirements.",
+            "placeholder": "Schedule a meeting with our experts to discuss your requirements.",
+            "rows": 3,
+            "new_lines": "br"
+        },
+        {
+            "key": "field_footer_cta_button_text",
+            "label": "Button / Link Text",
+            "name": "footer_cta_button_text",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "e.g. Book Now",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Book Now",
+            "placeholder": "Book Now"
+        },
+        {
+            "key": "field_footer_cta_button_url",
+            "label": "Button / Link URL",
+            "name": "footer_cta_button_url",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Destination URL (e.g. /contact or https://...)",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#",
+            "placeholder": "#"
+        },
+        {
+            "key": "field_footer_cta_new_tab",
+            "label": "Open Link in New Tab",
+            "name": "footer_cta_new_tab",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "20",
+                "class": "",
+                "id": ""
+            },
+            "message": "Open in new window",
+            "default_value": 0,
+            "ui": 1
+        },
+        {
+            "key": "field_footer_tab_bottom",
+            "label": "Footer Bottom & Copyright",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_footer_copyright",
+            "label": "Copyright Text",
+            "name": "footer_copyright",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "e.g. © {year} Sarathi AI Labs. All rights reserved. Tip: Use {year} to dynamically insert the current year.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "100",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "© {year} Sarathi AI Labs. All rights reserved.",
+            "placeholder": "© {year} Sarathi AI Labs. All rights reserved."
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "footer-settings"
+            }
+        ],
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "acf-options-footer"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Global settings for website footer",
+    "show_in_rest": 0
+}

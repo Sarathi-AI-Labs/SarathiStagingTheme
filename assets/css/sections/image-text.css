@@ -1,0 +1,319 @@
+/* ============================================================
+   IMAGE & TEXT SECTION — Clean Mockup Implementation
+   ============================================================ */
+
+.sarathi-imagetext-section {
+    width: 100%;
+    background-color: var(--bg-white);
+    padding: 3.5rem 1rem;
+    position: relative;
+}
+
+.is-style-circular {
+    /* Wavy background lines for the circular variant */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 400'%3E%3Cpath fill='none' stroke='%23888888' stroke-opacity='0.2' stroke-width='1.5' d='M0,240 C320,340 420,340 720,240 C1020,140 1120,140 1440,240'/%3E%3Cpath fill='none' stroke='%2300a1ab' stroke-opacity='0.2' stroke-dasharray='6,6' stroke-width='1.5' d='M0,260 C320,360 420,360 720,260 C1020,160 1120,160 1440,260'/%3E%3Cpath fill='none' stroke='%2300a1ab' stroke-opacity='0.2' stroke-width='1.5' d='M0,280 C320,380 420,380 720,280 C1020,180 1120,180 1440,280'/%3E%3C/svg%3E");
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-color: #f6fafb !important; /* Soft tint from the new mockup */
+    padding-bottom: 6rem; /* Adjust padding if needed */
+}
+
+.sarathi-imagetext-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 1.5rem;
+}
+
+/* Typography overrides for the circular mockup design */
+.is-style-circular .sarathi-imagetext-heading {
+    color: rgb(0, 161, 171); /* Teal heading */
+}
+
+.is-style-circular .sarathi-imagetext-btn {
+    box-shadow: 0 10px 20px rgba(0, 161, 171, 0.25);
+    border-radius: 9999px;
+}
+
+/* Hide the hardcoded arrow in the circular variant to match the mockup perfectly */
+.is-style-circular .sarathi-imagetext-btn svg {
+    display: none;
+}
+
+.sarathi-imagetext-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+@media (min-width: 1024px) {
+    .sarathi-imagetext-row {
+        grid-template-columns: 1fr 1.1fr;
+        gap: 5rem;
+    }
+    
+    .sarathi-imagetext-row--reverse .sarathi-imagetext-content {
+        order: 2;
+    }
+    
+    .sarathi-imagetext-row--reverse .sarathi-imagetext-media {
+        order: 1;
+    }
+}
+
+/* ============================================================
+   CONTENT STYLING (LEFT COLUMN)
+   ============================================================ */
+
+.sarathi-imagetext-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.sarathi-imagetext-eyebrow {
+    font-size: 16px;
+    font-weight: 700;
+    color: rgb(0, 161, 171);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    font-family: var(--font-body);
+}
+
+.sarathi-imagetext-heading {
+    font-size: clamp(28px, 3vw, 36px);
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.25;
+    margin: 0 0 1.5rem;
+    font-family: var(--font-heading);
+}
+
+@media (min-width: 768px) {
+    .sarathi-imagetext-heading {
+        font-size: clamp(32px, 3vw, 40px);
+    }
+}
+
+.sarathi-imagetext-subheading {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin: 0 0 1rem;
+    font-family: var(--font-heading);
+}
+
+.sarathi-imagetext-desc {
+    font-size: 18px;
+    line-height: 1.7;
+    color: inherit;
+    margin-bottom: 2.5rem;
+    font-family: var(--font-body);
+}
+
+.sarathi-imagetext-desc p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.sarathi-imagetext-desc p:last-child {
+    margin-bottom: 0;
+}
+
+/* CTA BUTTON */
+.sarathi-imagetext-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #009ca6;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    padding: 0.8rem 1.8rem;
+    border-radius: 9999px;
+    transition: all 0.3s ease;
+    font-family: var(--font-heading);
+    border: none;
+}
+
+.sarathi-imagetext-btn:hover {
+    background-color: #007f87;
+    color: #ffffff;
+    gap: 0.75rem;
+}
+
+/* ============================================================
+   IMAGE STYLING (RIGHT COLUMN)
+   ============================================================ */
+
+.sarathi-imagetext-media {
+    position: relative;
+    border-radius: 16px;
+    overflow: visible; /* To allow badge to break out if needed */
+}
+
+.sarathi-imagetext-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 9; /* Shorter, wider landscape */
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================================
+   FLOATING BADGE
+   ============================================================ */
+
+.sarathi-imagetext-badge {
+    position: absolute;
+    bottom: -1.5rem;
+    right: -1.5rem;
+    background: #ffffff;
+    padding: 0.75rem 1.25rem; /* Smaller padding */
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* Tighter gap */
+    z-index: 20;
+    max-width: 260px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.sarathi-imagetext-badge-icon {
+    width: 36px; /* Smaller icon */
+    height: 36px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.sarathi-imagetext-badge-text {
+    font-size: 14px; /* Smaller text */
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.3;
+    font-family: var(--font-heading);
+}
+
+/* Responsive Badge adjustments */
+@media (max-width: 1023px) {
+    .sarathi-imagetext-badge {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+        width: calc(100% - 2rem);
+        max-width: none;
+        padding: 1rem;
+    }
+    
+    .sarathi-imagetext-badge-text {
+        font-size: 14px;
+    }
+    
+    .sarathi-imagetext-badge-icon {
+        width: 36px;
+        height: 36px;
+    }
+}
+/* ============================================================
+   CIRCULAR VARIANT (.is-style-circular)
+   ============================================================ */
+
+.is-style-circular .sarathi-imagetext-media {
+    max-width: 460px; /* Made image slightly smaller as requested */
+    aspect-ratio: 1 / 1;
+    margin: 0 auto 0 auto;
+    position: relative;
+    border-radius: 50%;
+    z-index: 1;
+    overflow: visible !important;
+}
+
+/* The offset decorative ring from the mockup */
+.is-style-circular .sarathi-imagetext-media::before {
+    content: '';
+    position: absolute;
+    /* Added more padding between image and ring */
+    top: -30px;
+    bottom: -30px;
+    left: -30px;
+    right: -30px;
+    width: auto;
+    height: auto;
+    border: 1px solid rgb(0, 161, 171); /* Switched back to 1px for delicacy */
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* The small floating dot from the mockup */
+.is-style-circular .sarathi-imagetext-media::after {
+    content: '';
+    position: absolute;
+    top: 50px;
+    left: -60px;
+    width: 16px;
+    height: 16px;
+    background-color: rgb(0, 161, 171);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+.is-style-circular .sarathi-imagetext-image {
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    box-shadow: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.is-style-circular .sarathi-imagetext-badge {
+    bottom: -3.5rem; /* Pull down more like the mockup */
+    right: -1rem; /* Closer to center */
+    border-radius: 50%;
+    width: 200px; /* Slightly larger for quote */
+    height: 200px;
+    aspect-ratio: 1 / 1;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    gap: 0.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08); /* Softer, larger shadow */
+    border: none;
+}
+
+.is-style-circular .sarathi-imagetext-badge-icon {
+    width: 32px;
+    height: 32px;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+.is-style-circular .sarathi-imagetext-badge-text {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--text-main);
+    position: relative;
+    padding-bottom: 12px;
+}
+
+/* Small teal dash under the badge text */
+.is-style-circular .sarathi-imagetext-badge-text::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 2px;
+    background-color: rgb(0, 161, 171);
+}
+
