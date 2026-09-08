@@ -34,10 +34,10 @@ $card_border_radius = get_sub_field('card_border_radius');
 
 $custom_card_style = '';
 if (!empty($card_bg_color)) {
-    $custom_card_style .= 'background-color: ' . esc_attr($card_bg_color) . ' !important; ';
+	$custom_card_style .= 'background-color: ' . esc_attr($card_bg_color) . ' !important; ';
 }
 if ($card_border_radius !== '' && $card_border_radius !== null && $card_border_radius !== false) {
-    $custom_card_style .= 'border-radius: ' . esc_attr($card_border_radius) . 'px !important; ';
+	$custom_card_style .= 'border-radius: ' . esc_attr($card_border_radius) . 'px !important; ';
 }
 $custom_card_style_attr = !empty($custom_card_style) ? ' style="' . $custom_card_style . '"' : '';
 
@@ -51,22 +51,22 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 	<div class="cards-grid__container sarathi-section-container">
 
 		<?php if ($has_header): ?>
-		<!-- Section Header -->
-		<div class="cards-grid__header">
-			<?php if (!empty($section_eyebrow)): ?>
-				<span class="cards-grid__eyebrow"><?php echo esc_html($section_eyebrow); ?></span>
-			<?php endif; ?>
+			<!-- Section Header -->
+			<div class="cards-grid__header">
+				<?php if (!empty($section_eyebrow)): ?>
+					<span class="cards-grid__eyebrow"><?php echo esc_html($section_eyebrow); ?></span>
+				<?php endif; ?>
 
-			<?php if (!empty($section_title)): ?>
-				<h2 class="cards-grid__title">
-					<?php echo esc_html($section_title); ?>
-				</h2>
-			<?php endif; ?>
+				<?php if (!empty($section_title)): ?>
+					<h2 class="cards-grid__title">
+						<?php echo esc_html($section_title); ?>
+					</h2>
+				<?php endif; ?>
 
-			<?php if (!empty($section_description)): ?>
-				<p class="cards-grid__description"><?php echo esc_html($section_description); ?></p>
-			<?php endif; ?>
-		</div>
+				<?php if (!empty($section_description)): ?>
+					<p class="cards-grid__description"><?php echo esc_html($section_description); ?></p>
+				<?php endif; ?>
+			</div>
 		<?php endif; ?>
 
 		<!-- Cards Grid -->
@@ -86,10 +86,52 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 						$img_src = $theme_uri . '/assets/images/UST_overview.avif';
 					}
 
-					$is_link_wrapped = ($display_variant === 'standard' || $display_variant === 'minimal');
+					$extend_service = !empty($card['extend_service']) ? $card['extend_service'] : false;
+					$is_link_wrapped = ($display_variant === 'standard' || $display_variant === 'minimal') && !$extend_service;
+
+					$item_classes = 'cards-grid__item';
+					if ($extend_service) {
+						$item_classes .= ' js-extend-service-card';
+					}
+
+					$detail_data = '';
+					if ($extend_service) {
+						$detail_eyebrow = !empty($card['detail_eyebrow']) ? $card['detail_eyebrow'] : '';
+						$detail_heading = !empty($card['detail_heading']) ? $card['detail_heading'] : '';
+						$detail_description = !empty($card['detail_description']) ? $card['detail_description'] : '';
+						$detail_image = !empty($card['detail_image']) ? $card['detail_image'] : '';
+						$detail_img_src = is_array($detail_image) ? $detail_image['url'] : $detail_image;
+						$detail_features = !empty($card['detail_features']) ? $card['detail_features'] : [];
+
+						$features_clean = [];
+						if (is_array($detail_features)) {
+							foreach ($detail_features as $feat) {
+								$feat_img = !empty($feat['feature_icon']) ? $feat['feature_icon'] : '';
+								$feat_img_src = is_array($feat_img) ? $feat_img['url'] : $feat_img;
+								$features_clean[] = [
+									'title' => !empty($feat['feature_title']) ? $feat['feature_title'] : '',
+									'desc' => !empty($feat['feature_description']) ? $feat['feature_description'] : '',
+									'icon' => $feat_img_src
+								];
+							}
+						}
+
+						$detail_button = !empty($card['detail_button']) ? $card['detail_button'] : [];
+
+						$detail_data_arr = [
+							'eyebrow' => $detail_eyebrow,
+							'heading' => $detail_heading,
+							'description' => $detail_description,
+							'image' => $detail_img_src,
+							'features' => $features_clean,
+							'button' => $detail_button
+						];
+						$detail_data = " data-details='" . esc_attr(wp_json_encode($detail_data_arr)) . "'";
+					}
 					?>
 
-					<<?php echo $is_link_wrapped ? 'a href="' . esc_url($link) . '"' : 'div'; ?> class="cards-grid__item"<?php echo $custom_card_style_attr; ?>>
+					<<?php echo $is_link_wrapped ? 'a href="' . esc_url($link) . '"' : 'div'; ?>
+						class="<?php echo esc_attr($item_classes); ?>"<?php echo $custom_card_style_attr; ?><?php echo $detail_data; ?>>
 
 						<div class="cards-grid__icon-wrapper">
 							<img src="<?php echo esc_url($img_src); ?>" alt="<?php echo esc_attr($title); ?>" loading="lazy"
@@ -104,6 +146,11 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 
 							<?php if ($display_variant === 'featured'): ?>
 								<a href="<?php echo esc_url($link); ?>" class="cards-grid__item-link"><?php echo $link_title; ?></a>
+							<?php endif; ?>
+
+							<?php if ($extend_service): ?>
+								<button type="button" class="cards-grid__item-btn js-explore-service">Explore Service
+									&rarr;</button>
 							<?php endif; ?>
 						</div>
 
@@ -132,6 +179,26 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 				</a>
 			<?php endif; ?>
 		</div>
+
+		<?php if ($display_variant === 'standard'): ?>
+			<!-- Shared Details Area for Extended Services -->
+			<div class="cards-grid__shared-details" style="display: none;">
+				<div class="cards-grid__shared-details-inner">
+					<div class="cards-grid__shared-details-content">
+						<span class="cards-grid__shared-eyebrow js-shared-eyebrow"></span>
+						<h3 class="cards-grid__shared-title js-shared-title"></h3>
+						<div class="cards-grid__shared-desc js-shared-desc"></div>
+						<div class="cards-grid__shared-features js-shared-features"></div>
+						<div class="cards-grid__shared-btn-wrapper js-shared-btn-wrapper" style="display: none;">
+							<a href="#" class="btn btn-primary js-shared-btn"></a>
+						</div>
+					</div>
+					<div class="cards-grid__shared-details-image">
+						<img src="" alt="" class="js-shared-image" aria-hidden="true" loading="lazy">
+					</div>
+				</div>
+			</div>
+		<?php endif; ?>
 
 		<?php if (!empty($section_cta) && is_array($section_cta)): ?>
 			<div class="cards-grid__footer">

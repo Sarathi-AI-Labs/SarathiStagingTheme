@@ -103,6 +103,22 @@
             "ui": 1,
             "ajax": 0,
             "placeholder": "— Default Primary Menu —"
+        },
+        {
+            "key": "field_header_consultation_cta",
+            "label": "Header CTA Button",
+            "name": "header_consultation_cta",
+            "aria-label": "",
+            "type": "link",
+            "instructions": "Set the text and URL for the CTA button in the header. Defaults to 'Book a Consultation'.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array"
         }
     ],
     "location": [

@@ -69,7 +69,7 @@
         osc.start();
         osc.stop(ctx.currentTime + 0.12);
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // Text-To-Speech Speech Synthesis Engine
@@ -96,7 +96,7 @@
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.rate = 1.05;
     utterance.pitch = 1.0;
-    
+
     state.speakingId = msgId;
 
     utterance.onend = () => {
@@ -164,7 +164,7 @@
   // Safe DOM-based High-Performance Markdown & Feature Parser
   function renderMarkdown(text) {
     if (!text) return '';
-    
+
     // Normalize newlines
     let raw = text.replace(/\r\n/g, '\n');
 
@@ -218,7 +218,7 @@
     html = html.replace(/((?:\|.+?\|\n?)+)/g, function (tableMatch) {
       const rows = tableMatch.trim().split('\n');
       if (rows.length < 2) return tableMatch;
-      
+
       let tableHtml = '<div class="sarathi-table-wrap"><table class="sarathi-table">';
       let isHeader = true;
 
@@ -352,7 +352,7 @@
         const stepNum = numberStepMatch[1];
         const stepContent = numberStepMatch[2];
         const strongMatch = stepContent.match(/^(?:<strong>([^<]+)<\/strong>|\*\*([^*]+)\*\*)\s*(?:[–—:-]\s*|\s*:\s*|\s*-\s*)(.*)$/);
-        
+
         if (strongMatch) {
           stepBuffer.push({
             num: stepNum,
@@ -383,7 +383,7 @@
         const rest = trimmed.substring(emojiMatch[0].length).trim();
         const strongMatch = rest.match(/^(?:<strong>([^<]+)<\/strong>|\*\*([^*]+)\*\*)\s*(?:[–—:-]\s*|\s*:\s*|\s*-\s*)(.*)$/);
         const plainMatch = rest.match(/^([A-Za-z0-9\s&/]{2,40})\s*(?:[–—:-]\s*|\s*:\s*|\s*-\s*)(.*)$/);
-        
+
         if (strongMatch) {
           itemTitle = strongMatch[1] || strongMatch[2];
           itemDesc = strongMatch[3];
@@ -646,9 +646,9 @@ Select a topic above or ask any technical question!`,
           
           <div class="sarathi-chat-header-actions">
             <button class="sarathi-icon-btn" id="sarathi-btn-theme" title="Toggle Theme" aria-label="Toggle Theme">
-              ${state.theme === 'dark' ? 
-                `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>` : 
-                `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`}
+              ${state.theme === 'dark' ?
+        `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>` :
+        `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`}
             </button>
             <button class="sarathi-icon-btn" id="sarathi-btn-reset" title="Reset Chat" aria-label="Reset Conversation">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -872,10 +872,10 @@ Select a topic above or ask any technical question!`,
       if (rootEl) rootEl.setAttribute('data-theme', newTheme);
       if (chatWindow) chatWindow.setAttribute('data-theme', newTheme);
       localStorage.setItem(CONFIG.storageKeyTheme, newTheme);
-      
+
       if (btnTheme) {
-        btnTheme.innerHTML = newTheme === 'dark' ? 
-          `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>` : 
+        btnTheme.innerHTML = newTheme === 'dark' ?
+          `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>` :
           `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
       }
     }
@@ -891,7 +891,7 @@ Select a topic above or ask any technical question!`,
       if (isLeadComplete) {
         if (gateView) gateView.style.display = 'none';
         if (composerContainer) composerContainer.style.display = 'flex';
-        
+
         const hubTitle = document.getElementById('sarathi-hub-title');
         if (hubTitle && state.leadInfo.name) {
           const firstName = state.leadInfo.name.split(' ')[0];
@@ -923,12 +923,12 @@ Select a topic above or ask any technical question!`,
 
       if (gateError) gateError.style.display = 'none';
 
-      state.leadInfo = { 
-        name, 
-        contact, 
+      state.leadInfo = {
+        name,
+        contact,
         phone: contact,
         interest: state.selectedInterest || '',
-        timestamp: new Date().toISOString() 
+        timestamp: new Date().toISOString()
       };
       localStorage.setItem(CONFIG.storageKeyLead, JSON.stringify(state.leadInfo));
 
@@ -1003,7 +1003,7 @@ Select a topic above or ask any technical question!`,
     // Draggable Launcher Button & Header
     makeDraggable(
       launcherWrap,
-      function(r, b) {
+      function (r, b) {
         chatWindow.style.right = r + 'px';
         chatWindow.style.bottom = b + 'px';
         localStorage.setItem(CONFIG.storageKeyPos, JSON.stringify({ right: r, bottom: b }));
@@ -1014,7 +1014,7 @@ Select a topic above or ask any technical question!`,
 
     makeDraggable(
       chatWindow,
-      function(r, b) {
+      function (r, b) {
         launcherWrap.style.right = r + 'px';
         launcherWrap.style.bottom = b + 'px';
         localStorage.setItem(CONFIG.storageKeyPos, JSON.stringify({ right: r, bottom: b }));
@@ -1029,7 +1029,7 @@ Select a topic above or ask any technical question!`,
         toggleChat();
       });
     }
-    
+
     if (launcherPill) {
       launcherPill.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1077,7 +1077,7 @@ Select a topic above or ask any technical question!`,
       card.addEventListener('click', (e) => {
         const topic = card.getAttribute('data-topic');
         let prompt = '';
-        
+
         if (topic) {
           if (topic.includes('Agentic AI')) {
             prompt = 'Tell me about Sarathi Agentic AI and Custom Solutions';
@@ -1607,7 +1607,7 @@ Select a topic above or ask any technical question!`,
 
       try {
         dragHandle.setPointerCapture(e.pointerId);
-      } catch (err) {}
+      } catch (err) { }
 
       dragHandle.addEventListener('pointermove', onMove);
       dragHandle.addEventListener('pointerup', onEnd);
@@ -1654,7 +1654,7 @@ Select a topic above or ask any technical question!`,
 
       try {
         dragHandle.releasePointerCapture(e.pointerId);
-      } catch (err) {}
+      } catch (err) { }
 
       dragHandle.removeEventListener('pointermove', onMove);
       dragHandle.removeEventListener('pointerup', onEnd);

@@ -350,6 +350,7 @@
 	outline: 2px solid #07B6D5;
 	outline-offset: 2px;
 }
+
 /* ============================================================
    INNER PAGE BANNER LAYOUT (NEW SPECIFICATION)
    ============================================================ */
@@ -357,13 +358,16 @@
 .sarathi-inner-page-banner {
 	position: relative;
 	width: 100%;
-	height: 360px; /* Spec: Desktop 360px */
+	height: 360px;
+	/* Spec: Desktop 360px */
 	min-height: 360px;
 	display: flex;
 	align-items: center;
-	background-color: #f8fbff; /* Spec: #f8fbff */
+	background-color: #f8fbff;
+	/* Spec: #f8fbff */
 	overflow: hidden;
-	margin-top: 0 !important; /* Prevent overlapping the header */
+	margin-top: 0 !important;
+	/* Prevent overlapping the header */
 }
 
 .sarathi-inner-banner-wrapper {
@@ -371,9 +375,11 @@
 	flex-direction: column;
 	align-items: flex-start;
 	width: 100%;
-	max-width: 1280px; /* Spec: Container max-width 1280px */
+	max-width: 1280px;
+	/* Spec: Container max-width 1280px */
 	margin: 0 auto;
-	padding: 0 80px; /* Spec: Desktop Horizontal padding ~80px */
+	padding: 0 80px;
+	/* Spec: Desktop Horizontal padding ~80px */
 }
 
 @media (min-width: 992px) {
@@ -382,7 +388,7 @@
 		justify-content: space-between;
 		align-items: center;
 	}
-	
+
 	.sarathi-inner-banner-wrapper.align-left {
 		flex-direction: row-reverse;
 	}
@@ -390,7 +396,8 @@
 
 .sarathi-inner-banner-text-content {
 	flex: 1;
-	max-width: 550px; /* Spec: Content ~50-55% of banner, max 550-600px */
+	max-width: 550px;
+	/* Spec: Content ~50-55% of banner, max 550-600px */
 	text-align: left;
 	position: relative;
 	z-index: 1;
@@ -405,7 +412,8 @@
 
 .sarathi-hero-eyebrow-wrapper .sarathi-hero-eyebrow {
 	margin-bottom: 0;
-	font-size: 14px; /* Spec: Label Desktop 14px */
+	font-size: 14px;
+	/* Spec: Label Desktop 14px */
 	font-weight: 600;
 	letter-spacing: 1.5px;
 	text-transform: uppercase;
@@ -420,7 +428,8 @@
 }
 
 .sarathi-inner-banner-text-content .sarathi-hero-heading {
-	font-size: 48px; /* Spec: H1 Desktop 48px */
+	font-size: 48px;
+	/* Spec: H1 Desktop 48px */
 	line-height: 1.15;
 	font-weight: 700;
 	margin: 0 0 16px;
@@ -428,7 +437,8 @@
 }
 
 .sarathi-inner-banner-text-content .sarathi-hero-description {
-	font-size: 18px; /* Spec: Description Desktop 18px */
+	font-size: 18px;
+	/* Spec: Description Desktop 18px */
 	line-height: 1.6;
 	max-width: 100%;
 	margin: 0;
@@ -452,7 +462,8 @@
 	position: absolute;
 	top: 0;
 	right: 0;
-	width: 70%; /* Increased to stretch further left behind the text fade */
+	width: 70%;
+	/* Increased to stretch further left behind the text fade */
 	height: 100%;
 	z-index: 0;
 }
@@ -466,7 +477,8 @@
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	object-position: right center; /* Prevent cropping main subject */
+	object-position: right center;
+	/* Prevent cropping main subject */
 	box-shadow: none;
 	-webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 5%, black 80%);
 	mask-image: linear-gradient(to right, transparent 0%, transparent 5%, black 80%);
@@ -496,61 +508,72 @@
 
 @media (max-width: 1024px) {
 	.sarathi-inner-page-banner {
-		height: 300px; /* Spec: Tablet 300px */
-		min-height: 300px; 
+		height: 300px;
+		/* Spec: Tablet 300px */
+		min-height: 300px;
 	}
-	
+
 	.sarathi-inner-banner-wrapper {
-		padding: 0 60px; /* Spec: Tablet Horizontal padding 60px */
+		padding: 0 60px;
+		/* Spec: Tablet Horizontal padding 60px */
 	}
-	
+
 	.sarathi-inner-banner-text-content .sarathi-hero-heading {
-		font-size: 40px; /* Spec: H1 Tablet 40px */
+		font-size: 40px;
+		/* Spec: H1 Tablet 40px */
 	}
-	
+
 	.sarathi-inner-banner-text-content .sarathi-hero-description {
-		font-size: 17px; /* Spec: Description Tablet 17px */
+		font-size: 17px;
+		/* Spec: Description Tablet 17px */
 	}
-	
+
 	.sarathi-hero-eyebrow-wrapper .sarathi-hero-eyebrow {
-		font-size: 13px; /* Spec: Label Tablet 13px */
+		font-size: 13px;
+		/* Spec: Label Tablet 13px */
 	}
 }
 
 @media (max-width: 767px) {
 	.sarathi-inner-page-banner {
-		height: 230px; /* Spec: Mobile 230px */
-		min-height: 230px; 
+		height: 230px;
+		/* Spec: Mobile 230px */
+		min-height: 230px;
 	}
-	
+
 	.sarathi-inner-banner-wrapper {
-		padding: 0 20px; /* Spec: Mobile padding 20px */
+		padding: 0 20px;
+		/* Spec: Mobile padding 20px */
 	}
-	
+
 	.sarathi-inner-banner-text-content {
 		max-width: 100%;
 	}
-	
+
 	.sarathi-inner-banner-text-content .sarathi-hero-heading {
-		font-size: 32px; /* Spec: H1 Mobile 32px */
+		font-size: 32px;
+		/* Spec: H1 Mobile 32px */
 		line-height: 1.2;
 		margin-bottom: 12px;
 	}
-	
+
 	.sarathi-inner-banner-text-content .sarathi-hero-description {
-		font-size: 15px; /* Spec: Description Mobile 15px */
+		font-size: 15px;
+		/* Spec: Description Mobile 15px */
 		line-height: 1.5;
 	}
-	
+
 	.sarathi-hero-eyebrow-wrapper .sarathi-hero-eyebrow {
-		font-size: 13px; /* Spec: Label Mobile 13px */
+		font-size: 13px;
+		/* Spec: Label Mobile 13px */
 	}
-	
+
 	/* Subdue the image on mobile so text remains readable across the full width */
 	.sarathi-inner-banner-side-content.type-image {
 		width: 100%;
 		opacity: 0.15;
 	}
+
 	.sarathi-inner-banner-side-content.type-image .sarathi-inner-side-img {
 		-webkit-mask-image: none;
 		mask-image: none;

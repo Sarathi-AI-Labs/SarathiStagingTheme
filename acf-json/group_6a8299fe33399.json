@@ -47,7 +47,7 @@
                         },
                         {
                             "key": "field_hero_version_6a8299fe",
-                            "label": "Hero Version \/ Layout",
+                            "label": "Hero Version / Layout",
                             "name": "hero_version",
                             "aria-label": "",
                             "type": "select",
@@ -538,16 +538,7 @@
                             "key": "field_imagetext_clone_section",
                             "label": "Section Settings",
                             "name": "section_settings",
-                            "aria-label": "",
                             "type": "clone",
-                            "instructions": "",
-                            "required": false,
-                            "conditional_logic": false,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
                             "clone": [
                                 "group_clone_section"
                             ],
@@ -560,16 +551,7 @@
                             "key": "field_imagetext_clone_heading",
                             "label": "Heading Settings",
                             "name": "heading_settings",
-                            "aria-label": "",
                             "type": "clone",
-                            "instructions": "",
-                            "required": false,
-                            "conditional_logic": false,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
                             "clone": [
                                 "group_clone_heading"
                             ],
@@ -582,64 +564,30 @@
                             "key": "field_imagetext_description",
                             "label": "Description",
                             "name": "description",
-                            "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
-                            "required": false,
-                            "conditional_logic": false,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
                             "tabs": "all",
                             "toolbar": "basic",
                             "media_upload": 0,
-                            "delay": 0,
-                            "default_value": ""
+                            "delay": 0
                         },
                         {
                             "key": "field_imagetext_image_style",
                             "label": "Image Style",
                             "name": "image_style",
-                            "aria-label": "",
                             "type": "select",
-                            "instructions": "",
-                            "required": false,
-                            "conditional_logic": false,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
                             "choices": {
                                 "standard": "Standard (Rectangle)",
                                 "circular": "Circular (Rounded)"
                             },
                             "default_value": "standard",
                             "return_format": "value",
-                            "ui": 1,
-                            "multiple": 0,
-                            "allow_null": 0,
-                            "ajax": 0,
-                            "placeholder": "",
-                            "create_options": 0,
-                            "save_options": 0
+                            "ui": 1
                         },
                         {
                             "key": "field_imagetext_clone_image",
                             "label": "Image Settings",
                             "name": "image_settings",
-                            "aria-label": "",
                             "type": "clone",
-                            "instructions": "",
-                            "required": false,
-                            "conditional_logic": false,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
                             "clone": [
                                 "group_clone_image"
                             ],
@@ -652,16 +600,7 @@
                             "key": "field_imagetext_clone_button",
                             "label": "CTA Button",
                             "name": "cta_button",
-                            "aria-label": "",
                             "type": "clone",
-                            "instructions": "",
-                            "required": false,
-                            "conditional_logic": false,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
                             "clone": [
                                 "group_clone_button"
                             ],
@@ -674,30 +613,17 @@
                             "key": "field_imagetext_enable_badge",
                             "label": "Enable Floating Badge",
                             "name": "enable_floating_badge",
-                            "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
-                            "required": false,
-                            "conditional_logic": false,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
                             "ui": 1,
-                            "default_value": 0,
-                            "message": "",
-                            "ui_on_text": "",
-                            "ui_off_text": ""
+                            "default_value": 0
                         },
                         {
                             "key": "field_imagetext_badge_icon",
                             "label": "Badge Icon",
                             "name": "badge_icon",
-                            "aria-label": "",
                             "type": "image",
-                            "instructions": "",
-                            "required": false,
+                            "return_format": "array",
+                            "preview_size": "thumbnail",
                             "conditional_logic": [
                                 [
                                     {
@@ -706,31 +632,13 @@
                                         "value": "1"
                                     }
                                 ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "return_format": "array",
-                            "preview_size": "thumbnail",
-                            "library": "all",
-                            "min_width": 0,
-                            "min_height": 0,
-                            "min_size": 0,
-                            "max_width": 0,
-                            "max_height": 0,
-                            "max_size": 0,
-                            "mime_types": ""
+                            ]
                         },
                         {
                             "key": "field_imagetext_badge_text",
                             "label": "Badge Text",
                             "name": "badge_text",
-                            "aria-label": "",
                             "type": "text",
-                            "instructions": "",
-                            "required": false,
                             "conditional_logic": [
                                 [
                                     {
@@ -739,17 +647,7 @@
                                         "value": "1"
                                     }
                                 ]
-                            ],
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "maxlength": "",
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": ""
+                            ]
                         }
                     ],
                     "min": "",
@@ -807,72 +705,25 @@
                             "key": "field_cardsgrid_eyebrow_6a957d3a78dc4",
                             "label": "Eyebrow",
                             "name": "section_eyebrow",
-                            "aria-label": "",
-                            "type": "text",
-                            "instructions": "",
-                            "required": false,
-                            "conditional_logic": false,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "maxlength": "",
-                            "placeholder": "",
-                            "prepend": "",
-                            "append": ""
+                            "type": "text"
                         },
                         {
                             "key": "field_cardsgrid_description_6a957d3a79376",
                             "label": "Description",
                             "name": "section_description",
-                            "aria-label": "",
-                            "type": "textarea",
-                            "instructions": "",
-                            "required": false,
-                            "conditional_logic": false,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "new_lines": "",
-                            "maxlength": "",
-                            "placeholder": "",
-                            "rows": ""
+                            "type": "textarea"
                         },
                         {
                             "key": "field_cardsgrid_cta_6a957d3a7937d",
                             "label": "Section CTA",
                             "name": "section_cta",
-                            "aria-label": "",
-                            "type": "link",
-                            "instructions": "",
-                            "required": false,
-                            "conditional_logic": false,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "return_format": "array"
+                            "type": "link"
                         },
                         {
                             "key": "field_cardsgrid_variant_6a957d3a7937f",
                             "label": "Display Variant",
                             "name": "display_variant",
-                            "aria-label": "",
                             "type": "select",
-                            "instructions": "",
-                            "required": false,
-                            "conditional_logic": false,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
                             "choices": {
                                 "standard": "Standard (Services)",
                                 "featured": "Featured (Solutions)",
@@ -880,57 +731,20 @@
                                 "stats": "Stats Counter"
                             },
                             "default_value": "standard",
-                            "return_format": "value",
-                            "multiple": 0,
-                            "allow_null": 0,
-                            "ui": 0,
-                            "ajax": 0,
-                            "placeholder": "",
-                            "create_options": 0,
-                            "save_options": 0
+                            "return_format": "value"
                         },
                         {
                             "key": "field_cardsgrid_card_bg_color",
                             "label": "Card Background Color",
                             "name": "card_bg_color",
-                            "aria-label": "",
-                            "type": "color_picker",
-                            "instructions": "",
-                            "required": false,
-                            "conditional_logic": false,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "default_value": "",
-                            "enable_opacity": false,
-                            "custom_palette_source": "",
-                            "palette_colors": "",
-                            "show_color_wheel": true,
-                            "return_format": "string"
+                            "type": "color_picker"
                         },
                         {
                             "key": "field_cardsgrid_card_border_radius",
                             "label": "Card Border Radius (px)",
                             "name": "card_border_radius",
-                            "aria-label": "",
                             "type": "number",
-                            "instructions": "",
-                            "required": false,
-                            "conditional_logic": false,
-                            "wrapper": {
-                                "width": "",
-                                "class": "",
-                                "id": ""
-                            },
-                            "append": "px",
-                            "default_value": "",
-                            "min": "",
-                            "max": "",
-                            "step": "",
-                            "placeholder": "",
-                            "prepend": ""
+                            "append": "px"
                         },
                         {
                             "key": "field_6a8299fe33433",
@@ -946,7 +760,7 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "layout": "table",
+                            "layout": "block",
                             "min": 0,
                             "max": 0,
                             "collapsed": "",
@@ -1037,6 +851,135 @@
                                     },
                                     "return_format": "array",
                                     "parent_repeater": "field_6a8299fe33433"
+                                },
+                                {
+                                    "key": "field_cards_extend_service",
+                                    "label": "Extend Service",
+                                    "name": "extend_service",
+                                    "type": "true_false",
+                                    "instructions": "Enable extended service details and 'Explore Service' button",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "ui": 1,
+                                    "default_value": 0
+                                },
+                                {
+                                    "key": "field_cards_detail_eyebrow",
+                                    "label": "Detail Eyebrow",
+                                    "name": "detail_eyebrow",
+                                    "type": "text",
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_cards_extend_service",
+                                                "operator": "==",
+                                                "value": "1"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "key": "field_cards_detail_heading",
+                                    "label": "Detail Heading",
+                                    "name": "detail_heading",
+                                    "type": "text",
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_cards_extend_service",
+                                                "operator": "==",
+                                                "value": "1"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "key": "field_cards_detail_description",
+                                    "label": "Detail Description",
+                                    "name": "detail_description",
+                                    "type": "textarea",
+                                    "rows": 4,
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_cards_extend_service",
+                                                "operator": "==",
+                                                "value": "1"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "key": "field_cards_detail_image",
+                                    "label": "Detail Image",
+                                    "name": "detail_image",
+                                    "type": "image",
+                                    "return_format": "array",
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_cards_extend_service",
+                                                "operator": "==",
+                                                "value": "1"
+                                            }
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "key": "field_cards_detail_features",
+                                    "label": "Detail Features",
+                                    "name": "detail_features",
+                                    "type": "repeater",
+                                    "layout": "block",
+                                    "button_label": "Add Feature",
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_cards_extend_service",
+                                                "operator": "==",
+                                                "value": "1"
+                                            }
+                                        ]
+                                    ],
+                                    "sub_fields": [
+                                        {
+                                            "key": "field_cards_feature_icon",
+                                            "label": "Feature Icon",
+                                            "name": "feature_icon",
+                                            "type": "image",
+                                            "return_format": "array",
+                                            "preview_size": "thumbnail"
+                                        },
+                                        {
+                                            "key": "field_cards_feature_title",
+                                            "label": "Feature Title",
+                                            "name": "feature_title",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "field_cards_feature_desc",
+                                            "label": "Feature Description",
+                                            "name": "feature_description",
+                                            "type": "textarea",
+                                            "rows": 3
+                                        }
+                                    ]
+                                },
+                                {
+                                    "key": "field_cards_detail_button",
+                                    "label": "Detail Button",
+                                    "name": "detail_button",
+                                    "type": "link",
+                                    "return_format": "array",
+                                    "conditional_logic": [
+                                        [
+                                            {
+                                                "field": "field_cards_extend_service",
+                                                "operator": "==",
+                                                "value": "1"
+                                            }
+                                        ]
+                                    ]
                                 }
                             ]
                         }
@@ -1542,7 +1485,7 @@
                             "name": "form_layout",
                             "aria-label": "",
                             "type": "select",
-                            "instructions": "Select visual layout structure for form and content\/image",
+                            "instructions": "Select visual layout structure for form and content/image",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2073,7 +2016,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "https:\/\/www.google.com\/maps\/embed?pb=..."
+                            "placeholder": "https://www.google.com/maps/embed?pb=..."
                         }
                     ],
                     "min": "",
@@ -2373,7 +2316,7 @@
                             "key": "field_tr_clone_section",
                             "label": "Section Settings",
                             "name": "section_settings",
-                            "aria-label": "",
+                            "aria_label": "",
                             "type": "clone",
                             "instructions": "",
                             "required": 0,

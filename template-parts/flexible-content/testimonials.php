@@ -26,7 +26,8 @@ if ($card_count === 1) {
 ?>
 
 <!-- Testimonials Section -->
-<section class="sarathi-testimonials<?php echo esc_attr($section_class); ?>" id="<?php echo esc_attr($section_id); ?>"<?php echo $section_style; ?>>
+<section class="sarathi-testimonials<?php echo esc_attr($section_class); ?>" id="<?php echo esc_attr($section_id); ?>"
+	<?php echo $section_style; ?>>
 	<div class="sarathi-testimonials-container sarathi-section-container">
 
 		<!-- Section Title -->
@@ -35,7 +36,8 @@ if ($card_count === 1) {
 		<?php endif; ?>
 
 		<div class="sarathi-testimonials-carousel-wrapper<?php echo $count_class; ?>">
-			<button class="sarathi-testimonials-arrow sarathi-testimonials-arrow-prev" aria-label="Previous Testimonial">
+			<button class="sarathi-testimonials-arrow sarathi-testimonials-arrow-prev"
+				aria-label="Previous Testimonial">
 				<i class="fas fa-chevron-left"></i>
 			</button>
 
@@ -49,19 +51,28 @@ if ($card_count === 1) {
 						$photo_field = !empty($testimonial['photo']) ? $testimonial['photo'] : '';
 						$photo_src = is_array($photo_field) ? $photo_field['url'] : $photo_field;
 						// First item is active by default only if carousel logic applies (more than 3 items)
-						$is_center = ($index === 1 && $card_count > 3) ? ' is-active' : ''; 
+						$is_center = ($index === 1 && $card_count > 3) ? ' is-active' : '';
 						?>
-						<div class="sarathi-testimonials-card<?php echo $is_center; ?>">
+						<div class="sarathi-testimonials-card<?php echo $is_center; ?>"
+							data-full-text="<?php echo esc_attr($quote); ?>">
 							<div class="sarathi-testimonials-quote-icon">
 								<i class="fas fa-quote-left"></i>
 							</div>
-							
-							<?php if (!empty($photo_src)): ?>
-								<div class="sarathi-testimonials-photo">
-									<img src="<?php echo esc_url($photo_src); ?>" alt="<?php echo esc_attr($name); ?>" loading="lazy">
-								</div>
-							<?php endif; ?>
-							
+
+							<div class="sarathi-testimonials-photo">
+								<?php if (!empty($photo_src)): ?>
+									<img src="<?php echo esc_url($photo_src); ?>" alt="<?php echo esc_attr($name); ?>"
+										loading="lazy">
+								<?php else: ?>
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+										stroke-linecap="round" stroke-linejoin="round"
+										style="width: 100%; height: 100%; color: #a0aab2; background: #eef2f5; padding: 1rem; box-sizing: border-box;">
+										<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+										<circle cx="12" cy="7" r="4"></circle>
+									</svg>
+								<?php endif; ?>
+							</div>
+
 							<div class="sarathi-testimonials-content">
 								<div class="sarathi-testimonials-quote">
 									<p><?php echo esc_html($quote); ?></p>
@@ -83,11 +94,13 @@ if ($card_count === 1) {
 							<i class="fas fa-quote-left"></i>
 						</div>
 						<div class="sarathi-testimonials-photo">
-							<img src="<?php echo esc_url($theme_uri . '/assets/images/UST_overview.avif'); ?>" alt="Jane Doe" loading="lazy">
+							<img src="<?php echo esc_url($theme_uri . '/assets/images/UST_overview.avif'); ?>"
+								alt="Jane Doe" loading="lazy">
 						</div>
 						<div class="sarathi-testimonials-content">
 							<div class="sarathi-testimonials-quote">
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus elementum magna ut duis pulvinar tincidunt vivamus adipiscing quam. Eget dui quis etiam sed eget sed est.</p>
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus elementum magna ut duis
+									pulvinar tincidunt vivamus adipiscing quam. Eget dui quis etiam sed eget sed est.</p>
 							</div>
 							<div class="sarathi-testimonials-author">
 								<div class="sarathi-testimonials-name">Jane Doe</div>
@@ -101,11 +114,13 @@ if ($card_count === 1) {
 							<i class="fas fa-quote-left"></i>
 						</div>
 						<div class="sarathi-testimonials-photo">
-							<img src="<?php echo esc_url($theme_uri . '/assets/images/Early_years_program.avif'); ?>" alt="Jane Doe" loading="lazy">
+							<img src="<?php echo esc_url($theme_uri . '/assets/images/Early_years_program.avif'); ?>"
+								alt="Jane Doe" loading="lazy">
 						</div>
 						<div class="sarathi-testimonials-content">
 							<div class="sarathi-testimonials-quote">
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus elementum magna ut duis pulvinar tincidunt vivamus adipiscing quam. Eget dui quis etiam sed eget sed est.</p>
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus elementum magna ut duis
+									pulvinar tincidunt vivamus adipiscing quam. Eget dui quis etiam sed eget sed est.</p>
 							</div>
 							<div class="sarathi-testimonials-author">
 								<div class="sarathi-testimonials-name">Jane Doe</div>
@@ -119,11 +134,13 @@ if ($card_count === 1) {
 							<i class="fas fa-quote-left"></i>
 						</div>
 						<div class="sarathi-testimonials-photo">
-							<img src="<?php echo esc_url($theme_uri . '/assets/images/UST_overview.avif'); ?>" alt="Jane Doe" loading="lazy">
+							<img src="<?php echo esc_url($theme_uri . '/assets/images/UST_overview.avif'); ?>"
+								alt="Jane Doe" loading="lazy">
 						</div>
 						<div class="sarathi-testimonials-content">
 							<div class="sarathi-testimonials-quote">
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus elementum magna ut duis pulvinar tincidunt vivamus adipiscing quam. Eget dui quis etiam sed eget sed est.</p>
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus elementum magna ut duis
+									pulvinar tincidunt vivamus adipiscing quam. Eget dui quis etiam sed eget sed est.</p>
 							</div>
 							<div class="sarathi-testimonials-author">
 								<div class="sarathi-testimonials-name">Jane Doe</div>
@@ -143,4 +160,20 @@ if ($card_count === 1) {
 		<div class="sarathi-testimonials-pagination"></div>
 
 	</div>
+	<<<<<<< HEAD=======<!-- Testimonial Modal -->
+		<div class="sarathi-testimonials-modal" aria-hidden="true" role="dialog" aria-modal="true">
+			<div class="sarathi-testimonials-modal-overlay"></div>
+			<div class="sarathi-testimonials-modal-content">
+				<button class="sarathi-testimonials-modal-close" aria-label="Close modal">&times;</button>
+				<div class="sarathi-testimonials-modal-body">
+					<div class="sarathi-testimonials-quote-icon">
+						<i class="fas fa-quote-left"></i>
+					</div>
+					<div class="sarathi-testimonials-modal-photo-wrapper"></div>
+					<div class="sarathi-testimonials-modal-text"></div>
+					<div class="sarathi-testimonials-modal-author"></div>
+				</div>
+			</div>
+		</div>
+		>>>>>>> f1ecd395def36b6dcf2325b807af4e2e86fc226d
 </section>

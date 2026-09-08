@@ -63,14 +63,16 @@
 	align-items: center;
 	margin-left: -1rem;
 	margin-right: -1rem;
-	padding: 1rem; /* For hover shadows */
+	padding: 1rem;
+	/* For hover shadows */
 }
 
 @media (min-width: 768px) {
 	.sarathi-testimonials-carousel-wrapper {
 		margin-left: 0;
 		margin-right: 0;
-		padding: 1rem 3rem; /* Space for arrows */
+		padding: 1rem 3rem;
+		/* Space for arrows */
 	}
 }
 
@@ -102,6 +104,12 @@
 	box-shadow: var(--shadow-md);
 }
 
+.sarathi-testimonials-arrow.is-disabled {
+	opacity: 0.3;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
 .sarathi-testimonials-arrow-prev {
 	left: 0;
 }
@@ -110,10 +118,20 @@
 	right: 0;
 }
 
-/* Hide arrows on smaller screens, they can swipe */
+/* Keep arrows visible on smaller screens but scale them down to avoid covering text */
 @media (max-width: 767px) {
 	.sarathi-testimonials-arrow {
-		display: none;
+		width: 36px;
+		height: 36px;
+		font-size: 1rem;
+	}
+
+	.sarathi-testimonials-arrow-prev {
+		left: -0.5rem;
+	}
+
+	.sarathi-testimonials-arrow-next {
+		right: -0.5rem;
 	}
 }
 
@@ -124,9 +142,12 @@
 	overflow-x: auto;
 	scroll-behavior: smooth;
 	scroll-snap-type: x mandatory;
-	-ms-overflow-style: none; /* IE and Edge */
-	scrollbar-width: none; /* Firefox */
-	padding: 1rem 0; /* Padding for card box-shadows */
+	-ms-overflow-style: none;
+	/* IE and Edge */
+	scrollbar-width: none;
+	/* Firefox */
+	padding: 1rem 0;
+	/* Padding for card box-shadows */
 	align-items: stretch;
 }
 
@@ -137,7 +158,7 @@
 
 /* Card */
 .sarathi-testimonials-card {
-	flex: 0 0 100%;
+	flex: 0 0 85%;
 	scroll-snap-align: center;
 	background-color: var(--bg-white);
 	border-radius: var(--border-radius-md);
@@ -149,17 +170,19 @@
 	position: relative;
 	transition: transform 0.3s ease, box-shadow 0.3s ease;
 	border: 1px solid var(--border-color);
+	height: 100%;
+	/* Ensure cards can stretch to full height */
 }
 
 @media (min-width: 768px) {
 	.sarathi-testimonials-card {
-		flex: 0 0 calc(50% - 1rem);
+		flex: 0 0 calc(45% - 1rem);
 	}
 }
 
 @media (min-width: 1024px) {
 	.sarathi-testimonials-card {
-		flex: 0 0 calc(33.3333% - 1.3333rem);
+		flex: 0 0 calc(30% - 1.3333rem);
 	}
 }
 
@@ -219,6 +242,15 @@
 	line-height: 1.6;
 	color: var(--text-muted);
 	margin: 0;
+	display: -webkit-box;
+	-webkit-line-clamp: 4;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.sarathi-testimonials-card.is-clickable {
+	cursor: pointer;
 }
 
 /* Author Info */
@@ -271,40 +303,142 @@
 
 /* 1 or 2 Cards Layout */
 @media (min-width: 768px) {
-    .sarathi-testimonials-carousel-wrapper.has-1-card .sarathi-testimonials-track,
-    .sarathi-testimonials-carousel-wrapper.has-2-cards .sarathi-testimonials-track {
-        justify-content: center;
-        overflow: hidden;
-    }
-    
-    .sarathi-testimonials-carousel-wrapper.has-1-card .sarathi-testimonials-arrow,
-    .sarathi-testimonials-carousel-wrapper.has-2-cards .sarathi-testimonials-arrow {
-        display: none;
-    }
-    
-    .sarathi-testimonials-carousel-wrapper.has-1-card ~ .sarathi-testimonials-pagination,
-    .sarathi-testimonials-carousel-wrapper.has-2-cards ~ .sarathi-testimonials-pagination {
-        display: none;
-    }
 
-    .sarathi-testimonials-carousel-wrapper.has-1-card .sarathi-testimonials-card {
-        flex: 0 0 100%;
-        max-width: 800px;
-    }
+	.sarathi-testimonials-carousel-wrapper.has-1-card .sarathi-testimonials-track,
+	.sarathi-testimonials-carousel-wrapper.has-2-cards .sarathi-testimonials-track {
+		justify-content: center;
+		overflow: hidden;
+	}
+
+	.sarathi-testimonials-carousel-wrapper.has-1-card .sarathi-testimonials-arrow,
+	.sarathi-testimonials-carousel-wrapper.has-2-cards .sarathi-testimonials-arrow {
+		display: none;
+	}
+
+	.sarathi-testimonials-carousel-wrapper.has-1-card~.sarathi-testimonials-pagination,
+	.sarathi-testimonials-carousel-wrapper.has-2-cards~.sarathi-testimonials-pagination {
+		display: none;
+	}
+
+	.sarathi-testimonials-carousel-wrapper.has-1-card .sarathi-testimonials-card {
+		flex: 0 0 100%;
+		max-width: 800px;
+	}
+
+	.sarathi-testimonials-carousel-wrapper.has-2-cards .sarathi-testimonials-card {
+		flex: 0 0 calc(50% - 1rem);
+	}
 }
 
 /* 3 Cards Layout */
 @media (min-width: 1024px) {
-    .sarathi-testimonials-carousel-wrapper.has-3-cards .sarathi-testimonials-track {
-        justify-content: center;
-        overflow: hidden;
-    }
-    
-    .sarathi-testimonials-carousel-wrapper.has-3-cards .sarathi-testimonials-arrow {
-        display: none;
-    }
-    
-    .sarathi-testimonials-carousel-wrapper.has-3-cards ~ .sarathi-testimonials-pagination {
-        display: none;
-    }
+	.sarathi-testimonials-carousel-wrapper.has-3-cards .sarathi-testimonials-track {
+		justify-content: center;
+		overflow: auto;
+	}
+
+	.sarathi-testimonials-carousel-wrapper.has-3-cards .sarathi-testimonials-card {
+		flex: 0 0 calc(33.3333% - 1.3333rem);
+	}
+}
+
+/* ============================================================
+	MODAL STYLES
+	============================================================ */
+
+.sarathi-testimonials-modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 9999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.sarathi-testimonials-modal.is-open {
+	opacity: 1;
+	visibility: visible;
+}
+
+.sarathi-testimonials-modal-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(4px);
+}
+
+.sarathi-testimonials-modal-content {
+	position: relative;
+	width: 90%;
+	max-width: 600px;
+	max-height: 90vh;
+	overflow-y: auto;
+	background-color: var(--bg-white);
+	border-radius: var(--border-radius-md);
+	padding: 3rem 2rem;
+	box-shadow: var(--shadow-lg);
+	z-index: 1;
+	transform: translateY(20px);
+	transition: transform 0.3s ease;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	border: 1px solid var(--border-color);
+}
+
+.sarathi-testimonials-modal.is-open .sarathi-testimonials-modal-content {
+	transform: translateY(0);
+}
+
+.sarathi-testimonials-modal-close {
+	position: absolute;
+	top: 1rem;
+	right: 1.5rem;
+	background: none;
+	border: none;
+	font-size: 2rem;
+	line-height: 1;
+	cursor: pointer;
+	color: var(--text-muted);
+	padding: 0;
+	transition: color 0.3s ease;
+}
+
+.sarathi-testimonials-modal-close:hover {
+	color: var(--color-primary);
+}
+
+.sarathi-testimonials-modal-body {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.sarathi-testimonials-modal-photo-wrapper .sarathi-testimonials-photo {
+	margin: 0 auto 1.5rem auto;
+}
+
+.sarathi-testimonials-modal-text {
+	font-family: var(--font-body);
+	font-size: 16px;
+	line-height: 1.6;
+	color: var(--text-main);
+	margin-bottom: 2rem;
+}
+
+.sarathi-testimonials-modal-author {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
