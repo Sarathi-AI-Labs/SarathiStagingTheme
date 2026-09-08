@@ -1,0 +1,465 @@
+/* ============================================================
+	WELCOME SECTION — Sarathi AI Labs Rebuild
+	============================================================ */
+
+
+/* ============================================================
+	OUTER SECTION WRAPPER
+	============================================================ */
+
+.sarathi-welcome {
+	display: flex;
+	width: 100%;
+	font-family: var(--font-body);
+}
+
+
+/* ============================================================
+	SIDEBAR
+	============================================================ */
+
+.sarathi-welcome-sidebar {
+	flex: 0 0 210px;
+	width: 210px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: var(--color-primary);
+	padding-bottom: 24px;
+	box-sizing: border-box;
+}
+
+
+/* ============================================================
+	SIDEBAR — SCROLL ARROW
+	============================================================ */
+
+.sarathi-sidebar-arrow {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 72px;
+	padding: 20px 0 16px;
+	color: var(--bg-white);
+	transition: opacity 0.2s ease;
+}
+
+.sarathi-sidebar-arrow:hover {
+	opacity: 0.8;
+}
+
+.sarathi-sidebar-arrow svg {
+	width: 24px;
+	height: 70px;
+}
+
+
+/* ============================================================
+	SIDEBAR — NAV
+	============================================================ */
+
+.sarathi-sidebar-nav {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.sarathi-sidebar-nav-item {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 10px 10px 5px;
+	text-decoration: none;
+	color: var(--bg-white);
+	transition: opacity 0.2s ease;
+}
+
+.sarathi-sidebar-nav-item:hover {
+	opacity: 0.8;
+}
+
+.sarathi-sidebar-nav-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	margin-bottom: 4px;
+}
+
+/* Specific item icon dimensions from reference inspect data */
+.sarathi-sidebar-nav-item:nth-child(1) .sarathi-sidebar-nav-icon img {
+	width: 47px;
+	height: 68px;
+	object-fit: contain;
+}
+
+.sarathi-sidebar-nav-item:nth-child(2) .sarathi-sidebar-nav-icon img {
+	width: 47px;
+	height: 67px;
+	object-fit: contain;
+}
+
+.sarathi-sidebar-nav-item:nth-child(3) .sarathi-sidebar-nav-icon img {
+	width: 73px;
+	height: 67px;
+	object-fit: contain;
+}
+
+.sarathi-sidebar-nav-label {
+	font-family: var(--font-body);
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.4;
+	text-align: center;
+	color: var(--bg-white);
+	padding-bottom: 5px;
+}
+
+.sarathi-sidebar-divider {
+	display: block;
+	width: 90px;
+	height: 1.5px;
+	background-color: rgba(255, 255, 255, 0.3);
+	margin-top: 14px;
+}
+
+
+/* ============================================================
+	SIDEBAR — SOCIAL ICONS
+	============================================================ */
+
+.sarathi-sidebar-social {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 16px;
+	padding: 20px 0 10px;
+	margin-top: 20px;
+}
+
+.sarathi-sidebar-social-item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 45px;
+	height: 45px;
+	text-decoration: none;
+	transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.sarathi-sidebar-social-item:hover {
+	opacity: 0.9;
+	transform: scale(1.05);
+}
+
+.sarathi-sidebar-social-item img {
+	width: 45px;
+	height: 45px;
+	object-fit: contain;
+}
+
+
+/* ============================================================
+	MAIN AREA (right of sidebar)
+	============================================================ */
+
+.sarathi-welcome-main {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+
+/* ============================================================
+	BLUE HEADER BAR -> Dark Gradient Header
+	============================================================ */
+
+.sarathi-welcome-header {
+	background: linear-gradient(90deg, var(--color-primary-dark) 0%, var(--color-secondary) 100%);
+	min-height: 134px;
+	padding: 15px 10px 15px 90px;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.sarathi-welcome-heading {
+	margin: 0;
+	padding-bottom: 8px;
+	color: var(--bg-white);
+	font-family: var(--font-heading);
+	font-weight: 700;
+	font-size: 40px;
+	line-height: 1.2;
+}
+
+.sarathi-welcome-subheading {
+	margin: 0;
+	padding-top: 4px;
+	color: var(--bg-white);
+	font-family: var(--font-body);
+	font-weight: 400;
+	font-style: normal;
+	font-size: 22px;
+	line-height: 1.4;
+	opacity: 0.9;
+}
+
+
+/* ============================================================
+	TWO-COLUMN CONTENT
+	============================================================ */
+
+.sarathi-welcome-content {
+	display: flex;
+	flex: 1;
+	align-items: start;
+	position: relative;
+}
+
+
+/* ============================================================
+	TEXT COLUMN
+	============================================================ */
+
+.sarathi-welcome-text {
+	flex: 1;
+	min-width: 0;
+	background: var(--bg-white);
+	padding: 40px 90px 45px;
+	box-sizing: border-box;
+	color: var(--text-muted);
+	font-family: var(--font-body);
+	font-size: 18px;
+	line-height: 1.6;
+}
+
+/* Paragraphs */
+.sarathi-welcome-text p {
+	margin: 0 0 22px;
+	color: var(--text-muted);
+	font-family: var(--font-body);
+	font-size: 18px;
+	line-height: 1.6;
+	max-width: 500px;
+}
+
+.sarathi-welcome-text p:last-of-type {
+	margin-bottom: 0;
+}
+
+
+/* ============================================================
+	LEARN MORE BUTTON
+	============================================================ */
+
+.sarathi-welcome-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 30px;
+	background: var(--color-primary);
+	color: var(--bg-white);
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1;
+	text-decoration: none;
+	padding: 14px 32px;
+	border-radius: 50px;
+	transition: all 0.3s ease;
+	border: 2px solid var(--color-primary);
+}
+
+.sarathi-welcome-btn:hover {
+	background: var(--color-primary-dark);
+	border-color: var(--color-primary-dark);
+	box-shadow: var(--shadow-md);
+}
+
+
+/* ============================================================
+	IMAGE COLUMN — Sticky
+	============================================================ */
+
+.sarathi-welcome-image {
+	flex: 0 0 639px;
+	width: 639px;
+	max-width: 100%;
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	align-self: stretch;
+	overflow: hidden;
+	background-color: var(--bg-light);
+	z-index: 2;
+}
+
+.sarathi-welcome-image img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	will-change: transform;
+}
+
+
+/* ============================================================
+	RESPONSIVE — TABLET (≤ 1024px)
+	============================================================ */
+
+@media (max-width: 1024px) {
+	.sarathi-welcome-sidebar {
+		flex: 0 0 180px;
+		width: 180px;
+	}
+
+	.sarathi-welcome-header {
+		padding: 36px 60px 32px;
+	}
+
+	.sarathi-welcome-heading {
+		font-size: 32px;
+	}
+
+	.sarathi-welcome-subheading {
+		font-size: 18px;
+	}
+
+	.sarathi-welcome-text {
+		padding: 32px 40px 40px;
+	}
+
+	.sarathi-welcome-image {
+		height: 100vh;
+	}
+}
+
+
+/* ============================================================
+	RESPONSIVE — MOBILE (≤ 768px)
+	============================================================ */
+
+@media (max-width: 768px) {
+
+	.sarathi-welcome {
+		flex-direction: column;
+	}
+
+	/* Sidebar → horizontal strip */
+	.sarathi-welcome-sidebar {
+		flex: none;
+		width: 100%;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 16px;
+		min-height: 56px;
+	}
+
+	.sarathi-sidebar-arrow {
+		display: none;
+	}
+
+	.sarathi-sidebar-nav {
+		flex-direction: row;
+		width: auto;
+	}
+
+	.sarathi-sidebar-nav-item {
+		border-top: none;
+		border-left: 1px solid rgba(255, 255, 255, 0.2);
+		padding: 6px 12px;
+		flex-direction: row;
+		gap: 5px;
+		width: auto;
+	}
+
+	.sarathi-sidebar-nav-item:last-child {
+		border-bottom: none;
+		border-right: 1px solid rgba(255, 255, 255, 0.2);
+	}
+
+	.sarathi-sidebar-nav-icon svg {
+		width: 20px;
+		height: 20px;
+	}
+
+	.sarathi-sidebar-social {
+		flex-direction: row;
+		margin-top: 0;
+		padding: 0;
+		gap: 8px;
+	}
+
+	.sarathi-sidebar-social-item {
+		width: 32px;
+		height: 32px;
+	}
+
+	.sarathi-sidebar-social-item svg {
+		width: 15px;
+		height: 15px;
+	}
+
+	/* Header */
+	.sarathi-welcome-header {
+		padding: 24px 28px 20px;
+	}
+
+	.sarathi-welcome-heading {
+		font-size: 28px;
+	}
+
+	.sarathi-welcome-subheading {
+		font-size: 16px;
+	}
+
+	/* Stack text above image, disable sticky */
+	.sarathi-welcome-content {
+		flex-direction: column;
+		width: 100%;
+	}
+
+	.sarathi-welcome-text {
+		width: 100%;
+		padding: 24px 20px 32px;
+	}
+
+	.sarathi-welcome-text p {
+		max-width: 100%;
+	}
+
+	.sarathi-welcome-image {
+		position: relative;
+		top: auto;
+		flex: none;
+		width: 100%;
+		height: 300px;
+		max-height: 300px;
+	}
+}
+
+
+/* ============================================================
+	RESPONSIVE — SMALL MOBILE (≤ 480px)
+	============================================================ */
+
+@media (max-width: 480px) {
+
+	.sarathi-sidebar-nav-label {
+		display: none;
+	}
+
+	.sarathi-welcome-heading {
+		font-size: 24px;
+	}
+
+	.sarathi-welcome-subheading {
+		font-size: 14px;
+	}
+}

@@ -1,0 +1,762 @@
+/**
+ * Trainings Section Styles - Custom Theme
+ * Matches Sarathi AI Labs design mockup with support for Split 30/70, Grid, and Detailed layouts.
+ */
+
+.sarathi-training-section {
+	width: 100%;
+	padding: 70px 0 60px 0;
+	background-color: var(--bg-white, #ffffff);
+	font-family: var(--font-body, 'Inter', sans-serif);
+	color: var(--text-main, #1f2937);
+	box-sizing: border-box;
+}
+
+.sarathi-training-container {
+	width: min(100% - 48px, 1240px);
+	margin-inline: auto;
+	box-sizing: border-box;
+}
+
+/* ==========================================================================
+   Shared Typography & Badges
+   ========================================================================== */
+
+.sarathi-training-eyebrow {
+	display: inline-block;
+	font-family: var(--font-body, 'Inter', sans-serif);
+	font-size: 13px;
+	font-weight: 700;
+	color: var(--color-primary, #07B6D5);
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	margin-bottom: 12px;
+}
+
+.sarathi-training-title {
+	font-family: var(--font-heading, 'Outfit', sans-serif);
+	font-size: clamp(26px, 3.5vw, 36px);
+	font-weight: 700;
+	color: #111827;
+	line-height: 1.25;
+	margin: 0 0 14px 0;
+	letter-spacing: -0.02em;
+}
+
+.sarathi-training-desc {
+	font-family: var(--font-body, 'Inter', sans-serif);
+	font-size: 15px;
+	color: #4b5563;
+	line-height: 1.6;
+	margin: 0;
+}
+
+.sarathi-training-explore-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-family: var(--font-body, 'Inter', sans-serif);
+	font-size: 15px;
+	font-weight: 600;
+	color: var(--color-primary, #07B6D5);
+	text-decoration: none;
+	transition: color 0.2s ease, gap 0.2s ease;
+}
+
+.sarathi-training-explore-link:hover {
+	color: var(--color-primary-dark, #007f87);
+	gap: 12px;
+}
+
+.sarathi-tr-arrow {
+	width: 16px;
+	height: 16px;
+	transition: transform 0.2s ease;
+	flex-shrink: 0;
+}
+
+.sarathi-training-explore-link:hover .sarathi-tr-arrow {
+	transform: translateX(3px);
+}
+
+/* ==========================================================================
+   LAYOUT 1: SPLIT 30/70 (Matching Design Mockup)
+   ========================================================================== */
+
+.sarathi-tr-split-wrapper {
+	display: grid;
+	grid-template-columns: 340px 1fr;
+	gap: 52px;
+	align-items: center;
+}
+
+.sarathi-tr-split-info {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.sarathi-tr-info-btn-wrap {
+	margin-top: 24px;
+}
+
+.sarathi-tr-split-cards {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 24px;
+}
+
+/* ==========================================================================
+   Training Card (Mockup Style)
+   ========================================================================== */
+
+.sarathi-training-card {
+	background: #ffffff;
+	border: 1px solid var(--border-color, #e5e7eb);
+	border-radius: 16px;
+	padding: 28px 24px 24px 24px;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	min-height: 210px;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+	transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease;
+	box-sizing: border-box;
+}
+
+.sarathi-training-card:hover {
+	transform: translateY(-5px);
+	border-color: var(--color-primary, #07B6D5);
+	box-shadow: 0 16px 28px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+}
+
+.sarathi-training-card__icon {
+	margin-bottom: 18px;
+	width: 44px;
+	height: 44px;
+	display: flex;
+	align-items: center;
+}
+
+.sarathi-tr-icon-svg {
+	width: 40px;
+	height: 40px;
+	display: block;
+}
+
+.sarathi-training-custom-icon {
+	width: 40px;
+	height: 40px;
+	object-fit: contain;
+}
+
+.sarathi-training-card__body {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.sarathi-training-card__title {
+	font-family: var(--font-heading, 'Outfit', sans-serif);
+	font-size: 18px;
+	font-weight: 700;
+	color: #111827;
+	line-height: 1.35;
+	margin: 0 0 10px 0;
+	letter-spacing: -0.01em;
+}
+
+.sarathi-training-card__title a {
+	color: #111827;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.sarathi-training-card__title a:hover {
+	color: var(--color-primary, #07B6D5);
+}
+
+.sarathi-training-card__desc {
+	font-size: 13.5px;
+	color: #6b7280;
+	line-height: 1.55;
+	margin: 0;
+	padding-right: 48px;
+}
+
+.sarathi-training-card__action {
+	position: absolute;
+	bottom: 22px;
+	right: 22px;
+}
+
+.sarathi-training-btn-arrow {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 38px;
+	height: 38px;
+	border-radius: 9px;
+	border: 1.5px solid var(--color-primary, #07B6D5);
+	background-color: transparent;
+	color: var(--color-primary, #07B6D5);
+	text-decoration: none;
+	transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sarathi-tr-btn-svg {
+	width: 17px;
+	height: 17px;
+	transition: transform 0.2s ease;
+}
+
+.sarathi-training-card:hover .sarathi-training-btn-arrow,
+.sarathi-training-btn-arrow:hover {
+	background-color: var(--color-primary, #07B6D5);
+	color: #ffffff;
+	transform: scale(1.06);
+}
+
+.sarathi-training-card:hover .sarathi-tr-btn-svg {
+	transform: translateX(2px);
+}
+
+/* ==========================================================================
+   LAYOUT 2: TOP INFO + BOTTOM GRID (3 or 4 Columns)
+   ========================================================================== */
+
+.sarathi-tr-top-header {
+	text-align: center;
+	max-width: 760px;
+	margin: 0 auto 44px auto;
+}
+
+.sarathi-tr-grid-wrapper {
+	display: grid;
+	gap: 24px;
+}
+
+.sarathi-tr-cols-3 {
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.sarathi-tr-cols-4 {
+	grid-template-columns: repeat(4, 1fr);
+}
+
+.sarathi-tr-footer-cta {
+	margin-top: 48px;
+	text-align: center;
+}
+
+/* ==========================================================================
+   LAYOUT 3: DETAILED FEATURED CARDS
+   ========================================================================== */
+
+.sarathi-tr-detailed-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+	gap: 28px;
+}
+
+.sarathi-tr-detailed-card {
+	background: #ffffff;
+	border: 1px solid var(--border-color, #e5e7eb);
+	border-radius: 18px;
+	padding: 28px;
+	display: flex;
+	flex-direction: column;
+	transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.sarathi-tr-detailed-card:hover {
+	transform: translateY(-5px);
+	border-color: var(--color-primary, #07B6D5);
+	box-shadow: 0 16px 28px -5px rgba(0, 0, 0, 0.08);
+}
+
+.sarathi-tr-detailed-card__top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 16px;
+}
+
+.sarathi-tr-badge {
+	display: inline-block;
+	font-size: 11px;
+	font-weight: 700;
+	color: var(--color-primary, #07B6D5);
+	background-color: #f0fdfa;
+	padding: 4px 10px;
+	border-radius: 50px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	border: 1px solid rgba(0, 161, 171, 0.2);
+}
+
+.sarathi-tr-meta-pill {
+	font-size: 12px;
+	font-weight: 600;
+	color: #4b5563;
+	background-color: #f3f4f6;
+	padding: 4px 10px;
+	border-radius: 50px;
+}
+
+.sarathi-tr-detailed-card__title {
+	font-family: var(--font-heading, 'Outfit', sans-serif);
+	font-size: 19px;
+	font-weight: 700;
+	color: #111827;
+	line-height: 1.35;
+	margin: 0 0 12px 0;
+}
+
+.sarathi-tr-detailed-card__title a {
+	color: #111827;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.sarathi-tr-detailed-card__title a:hover {
+	color: var(--color-primary, #07B6D5);
+}
+
+.sarathi-tr-detailed-card__desc {
+	font-size: 14px;
+	color: #6b7280;
+	line-height: 1.6;
+	margin: 0 0 24px 0;
+}
+
+.sarathi-tr-detailed-card__footer {
+	margin-top: auto;
+	padding-top: 18px;
+	border-top: 1px solid #f1f5f9;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.sarathi-tr-info-tags {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.sarathi-tr-tag-item {
+	font-size: 12px;
+	color: #6b7280;
+	background-color: #f8fafc;
+	padding: 3px 8px;
+	border-radius: 4px;
+}
+
+.sarathi-tr-enroll-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--color-primary, #07B6D5);
+	text-decoration: none;
+	transition: all 0.2s ease;
+}
+
+.sarathi-tr-enroll-btn:hover {
+	color: var(--color-primary-dark, #007f87);
+	gap: 9px;
+}
+
+/* ==========================================================================
+   Single Training Page Styles
+   ========================================================================== */
+
+.sarathi-single-training {
+	width: 100%;
+	background-color: var(--bg-white, #ffffff);
+	padding-bottom: 80px;
+}
+
+.sarathi-tr-single-hero {
+	padding: 48px 0 36px 0;
+	background-color: var(--bg-light, #f0f7fa);
+	border-bottom: 1px solid var(--border-color, #e5e7eb);
+	margin-bottom: 48px;
+}
+
+.sarathi-tr-single-back {
+	margin-bottom: 20px;
+}
+
+.sarathi-tr-back-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #6b7280;
+	text-decoration: none;
+	transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.sarathi-tr-back-link:hover {
+	color: var(--color-primary, #07B6D5);
+	transform: translateX(-3px);
+}
+
+.sarathi-tr-back-arrow {
+	width: 16px;
+	height: 16px;
+}
+
+.sarathi-tr-hero-tags {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	margin-bottom: 16px;
+}
+
+.sarathi-tr-single-title {
+	font-family: var(--font-heading, 'Outfit', sans-serif);
+	font-size: clamp(28px, 4vw, 42px);
+	font-weight: 700;
+	color: #111827;
+	line-height: 1.25;
+	margin: 0 0 16px 0;
+}
+
+.sarathi-tr-single-lead {
+	font-size: 17px;
+	color: #4b5563;
+	line-height: 1.65;
+	margin: 0 0 28px 0;
+	max-width: 820px;
+}
+
+.sarathi-tr-meta-strip {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 24px 36px;
+	padding-top: 24px;
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.sarathi-tr-meta-item {
+	display: flex;
+	flex-direction: column;
+}
+
+.sarathi-tr-meta-label {
+	font-size: 12px;
+	color: #6b7280;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.sarathi-tr-meta-val {
+	font-size: 16px;
+	color: #111827;
+	margin-top: 3px;
+}
+
+.sarathi-tr-meta-val.sarathi-tr-highlight {
+	color: var(--color-primary, #07B6D5);
+	font-weight: 700;
+}
+
+/* Layout Grid for Content + Sidebar */
+.sarathi-tr-layout-grid {
+	display: grid;
+	grid-template-columns: 1fr 340px;
+	gap: 48px;
+	align-items: start;
+}
+
+.sarathi-tr-section-block {
+	margin-bottom: 48px;
+}
+
+.sarathi-tr-section-heading {
+	font-family: var(--font-heading, 'Outfit', sans-serif);
+	font-size: 22px;
+	font-weight: 700;
+	color: #111827;
+	margin: 0 0 20px 0;
+	padding-bottom: 10px;
+	border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.sarathi-tr-prose {
+	font-size: 16px;
+	line-height: 1.75;
+	color: #374151;
+}
+
+.sarathi-tr-highlights-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 16px;
+}
+
+.sarathi-tr-highlight-card {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 16px;
+	background-color: var(--bg-light, #f0f7fa);
+	border: 1px solid var(--border-color, #e5e7eb);
+	border-radius: 12px;
+	font-size: 14.5px;
+	color: #1f2937;
+	line-height: 1.5;
+}
+
+.sarathi-tr-check-svg {
+	width: 20px;
+	height: 20px;
+	color: var(--color-primary, #07B6D5);
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+
+/* Modules List */
+.sarathi-tr-modules-list {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.sarathi-tr-module-item {
+	padding: 20px 24px;
+	background-color: #ffffff;
+	border: 1px solid var(--border-color, #e5e7eb);
+	border-radius: 14px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.sarathi-tr-module-header {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.sarathi-tr-module-num {
+	font-family: var(--font-heading, 'Outfit', sans-serif);
+	font-size: 18px;
+	font-weight: 700;
+	color: var(--color-primary, #07B6D5);
+	width: 36px;
+	height: 36px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f0fdfa;
+	border-radius: 8px;
+	flex-shrink: 0;
+}
+
+.sarathi-tr-module-title {
+	font-family: var(--font-heading, 'Outfit', sans-serif);
+	font-size: 17px;
+	font-weight: 700;
+	color: #111827;
+	margin: 0;
+}
+
+.sarathi-tr-module-desc {
+	font-size: 14px;
+	color: #6b7280;
+	line-height: 1.6;
+	margin: 12px 0 0 50px;
+}
+
+/* Sticky Sidebar */
+.sarathi-tr-sidebar-card {
+	background-color: #ffffff;
+	border: 1px solid var(--border-color, #e5e7eb);
+	border-radius: 20px;
+	overflow: hidden;
+	box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
+	position: sticky;
+	top: 100px;
+}
+
+.sarathi-tr-side-thumb img {
+	width: 100%;
+	height: 180px;
+	object-fit: cover;
+	display: block;
+}
+
+.sarathi-tr-side-content {
+	padding: 28px;
+}
+
+.sarathi-tr-side-title {
+	font-family: var(--font-heading, 'Outfit', sans-serif);
+	font-size: 20px;
+	font-weight: 700;
+	color: #111827;
+	margin: 0 0 18px 0;
+}
+
+.sarathi-tr-side-list {
+	list-style: none;
+	margin: 0 0 24px 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	font-size: 14px;
+	color: #4b5563;
+}
+
+.sarathi-tr-side-list strong {
+	color: #111827;
+}
+
+.sarathi-tr-enroll-main-btn {
+	width: 100%;
+	text-align: center;
+	background-color: var(--color-primary, #07B6D5);
+	color: #ffffff;
+	font-weight: 600;
+	padding: 14px 20px;
+	border-radius: 50px;
+	display: block;
+	text-decoration: none;
+	transition: background-color 0.2s ease;
+}
+
+.sarathi-tr-enroll-main-btn:hover {
+	background-color: var(--color-primary-dark, #007f87);
+}
+
+.sarathi-tr-side-help {
+	font-size: 12.5px;
+	color: #6b7280;
+	margin: 16px 0 0 0;
+	text-align: center;
+	line-height: 1.5;
+}
+
+.sarathi-tr-side-help a {
+	color: var(--color-primary, #07B6D5);
+	text-decoration: underline;
+	display: block;
+	margin-top: 4px;
+	font-weight: 600;
+}
+
+/* ==========================================================================
+   Archive & Filter Tabs
+   ========================================================================== */
+
+.sarathi-tr-archive-hero {
+	padding: 60px 0 30px 0;
+	text-align: center;
+	background-color: var(--bg-light, #f0f7fa);
+	border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+.sarathi-tr-filter-tabs {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 32px;
+}
+
+.sarathi-tr-tab {
+	display: inline-block;
+	padding: 8px 18px;
+	border-radius: 50px;
+	font-size: 14px;
+	font-weight: 500;
+	color: #4b5563;
+	background-color: #ffffff;
+	border: 1px solid var(--border-color, #e5e7eb);
+	text-decoration: none;
+	transition: all 0.2s ease;
+}
+
+.sarathi-tr-tab:hover {
+	color: var(--color-primary, #07B6D5);
+	border-color: var(--color-primary, #07B6D5);
+}
+
+.sarathi-tr-tab.is-active {
+	color: #ffffff;
+	background-color: var(--color-primary, #07B6D5);
+	border-color: var(--color-primary, #07B6D5);
+}
+
+.sarathi-tr-archive-body {
+	padding: 60px 0;
+}
+
+.sarathi-tr-no-posts {
+	grid-column: 1 / -1;
+	text-align: center;
+	padding: 40px;
+	color: #6b7280;
+	font-size: 16px;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+	.sarathi-tr-split-wrapper {
+		grid-template-columns: 1fr;
+		gap: 36px;
+	}
+
+	.sarathi-tr-cols-4 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.sarathi-tr-cols-3 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.sarathi-tr-layout-grid {
+		grid-template-columns: 1fr;
+		gap: 40px;
+	}
+}
+
+@media (max-width: 767px) {
+	.sarathi-training-section {
+		padding: 50px 0 40px 0;
+	}
+
+	.sarathi-training-container {
+		width: min(100% - 32px, 100%);
+	}
+
+	.sarathi-tr-split-cards {
+		grid-template-columns: 1fr;
+		gap: 18px;
+	}
+
+	.sarathi-tr-cols-3,
+	.sarathi-tr-cols-4 {
+		grid-template-columns: 1fr;
+		gap: 18px;
+	}
+
+	.sarathi-tr-module-desc {
+		margin-left: 0;
+	}
+
+	.sarathi-tr-meta-strip {
+		gap: 16px;
+	}
+}

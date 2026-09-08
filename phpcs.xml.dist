@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<ruleset name="Custom Theme">
+
+    <description>
+        WordPress Coding Standards for the Custom Theme.
+    </description>
+
+    <!-- Scan the theme -->
+    <file>.</file>
+
+    <!-- Use WordPress Coding Standards -->
+    <rule ref="WordPress"/>
+
+    <!-- Exclude dependencies -->
+    <exclude-pattern>/vendor/*</exclude-pattern>
+
+    <!-- Exclude frontend dependencies -->
+    <exclude-pattern>/node_modules/*</exclude-pattern>
+
+</ruleset>

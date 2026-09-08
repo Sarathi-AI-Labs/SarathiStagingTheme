@@ -1,0 +1,84 @@
+/* ============================================================
+   LOGO ROW SECTION
+   ============================================================ */
+
+.section-logo-marquee {
+    padding: 36px 0;
+    overflow: hidden;
+    background-color: #fff;
+    border-top: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.logo-marquee-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.logo-marquee-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.logo-marquee-heading {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #6c757d;
+    margin: 0;
+}
+
+/* Static Logo Grid */
+.logo-grid-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px 60px; /* Vertical and horizontal gaps */
+    width: 100%;
+    padding: 0 20px;
+}
+
+/* Logo items */
+.logo-marquee-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 160px; /* Explicit width to evenly distribute logos */
+}
+
+.marquee-img {
+    height: auto;
+    max-height: 58px;
+    width: 100%;
+    object-fit: contain;
+    filter: grayscale(100%) opacity(0.7); /* Modern grayscale look */
+    transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.logo-marquee-item:hover .marquee-img {
+    filter: grayscale(0%) opacity(1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .section-logo-marquee {
+        padding: 26px 0;
+    }
+    .logo-marquee-header {
+        margin-bottom: 16px;
+    }
+    .logo-grid-container {
+        gap: 20px 36px;
+    }
+    .logo-marquee-item {
+        width: 130px;
+    }
+    .marquee-img {
+        max-height: 44px;
+    }
+}
+
+

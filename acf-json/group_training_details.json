@@ -1,0 +1,256 @@
+{
+    "key": "group_training_details",
+    "title": "Training & Course Details",
+    "fields": [
+        {
+            "key": "field_tr_icon",
+            "label": "Card Icon / Illustration",
+            "name": "training_icon",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "Icon or small illustration displayed at the top of the card.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "thumbnail"
+        },
+        {
+            "key": "field_tr_badge",
+            "label": "Program Badge / Type",
+            "name": "training_badge",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "e.g. COHORT, BOOTCAMP, MASTERCLASS",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "COHORT"
+        },
+        {
+            "key": "field_tr_duration",
+            "label": "Duration",
+            "name": "training_duration",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "e.g. 6 Weeks, 8 Weeks, Self-paced",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "34",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "6 Weeks"
+        },
+        {
+            "key": "field_tr_format",
+            "label": "Delivery Format",
+            "name": "training_format",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "e.g. Live Online, Interactive Labs",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "Live Online & Labs"
+        },
+        {
+            "key": "field_tr_level",
+            "label": "Skill Level",
+            "name": "training_level",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "e.g. Beginner to Intermediate, Advanced",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "Intermediate to Advanced"
+        },
+        {
+            "key": "field_tr_start_date",
+            "label": "Next Batch Date",
+            "name": "training_start_date",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "e.g. Next Cohort: Starts Oct 15",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "34",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "Upcoming Batch: Oct 2025"
+        },
+        {
+            "key": "field_tr_summary",
+            "label": "Short Summary / Card Description",
+            "name": "training_summary",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Brief description shown on cards (falls back to post excerpt).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "100",
+                "class": "",
+                "id": ""
+            },
+            "rows": 3,
+            "placeholder": "Master AI-powered automation testing tools and frameworks."
+        },
+        {
+            "key": "field_tr_highlights",
+            "label": "Key Highlights / Takeaways",
+            "name": "training_highlights",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Key skills, tools, and outcomes learned.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "100",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "button_label": "Add Highlight",
+            "sub_fields": [
+                {
+                    "key": "field_tr_highlight_item",
+                    "label": "Highlight",
+                    "name": "highlight_item",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 1,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placeholder": "Hands-on projects with LangChain, LlamaIndex, and AGY SDK"
+                }
+            ]
+        },
+        {
+            "key": "field_tr_syllabus",
+            "label": "Curriculum Modules",
+            "name": "training_syllabus",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Detailed course modules for the single training page.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "100",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "button_label": "Add Module",
+            "sub_fields": [
+                {
+                    "key": "field_tr_module_title",
+                    "label": "Module Title",
+                    "name": "module_title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "e.g. Module 1: AI Testing Fundamentals",
+                    "required": 1,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placeholder": "Module 1: AI Testing Fundamentals"
+                },
+                {
+                    "key": "field_tr_module_desc",
+                    "label": "Module Description",
+                    "name": "module_desc",
+                    "aria-label": "",
+                    "type": "textarea",
+                    "instructions": "Overview of topics covered in this module.",
+                    "required": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "rows": 2,
+                    "placeholder": "Introduction to generative AI testing models, prompt engineering for QA, and synthetic test suites."
+                }
+            ]
+        },
+        {
+            "key": "field_tr_cta_text",
+            "label": "Enrollment Button Text",
+            "name": "training_cta_text",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Button text on the single course page.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Enroll in Cohort",
+            "placeholder": "Enroll in Cohort"
+        },
+        {
+            "key": "field_tr_cta_url",
+            "label": "Enrollment URL / Link",
+            "name": "training_cta_url",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Link to registration form or contact page.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "/contact/",
+            "placeholder": "/contact/"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "training"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Custom fields for single Training posts",
+    "show_in_rest": 0
+}

@@ -1,0 +1,333 @@
+/**
+ * Footer Styles - Custom Theme
+ * Matches Sarathi AI Labs design mockup with support for 3, 4, 5, and 6 columns.
+ */
+
+.sarathi-site-footer {
+	width: 100%;
+	background-color: var(--bg-white, #ffffff);
+	border-top: 1px solid var(--border-color, #e5e7eb);
+	font-family: var(--font-body, 'Inter', sans-serif);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	padding: 56px 0 32px 0;
+	color: var(--text-main, #1f2937);
+}
+
+.sarathi-footer-wrapper {
+	width: min(100% - 48px, 1240px);
+	margin-inline: auto;
+	box-sizing: border-box;
+}
+
+/* ==========================================================================
+   Main Footer Columns Grid
+   ========================================================================== */
+
+.sarathi-footer-main {
+	display: grid;
+	gap: 2.25rem 1.75rem;
+	align-items: start;
+}
+
+/* 6 Columns Grid (Default Mockup) */
+.sarathi-footer-cols-6 {
+	grid-template-columns: 1.25fr repeat(4, 1fr) 1.35fr;
+}
+
+/* 5 Columns Grid */
+.sarathi-footer-cols-5 {
+	grid-template-columns: 1.3fr repeat(3, 1fr) 1.4fr;
+}
+
+/* 4 Columns Grid */
+.sarathi-footer-cols-4 {
+	grid-template-columns: 1.3fr repeat(2, 1fr) 1.4fr;
+}
+
+/* 3 Columns Grid */
+.sarathi-footer-cols-3 {
+	grid-template-columns: 1.4fr 1.2fr 1.4fr;
+}
+
+.sarathi-footer-col {
+	display: flex;
+	flex-direction: column;
+}
+
+/* ==========================================================================
+   Column 1: Brand & Socials
+   ========================================================================== */
+
+.sarathi-footer-col-brand {
+	padding-right: 0.5rem;
+}
+
+.sarathi-footer-brand-header {
+	margin-bottom: 20px;
+}
+
+.sarathi-footer-logo-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	text-decoration: none;
+	color: inherit;
+	transition: opacity 0.2s ease;
+}
+
+.sarathi-footer-logo-link:hover {
+	opacity: 0.9;
+}
+
+.sarathi-footer-logo-img {
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	object-fit: contain;
+	flex-shrink: 0;
+}
+
+.sarathi-footer-brand-name {
+	font-family: var(--font-heading, 'Outfit', sans-serif);
+	font-size: 19px;
+	font-weight: 700;
+	color: #111827;
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+}
+
+/* Social Buttons */
+.sarathi-footer-socials {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.sarathi-footer-social-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	background-color: #f3f4f6;
+	color: #374151;
+	border: 1px solid transparent;
+	text-decoration: none;
+	transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+	flex-shrink: 0;
+}
+
+.sarathi-footer-social-btn:hover {
+	background-color: var(--color-primary, #07B6D5);
+	color: #ffffff;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 10px rgba(0, 161, 171, 0.25);
+}
+
+.sarathi-social-svg {
+	width: 17px;
+	height: 17px;
+	display: block;
+}
+
+.sarathi-social-custom-img {
+	width: 17px;
+	height: 17px;
+	object-fit: contain;
+}
+
+/* ==========================================================================
+   Menu Columns (Cols 2–5) & General Column Styles
+   ========================================================================== */
+
+.sarathi-footer-col-title {
+	font-family: var(--font-heading, 'Outfit', sans-serif);
+	font-size: 16px;
+	font-weight: 600;
+	color: #111827;
+	margin: 0 0 16px 0;
+	line-height: 1.3;
+	letter-spacing: -0.01em;
+}
+
+.sarathi-footer-nav-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.sarathi-footer-nav-list li {
+	margin: 0;
+	padding: 0;
+}
+
+.sarathi-footer-nav-list a {
+	font-family: var(--font-body, 'Inter', sans-serif);
+	font-size: 14px;
+	color: #4b5563;
+	text-decoration: none;
+	transition: color 0.2s ease, transform 0.2s ease;
+	display: inline-block;
+	line-height: 1.45;
+}
+
+.sarathi-footer-nav-list a:hover {
+	color: var(--color-primary, #07B6D5);
+	transform: translateX(2px);
+}
+
+/* ==========================================================================
+   Column 6: Consultation CTA
+   ========================================================================== */
+
+.sarathi-footer-col-cta {
+	padding-left: 0.25rem;
+}
+
+.sarathi-footer-cta-desc {
+	font-family: var(--font-body, 'Inter', sans-serif);
+	font-size: 14px;
+	color: #4b5563;
+	line-height: 1.55;
+	margin: 0 0 16px 0;
+	max-width: 250px;
+}
+
+.sarathi-footer-cta-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-family: var(--font-body, 'Inter', sans-serif);
+	font-size: 15px;
+	font-weight: 600;
+	color: var(--color-primary, #07B6D5);
+	text-decoration: none;
+	transition: color 0.2s ease, gap 0.2s ease;
+}
+
+.sarathi-footer-cta-link:hover {
+	color: var(--color-primary-dark, #007f87);
+	gap: 11px;
+}
+
+.sarathi-footer-cta-arrow {
+	width: 18px;
+	height: 18px;
+	transition: transform 0.2s ease;
+	flex-shrink: 0;
+}
+
+.sarathi-footer-cta-link:hover .sarathi-footer-cta-arrow {
+	transform: translateX(3px);
+}
+
+/* ==========================================================================
+   Footer Bottom & Copyright
+   ========================================================================== */
+
+.sarathi-footer-bottom {
+	margin-top: 52px;
+	padding-top: 24px;
+	border-top: 1px solid var(--border-color, #e5e7eb);
+	text-align: center;
+}
+
+.sarathi-footer-copyright {
+	font-family: var(--font-body, 'Inter', sans-serif);
+	font-size: 13px;
+	color: #6b7280;
+	margin: 0;
+	line-height: 1.5;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+/* Laptop / Medium Desktops (1024px - 1200px) */
+@media (max-width: 1199px) {
+	.sarathi-footer-cols-6 {
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2.5rem 1.5rem;
+	}
+
+	.sarathi-footer-cols-5 {
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2.5rem 1.5rem;
+	}
+
+	.sarathi-footer-cols-4 {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 2.5rem 1.5rem;
+	}
+}
+
+/* Tablets (768px - 1023px) */
+@media (max-width: 1023px) {
+	.sarathi-footer-wrapper {
+		width: min(100% - 40px, 100%);
+	}
+
+	.sarathi-footer-cols-6,
+	.sarathi-footer-cols-5,
+	.sarathi-footer-cols-4,
+	.sarathi-footer-cols-3 {
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2.25rem 1.5rem;
+	}
+}
+
+/* Small Tablets & Mobile Landscape (600px - 767px) */
+@media (max-width: 767px) {
+	.sarathi-site-footer {
+		padding: 44px 0 28px 0;
+	}
+
+	.sarathi-footer-cols-6,
+	.sarathi-footer-cols-5,
+	.sarathi-footer-cols-4,
+	.sarathi-footer-cols-3 {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 2rem 1.5rem;
+	}
+
+	.sarathi-footer-col-brand,
+	.sarathi-footer-col-cta {
+		grid-column: span 2;
+	}
+
+	.sarathi-footer-bottom {
+		margin-top: 36px;
+		padding-top: 20px;
+	}
+}
+
+/* Mobile Portrait (<600px) */
+@media (max-width: 599px) {
+	.sarathi-footer-wrapper {
+		width: min(100% - 32px, 100%);
+	}
+
+	.sarathi-footer-cols-6,
+	.sarathi-footer-cols-5,
+	.sarathi-footer-cols-4,
+	.sarathi-footer-cols-3 {
+		grid-template-columns: 1fr;
+		gap: 1.75rem;
+	}
+
+	.sarathi-footer-col-brand,
+	.sarathi-footer-col-cta {
+		grid-column: span 1;
+	}
+
+	.sarathi-footer-cta-desc {
+		max-width: 100%;
+	}
+}

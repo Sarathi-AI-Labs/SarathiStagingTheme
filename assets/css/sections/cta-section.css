@@ -1,0 +1,362 @@
+/* ============================================================
+	CTA SECTION — Reusable Component
+	============================================================ */
+
+.sarathi-cta-section {
+	padding: 4rem 1rem;
+	background-color: var(--bg-white);
+}
+
+.sarathi-cta-container {
+	display: flex;
+	align-items: stretch;
+	background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+	border-radius: var(--border-radius-lg);
+	overflow: hidden;
+	min-height: 350px;
+	position: relative;
+	max-width: 1200px;
+	margin: 0 auto;
+	box-shadow: var(--shadow-md);
+}
+
+/* Decorative background elements */
+.sarathi-cta-container::before {
+	content: '';
+	position: absolute;
+	top: -20%;
+	left: -5%;
+	width: 400px;
+	height: 400px;
+	background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+	border-radius: 50%;
+	pointer-events: none;
+	z-index: 1;
+}
+
+.sarathi-cta-container::after {
+	content: '';
+	position: absolute;
+	bottom: -15%;
+	right: 40%;
+	width: 250px;
+	height: 250px;
+	background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%);
+	border-radius: 50%;
+	pointer-events: none;
+	z-index: 1;
+}
+
+/* Allow section settings override if applied to section */
+.sarathi-cta-section.section-bg-light { background-color: var(--bg-light); }
+.sarathi-cta-section.section-bg-dark { background-color: var(--color-secondary); }
+
+.sarathi-cta-content {
+	flex: 1;
+	padding: 4rem 5rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	color: var(--bg-white);
+	position: relative;
+	z-index: 2;
+}
+
+.sarathi-cta-eyebrow {
+	font-family: var(--font-body);
+	font-size: 14px;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	margin-bottom: 0.5rem;
+	opacity: 0.8;
+}
+
+.sarathi-cta-heading {
+	font-family: var(--font-heading);
+	font-size: 40px;
+	font-weight: 700;
+	line-height: 1.2;
+	margin: 0 0 1rem;
+	color: var(--bg-white);
+}
+
+.sarathi-cta-subheading {
+	font-family: var(--font-body);
+	font-size: 20px;
+	margin: 0 0 1rem;
+	opacity: 0.9;
+}
+
+.sarathi-cta-description {
+	font-family: var(--font-body);
+	font-size: 18px;
+	line-height: 1.6;
+	margin-bottom: 2rem;
+	max-width: 600px;
+	opacity: 0.9;
+}
+
+.sarathi-cta-description p {
+	margin: 0 0 1rem;
+}
+
+.sarathi-cta-description p:last-child {
+	margin-bottom: 0;
+}
+
+.sarathi-cta-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	margin-top: 1rem;
+}
+
+/* CTA Buttons */
+.sarathi-cta-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 14px 32px;
+	font-family: var(--font-body);
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1;
+	text-decoration: none;
+	border-radius: 50px;
+	transition: all 0.3s ease;
+	cursor: pointer;
+}
+
+.sarathi-cta-btn-primary {
+	background-color: var(--bg-white);
+	color: var(--color-primary);
+	border: 2px solid var(--bg-white);
+}
+
+.sarathi-cta-btn-primary:hover {
+	background-color: transparent;
+	border-color: var(--bg-white);
+	color: var(--bg-white);
+}
+
+.sarathi-cta-btn-secondary {
+	background-color: transparent;
+	color: var(--bg-white);
+	border: 2px solid var(--bg-white);
+}
+
+.sarathi-cta-btn-secondary:hover {
+	background-color: var(--bg-white);
+	color: var(--color-primary);
+}
+
+.sarathi-cta-btn-outline {
+	background-color: transparent;
+	color: var(--bg-white);
+	border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.sarathi-cta-btn-outline:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+	border-color: var(--bg-white);
+}
+
+/* Image Column */
+.sarathi-cta-image-wrap {
+	flex: 0 0 45%;
+	position: relative;
+	overflow: hidden;
+	z-index: 2;
+	margin: 2rem 2rem 2rem 0;
+	border-radius: var(--border-radius-md);
+	box-shadow: var(--shadow-sm);
+}
+
+.sarathi-cta-image {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+/* Fallback if no image */
+.sarathi-cta-container:not(:has(.sarathi-cta-image-wrap)) .sarathi-cta-content {
+	text-align: center;
+	align-items: center;
+}
+
+.sarathi-cta-container:not(:has(.sarathi-cta-image-wrap)) .sarathi-cta-description {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.sarathi-cta-container:not(:has(.sarathi-cta-image-wrap)) .sarathi-cta-buttons {
+	justify-content: center;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+	.sarathi-cta-heading {
+		font-size: 32px;
+	}
+	
+	.sarathi-cta-content {
+		padding: 3rem;
+	}
+}
+
+@media (max-width: 768px) {
+	.sarathi-cta-container {
+		flex-direction: column;
+		border-radius: var(--border-radius-md);
+	}
+
+	.sarathi-cta-image-wrap {
+		order: -1;
+		height: 250px;
+		flex: none;
+		margin: 0;
+		border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+	}
+
+	.sarathi-cta-content {
+		padding: 2.5rem 1.5rem;
+		text-align: center;
+		align-items: center;
+	}
+
+	.sarathi-cta-buttons {
+		justify-content: center;
+		margin-top: 1.5rem;
+		width: 100%;
+		flex-direction: column;
+	}
+	
+	.sarathi-cta-btn {
+		width: 100%;
+	}
+
+	.sarathi-cta-description {
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+/* ============================================================
+   BANNER LAYOUT
+   ============================================================ */
+.sarathi-cta-section.layout-banner {
+    padding: 3rem 1rem;
+    background-color: var(--bg-white);
+}
+
+.sarathi-cta-section.layout-banner .sarathi-cta-container {
+    min-height: auto;
+    background-color: #03989e; /* Adjust to exact teal from design if needed */
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    box-shadow: none;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Remove decorative shapes for banner layout */
+.sarathi-cta-section.layout-banner .sarathi-cta-container::before,
+.sarathi-cta-section.layout-banner .sarathi-cta-container::after {
+    display: none;
+}
+
+.sarathi-cta-section.layout-banner .sarathi-cta-content {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2.5rem 4rem;
+    gap: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.sarathi-cta-section.layout-banner .sarathi-cta-text-wrap {
+    flex: 1;
+    text-align: left;
+}
+
+.sarathi-cta-section.layout-banner .sarathi-cta-eyebrow {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.sarathi-cta-section.layout-banner .sarathi-cta-heading {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+}
+
+.sarathi-cta-section.layout-banner .sarathi-cta-subheading {
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 0;
+    color: #ffffff;
+}
+
+.sarathi-cta-section.layout-banner .sarathi-cta-buttons {
+    margin-top: 0;
+    flex-shrink: 0;
+}
+
+.sarathi-cta-section.layout-banner .sarathi-cta-btn {
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Add arrow to button if not present in text */
+.sarathi-cta-section.layout-banner .sarathi-cta-btn::after {
+    content: '\2192'; /* Right arrow character */
+    font-size: 1.1em;
+    font-weight: normal;
+}
+
+.sarathi-cta-section.layout-banner .sarathi-cta-btn-primary {
+    background-color: #ffffff;
+    color: #333333;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.sarathi-cta-section.layout-banner .sarathi-cta-btn-primary:hover {
+    background-color: #f5f5f5;
+    color: #000000;
+    transform: none;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 991px) {
+    .sarathi-cta-section.layout-banner .sarathi-cta-content {
+        flex-direction: column;
+        text-align: center;
+        padding: 2.5rem 2rem;
+    }
+    .sarathi-cta-section.layout-banner .sarathi-cta-text-wrap {
+        text-align: center;
+    }
+    .sarathi-cta-section.layout-banner .sarathi-cta-heading {
+        font-size: 26px;
+    }
+}
