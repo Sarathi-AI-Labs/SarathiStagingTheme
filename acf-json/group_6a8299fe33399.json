@@ -2815,6 +2815,60 @@
                             "default_value": "Same purpose. More stories."
                         }
                     ]
+                },
+                "layout_jobs_section": {
+                    "key": "layout_jobs_section",
+                    "name": "jobs_section",
+                    "label": "Jobs / Open Positions",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_jobs_clone_section",
+                            "label": "Section Settings",
+                            "name": "section_settings",
+                            "aria-label": "",
+                            "type": "clone",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "clone": [
+                                "group_clone_section"
+                            ],
+                            "display": "seamless",
+                            "prefix_name": 0,
+                            "prefix_label": 0,
+                            "layout": "block"
+                        },
+                        {
+                            "key": "field_jobs_clone_heading",
+                            "label": "Heading Fields",
+                            "name": "heading_fields",
+                            "aria-label": "",
+                            "type": "clone",
+                            "instructions": "Eyebrow, section heading, and subheading shown above the job listings.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "clone": [
+                                "group_clone_heading"
+                            ],
+                            "display": "seamless",
+                            "prefix_name": 0,
+                            "prefix_label": 0,
+                            "layout": "block"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
                 }
             },
             "min": "",

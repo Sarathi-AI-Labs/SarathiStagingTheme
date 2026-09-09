@@ -7,7 +7,7 @@
 
 .sarathi-instagram-section {
 	padding: 5rem 1rem;
-	background-color: var(--bg-light, #f4f2ef); 
+	background-color: var(--bg-light, #f4f2ef);
 	color: var(--text-main, #1f2937);
 	overflow: hidden;
 }
@@ -32,36 +32,61 @@
 
 /* Subtle entrance animations */
 @keyframes fadeInUp {
-	from { opacity: 0; transform: translateY(20px); }
-	to { opacity: 1; transform: translateY(0); }
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
-.sarathi-instagram-left > .sarathi-instagram-content > * {
+.sarathi-instagram-left>.sarathi-instagram-content>* {
 	opacity: 0;
 	animation: fadeInUp 0.8s ease forwards;
 }
-.sarathi-instagram-left > .sarathi-instagram-content > *:nth-child(1) { animation-delay: 0.1s; }
-.sarathi-instagram-left > .sarathi-instagram-content > *:nth-child(2) { animation-delay: 0.2s; }
-.sarathi-instagram-left > .sarathi-instagram-content > *:nth-child(3) { animation-delay: 0.3s; }
-.sarathi-instagram-left > .sarathi-instagram-content > *:nth-child(4) { animation-delay: 0.4s; }
-.sarathi-instagram-left > .sarathi-instagram-content > *:nth-child(5) { animation-delay: 0.5s; }
-.sarathi-instagram-left > .sarathi-instagram-content > *:nth-child(6) { animation-delay: 0.6s; }
+
+.sarathi-instagram-left>.sarathi-instagram-content>*:nth-child(1) {
+	animation-delay: 0.1s;
+}
+
+.sarathi-instagram-left>.sarathi-instagram-content>*:nth-child(2) {
+	animation-delay: 0.2s;
+}
+
+.sarathi-instagram-left>.sarathi-instagram-content>*:nth-child(3) {
+	animation-delay: 0.3s;
+}
+
+.sarathi-instagram-left>.sarathi-instagram-content>*:nth-child(4) {
+	animation-delay: 0.4s;
+}
+
+.sarathi-instagram-left>.sarathi-instagram-content>*:nth-child(5) {
+	animation-delay: 0.5s;
+}
+
+.sarathi-instagram-left>.sarathi-instagram-content>*:nth-child(6) {
+	animation-delay: 0.6s;
+}
 
 .sarathi-instagram-section .sarathi-hero-eyebrow-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 0.5rem;
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	margin-bottom: 0.5rem;
 }
 
 .sarathi-instagram-section .sarathi-hero-eyebrow {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: #ff7a45;
-    margin: 0;
+	font-family: var(--font-body);
+	font-size: 13px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.15em;
+	color: #ff7a45;
+	margin: 0;
 }
 
 .sarathi-instagram-heading {
@@ -188,7 +213,15 @@
 
 .sarathi-instagram-feed-wrapper #sb_instagram .sb_instagram_header,
 .sarathi-instagram-feed-wrapper #sb_instagram .sb_instagram_header_2,
-.sarathi-instagram-feed-wrapper #sb_instagram #sbi_load {
+.sarathi-instagram-feed-wrapper #sb_instagram #sbi_load,
+.sarathi-instagram-feed-wrapper #sbi_mod_error,
+.sarathi-instagram-feed-wrapper .sbi_backend_error,
+.sarathi-instagram-feed-wrapper .sbi_admin_error,
+.sarathi-instagram-feed-wrapper .sb_instagram_error,
+.sarathi-instagram-feed-wrapper .sbi_errors,
+.sarathi-instagram-feed-wrapper .sbi-feed-error,
+.sarathi-instagram-feed-wrapper .sbi-critical-error,
+.sarathi-instagram-feed-wrapper .sbi_notice {
 	display: none !important;
 }
 
@@ -196,20 +229,32 @@
 .sarathi-instagram-feed-wrapper #sbi_images {
 	display: grid !important;
 	grid-template-columns: repeat(3, 1fr) !important;
-	gap: 4px !important; /* Instagram's classic small gap */
+	gap: 20px !important;
+	/* Larger gap */
 	padding: 0 !important;
 }
 
 /* Instagram Square Item */
 .sarathi-instagram-feed-wrapper .sbi_item {
 	padding: 0 !important;
-	background: transparent !important;
-	border-radius: 0 !important; /* Authentic Instagram doesn't round images in the grid */
+	background: #ffffff !important;
+	/* Solid background behind image */
+	border-radius: 12px !important;
+	border: 1px solid rgba(0, 0, 0, 0.06) !important;
+	/* Subtle premium border */
+	box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.07), 0 5px 15px -3px rgba(0, 0, 0, 0.04) !important;
+	/* Soft, rich shadow */
 	overflow: hidden !important;
 	display: block !important;
-	aspect-ratio: 1 / 1 !important; /* Force perfect squares */
+	aspect-ratio: 1 / 1 !important;
 	position: relative !important;
 	cursor: pointer;
+	transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+.sarathi-instagram-feed-wrapper .sbi_item:hover {
+	transform: translateY(-5px) !important;
+	box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 10px 20px -5px rgba(0, 0, 0, 0.08) !important;
 }
 
 /* Un-span the first item */
@@ -244,18 +289,18 @@
 	HOVER OVERLAY (Injected via JS)
 ------------------------------------------------------------- */
 .sarathi-insta-hover-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    z-index: 10;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.4);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	opacity: 0;
+	transition: opacity 0.2s ease;
+	z-index: 10;
 }
 
 .sarathi-instagram-feed-wrapper .sbi_item:hover .sarathi-insta-hover-overlay {
@@ -280,6 +325,37 @@
 	font-weight: 600;
 }
 
+/* Static Instagram Badge */
+.sarathi-insta-badge {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	width: 32px;
+	height: 32px;
+	background: rgba(255, 255, 255, 0.85);
+	backdrop-filter: blur(4px);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #ff7a45; /* Soft, warm orange-red to match theme eyebrow */
+	z-index: 5;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	pointer-events: none;
+	opacity: 1;
+	transition: opacity 0.3s ease;
+}
+
+.sarathi-instagram-feed-wrapper .sbi_item:hover .sarathi-insta-badge {
+	opacity: 0;
+	/* Fade out gracefully when the main hover overlay appears */
+}
+
+.sarathi-insta-badge svg {
+	width: 15px;
+	height: 15px;
+}
+
 /* -------------------------------------------------------------
 	RESPONSIVE
 ------------------------------------------------------------- */
@@ -288,7 +364,7 @@
 		flex-direction: column;
 		gap: 3rem;
 	}
-	
+
 	.sarathi-instagram-left {
 		flex: 1;
 		width: 100%;

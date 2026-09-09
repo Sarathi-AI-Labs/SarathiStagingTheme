@@ -1,0 +1,177 @@
+{
+    "key": "group_job_details",
+    "title": "Job Details",
+    "fields": [
+        {
+            "key": "field_job_short_description",
+            "label": "Short Description",
+            "name": "job_short_description",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "A 1–3 sentence summary of the role, displayed on job listing cards.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "100",
+                "class": "",
+                "id": ""
+            },
+            "rows": 3,
+            "placeholder": "We are looking for a talented..."
+        },
+        {
+            "key": "field_job_experience",
+            "label": "Experience",
+            "name": "job_experience",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "e.g. 2–4 years, 5+ years, Entry Level",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "3–5 years"
+        },
+        {
+            "key": "field_job_status",
+            "label": "Job Status",
+            "name": "job_status",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Controls whether this job is visible and accepting applications.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "open": "Open",
+                "closed": "Closed"
+            },
+            "default_value": "open",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
+            "key": "field_job_closing_date",
+            "label": "Closing Date",
+            "name": "job_closing_date",
+            "aria-label": "",
+            "type": "date_picker",
+            "instructions": "Optional deadline for applications. Leave blank if rolling.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "display_format": "d/m/Y",
+            "return_format": "Y-m-d",
+            "first_day": 1
+        },
+        {
+            "key": "field_job_application_url",
+            "label": "Application URL",
+            "name": "job_application_url",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "External link to the application form or ATS listing (e.g. Lever, Greenhouse, Google Forms).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "https://forms.example.com/apply"
+        },
+        {
+            "key": "field_job_responsibilities",
+            "label": "Responsibilities",
+            "name": "job_responsibilities",
+            "aria-label": "",
+            "type": "wysiwyg",
+            "instructions": "Key duties and day-to-day activities of the role.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "100",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 0,
+            "delay": 0
+        },
+        {
+            "key": "field_job_requirements",
+            "label": "Requirements",
+            "name": "job_requirements",
+            "aria-label": "",
+            "type": "wysiwyg",
+            "instructions": "Must-have qualifications, skills, and experience.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "100",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 0,
+            "delay": 0
+        },
+        {
+            "key": "field_job_preferred_qualifications",
+            "label": "Preferred Qualifications",
+            "name": "job_preferred_qualifications",
+            "aria-label": "",
+            "type": "wysiwyg",
+            "instructions": "Nice-to-have skills or experience that strengthen a candidate's application.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "100",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 0,
+            "delay": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "job"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "ACF custom fields for individual Job posts. Title = native WP title. Department/Location/Type = taxonomies.",
+    "show_in_rest": 0
+}
