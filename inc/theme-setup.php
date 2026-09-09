@@ -153,6 +153,7 @@ function custom_theme_enqueue_assets()
 			'sarathi-chatbot-script',
 			'SARATHI_CHATBOT_SETTINGS',
 			array(
+				'themeUri'       => $theme_uri,
 				'chatWebhookUrl' => 'https://n8n.srv1178467.hstgr.cloud/webhook/sal-ai-chat',
 				'leadWebhookUrl' => 'https://n8n.srv1178467.hstgr.cloud/webhook/sal-lead-cap',
 			)
