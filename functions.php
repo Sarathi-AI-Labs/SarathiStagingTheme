@@ -46,6 +46,9 @@ if ( file_exists( $theme_inc_dir . 'acf-options.php' ) ) {
 if ( file_exists( $theme_inc_dir . 'cpt-training.php' ) ) {
 	require_once $theme_inc_dir . 'cpt-training.php';
 }
+if ( file_exists( $theme_inc_dir . 'cpt-solutions.php' ) ) {
+	require_once $theme_inc_dir . 'cpt-solutions.php';
+}
 
 
 /**
