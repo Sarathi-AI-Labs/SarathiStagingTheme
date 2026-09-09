@@ -213,7 +213,15 @@
 
 .sarathi-instagram-feed-wrapper #sb_instagram .sb_instagram_header,
 .sarathi-instagram-feed-wrapper #sb_instagram .sb_instagram_header_2,
-.sarathi-instagram-feed-wrapper #sb_instagram #sbi_load {
+.sarathi-instagram-feed-wrapper #sb_instagram #sbi_load,
+.sarathi-instagram-feed-wrapper #sbi_mod_error,
+.sarathi-instagram-feed-wrapper .sbi_backend_error,
+.sarathi-instagram-feed-wrapper .sbi_admin_error,
+.sarathi-instagram-feed-wrapper .sb_instagram_error,
+.sarathi-instagram-feed-wrapper .sbi_errors,
+.sarathi-instagram-feed-wrapper .sbi-feed-error,
+.sarathi-instagram-feed-wrapper .sbi-critical-error,
+.sarathi-instagram-feed-wrapper .sbi_notice {
 	display: none !important;
 }
 
