@@ -155,8 +155,8 @@ elseif ('inner_page' === $hero_version):
 
 				<?php if ('image' === $side_type && !empty($side_image)): ?>
 					<div class="sarathi-inner-banner-side-content type-image">
-						<img src="<?php echo esc_url($side_image['url']); ?>"
-							alt="<?php echo esc_attr($side_image['alt']); ?>" class="sarathi-inner-side-img">
+						<img src="<?php echo esc_url($side_image['url']); ?>" alt="<?php echo esc_attr($side_image['alt']); ?>"
+							class="sarathi-inner-side-img">
 					</div>
 				<?php elseif ('text' === $side_type && !empty($side_text)): ?>
 					<div class="sarathi-inner-banner-side-content type-text">
@@ -286,8 +286,8 @@ else:
 	?>
 
 	<!-- ===================== HERO BANNER SECTION (FLOATING LOGO VERSION) ===================== -->
-	<section class="sarathi-hero-banner<?php echo esc_attr($section_class); ?>"
-		id="<?php echo esc_attr($section_id); ?>" aria-label="Hero Banner" <?php echo $section_style; ?>>
+	<section class="sarathi-hero-banner<?php echo esc_attr($section_class); ?>" id="<?php echo esc_attr($section_id); ?>"
+		aria-label="Hero Banner" <?php echo $section_style; ?>>
 
 		<!-- Background Layer: Radial Glow & Floating Logo Watermark -->
 		<div class="sarathi-hero-background" aria-hidden="true">
@@ -349,7 +349,7 @@ else:
 					</h1>
 				<?php endif; ?>
 
-				<?php if (!empty($subheading) && stripos($heading, $subheading) === false && stripos($subheading, 'Through Intelligent') === false): ?>
+				<?php if (!empty($subheading) && stripos($heading, $subheading) === false && stripos($subheading, 'Through Intelligence') === false): ?>
 					<h2 class="sarathi-hero-subheading"><?php echo esc_html($subheading); ?></h2>
 				<?php endif; ?>
 
