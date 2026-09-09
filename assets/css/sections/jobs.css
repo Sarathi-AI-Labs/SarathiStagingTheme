@@ -1,0 +1,739 @@
+/**
+ * Jobs Section & Single Job Page Styles — Sarathi AI Labs
+ *
+ * Design tokens inherit from trainings.css. This file covers:
+ * 1. .sarathi-jobs-section  — Page Builder section (Open Positions list)
+ * 2. .sarathi-single-job    — Single Job detail page
+ *
+ * Container: .sarathi-training-container (shared, defined in trainings.css)
+ * Typography tokens: .sarathi-training-eyebrow, .sarathi-training-title,
+ *                    .sarathi-training-desc (also shared)
+ */
+
+/* ==========================================================================
+   JOBS SECTION — Open Positions Page Builder Block
+   ========================================================================== */
+
+.sarathi-jobs-section {
+	width: 100%;
+	padding: 70px 0 60px;
+	background-color: var(--bg-white, #ffffff);
+	font-family: var(--font-body, 'Roboto', sans-serif);
+	color: var(--text-main, #1f2937);
+	box-sizing: border-box;
+}
+
+/* Section header: centred, max-width constrained */
+.sarathi-jobs-header {
+	text-align: center;
+	max-width: 680px;
+	margin: 0 auto 36px;
+}
+
+/* Count bar */
+.sarathi-jobs-count-bar {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.sarathi-jobs-count {
+	font-family: var(--font-body, 'Roboto', sans-serif);
+	font-size: 14px;
+	font-weight: 700;
+	color: #6b7280;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+/* ==========================================================================
+   Job Card — List Row Style (matches reference design)
+   ========================================================================== */
+
+/* Animation Keyframes */
+@keyframes sarathiFadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.sarathi-jobs-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.sarathi-job-card {
+	display: grid;
+	grid-template-columns: 52px 1fr auto;
+	gap: 20px;
+	align-items: center;
+	padding: 24px 28px;
+	background-color: #ffffff;
+	border: 1px solid var(--border-color, #e5e7eb);
+	border-radius: 12px;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	text-decoration: none;
+	animation: sarathiFadeInUp 0.6s ease-out backwards;
+}
+
+/* Stagger entrance animations */
+.sarathi-job-card:nth-child(1) { animation-delay: 0.1s; }
+.sarathi-job-card:nth-child(2) { animation-delay: 0.15s; }
+.sarathi-job-card:nth-child(3) { animation-delay: 0.2s; }
+.sarathi-job-card:nth-child(4) { animation-delay: 0.25s; }
+.sarathi-job-card:nth-child(5) { animation-delay: 0.3s; }
+.sarathi-job-card:nth-child(6) { animation-delay: 0.35s; }
+
+.sarathi-job-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.08);
+	border-color: rgba(7, 182, 213, 0.3);
+}
+
+/* Icon */
+.sarathi-job-card__icon {
+	width: 44px;
+	height: 44px;
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f0fdfa;
+	border-radius: 10px;
+	border: 1px solid rgba(7, 182, 213, 0.15);
+}
+
+.sarathi-job-icon-svg {
+	width: 28px;
+	height: 28px;
+	display: block;
+}
+
+/* Card body */
+.sarathi-job-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	min-width: 0;
+}
+
+.sarathi-job-card__title {
+	font-family: var(--font-heading, 'Questrial', sans-serif);
+	font-size: 17px;
+	font-weight: 700;
+	color: #111827;
+	margin: 0;
+	line-height: 1.3;
+}
+
+.sarathi-job-card__title a {
+	color: #111827;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.sarathi-job-card:hover .sarathi-job-card__title a,
+.sarathi-job-card__title a:hover {
+	color: var(--color-primary, #07B6D5);
+}
+
+/* Meta pills */
+.sarathi-job-card__meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+}
+
+.sarathi-job-meta-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #4b5563;
+	background-color: #f3f4f6;
+	border: 1px solid #e5e7eb;
+	padding: 3px 10px 3px 8px;
+	border-radius: 50px;
+	white-space: nowrap;
+	line-height: 1.5;
+}
+
+.sarathi-job-meta-pill svg {
+	width: 12px;
+	height: 12px;
+	color: #9ca3af;
+	flex-shrink: 0;
+}
+
+.sarathi-job-meta-dept svg,
+.sarathi-job-meta-dept {
+	color: var(--color-primary, #07B6D5);
+}
+
+/* Status Badges */
+.sarathi-job-status-badge {
+	display: inline-flex;
+	align-items: center;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	line-height: 1;
+	border-radius: 50px;
+}
+
+.sarathi-job-status-badge.is-open {
+	color: #065f46;
+	background-color: #d1fae5;
+}
+
+.sarathi-job-status-badge.is-closed {
+	color: #991b1b;
+	background-color: #fee2e2;
+}
+
+/* Description */
+.sarathi-job-card__desc {
+	font-size: 13.5px;
+	color: #6b7280;
+	line-height: 1.55;
+	margin: 0;
+}
+
+/* View Position link */
+.sarathi-job-card__action {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+}
+
+.sarathi-job-view-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-family: var(--font-body, 'Roboto', sans-serif);
+	font-size: 13.5px;
+	font-weight: 600;
+	color: var(--color-primary, #07B6D5);
+	text-decoration: none;
+	white-space: nowrap;
+	transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.sarathi-job-view-link .sarathi-tr-arrow {
+	width: 15px;
+	height: 15px;
+	transition: transform 0.2s ease;
+}
+
+.sarathi-job-view-link:hover,
+.sarathi-job-card:hover .sarathi-job-view-link {
+	color: var(--color-primary-dark, #007f87);
+	gap: 10px;
+}
+
+.sarathi-job-view-link:hover .sarathi-tr-arrow,
+.sarathi-job-card:hover .sarathi-job-view-link .sarathi-tr-arrow {
+	transform: translateX(3px);
+}
+
+/* ==========================================================================
+   Empty State
+   ========================================================================== */
+
+.sarathi-jobs-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	padding: 60px 24px;
+	border: 1px solid var(--border-color, #e5e7eb);
+	border-radius: 16px;
+	background-color: #f8fafc;
+}
+
+.sarathi-jobs-empty__icon {
+	width: 64px;
+	height: 64px;
+	margin-bottom: 24px;
+}
+
+.sarathi-jobs-empty__icon svg {
+	width: 64px;
+	height: 64px;
+}
+
+.sarathi-jobs-empty__title {
+	font-family: var(--font-heading, 'Questrial', sans-serif);
+	font-size: 20px;
+	font-weight: 700;
+	color: #111827;
+	margin: 0 0 10px;
+}
+
+.sarathi-jobs-empty__desc {
+	font-size: 15px;
+	color: #6b7280;
+	line-height: 1.6;
+	max-width: 460px;
+	margin: 0 0 28px;
+}
+
+.sarathi-job-empty-cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	background-color: var(--color-primary, #07B6D5);
+	color: #ffffff;
+	font-family: var(--font-body, 'Roboto', sans-serif);
+	font-size: 14px;
+	font-weight: 600;
+	padding: 12px 28px;
+	border-radius: 50px;
+	text-decoration: none;
+	transition: background-color 0.2s ease, gap 0.2s ease;
+}
+
+.sarathi-job-empty-cta svg {
+	width: 15px;
+	height: 15px;
+	transition: transform 0.2s ease;
+}
+
+.sarathi-job-empty-cta:hover {
+	background-color: var(--color-primary-dark, #007f87);
+	gap: 12px;
+}
+
+.sarathi-job-empty-cta:hover svg {
+	transform: translateX(3px);
+}
+
+/* ==========================================================================
+   SINGLE JOB PAGE — .sarathi-single-job
+   ========================================================================== */
+
+.sarathi-single-job {
+	width: 100%;
+	background-color: var(--bg-white, #ffffff);
+	padding-bottom: 80px;
+}
+
+/* Hero / Header */
+.sarathi-job-single-hero {
+	padding: 44px 0 36px;
+	background-color: var(--bg-light, #f0f7fa);
+	border-bottom: 1px solid var(--border-color, #e5e7eb);
+	margin-bottom: 52px;
+}
+
+/* Back link */
+.sarathi-job-back-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 13.5px;
+	font-weight: 600;
+	color: #6b7280;
+	text-decoration: none;
+	margin-bottom: 24px;
+	transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.sarathi-job-back-link:hover {
+	color: var(--color-primary, #07B6D5);
+	transform: translateX(-3px);
+}
+
+.sarathi-job-back-link svg {
+	width: 16px;
+	height: 16px;
+}
+
+/* Status + meta tags row */
+.sarathi-job-hero-meta {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-bottom: 16px;
+}
+
+/* Status badge */
+.sarathi-job-status-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 12px;
+	font-weight: 700;
+	padding: 4px 12px;
+	border-radius: 50px;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.sarathi-job-status-badge.is-open {
+	color: #065f46;
+	background-color: #d1fae5;
+	border: 1px solid #6ee7b7;
+}
+
+.sarathi-job-status-badge.is-open::before {
+	content: '';
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background-color: #10b981;
+	flex-shrink: 0;
+}
+
+.sarathi-job-status-badge.is-closed {
+	color: #7f1d1d;
+	background-color: #fee2e2;
+	border: 1px solid #fca5a5;
+}
+
+.sarathi-job-status-badge.is-closed::before {
+	content: '';
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background-color: #ef4444;
+	flex-shrink: 0;
+}
+
+/* H1 */
+.sarathi-job-single-title {
+	font-family: var(--font-heading, 'Questrial', sans-serif);
+	font-size: clamp(28px, 4vw, 42px);
+	font-weight: 700;
+	color: #111827;
+	line-height: 1.2;
+	margin: 0 0 16px;
+}
+
+/* Taxonomy pills under title */
+.sarathi-job-hero-pills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	align-items: center;
+}
+
+.sarathi-job-hero-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #374151;
+	background-color: #f3f4f6;
+	border: 1px solid #e5e7eb;
+	padding: 5px 12px 5px 10px;
+	border-radius: 50px;
+}
+
+.sarathi-job-hero-pill svg {
+	width: 13px;
+	height: 13px;
+	color: var(--color-primary, #07B6D5);
+	flex-shrink: 0;
+}
+
+/* Short description lead */
+.sarathi-job-lead {
+	font-size: 17px;
+	color: #4b5563;
+	line-height: 1.65;
+	margin: 20px 0 0;
+	max-width: 800px;
+}
+
+/* ==========================================================================
+   Single Job — Body Layout (main col + sidebar)
+   ========================================================================== */
+
+.sarathi-job-single-body {
+	padding: 0;
+}
+
+.sarathi-job-layout-grid {
+	display: grid;
+	grid-template-columns: 1fr 300px;
+	gap: 52px;
+	align-items: start;
+}
+
+/* Main content column */
+.sarathi-job-main-col {
+	min-width: 0;
+}
+
+/* Content blocks (Responsibilities, Requirements, Preferred) */
+.sarathi-job-content-block {
+	margin-bottom: 44px;
+}
+
+.sarathi-job-section-heading {
+	font-family: var(--font-heading, 'Questrial', sans-serif);
+	font-size: 20px;
+	font-weight: 700;
+	color: #111827;
+	margin: 0 0 16px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+/* Wysiwyg prose */
+.sarathi-job-prose {
+	font-size: 15.5px;
+	line-height: 1.75;
+	color: #374151;
+}
+
+.sarathi-job-prose ul,
+.sarathi-job-prose ol {
+	padding-left: 24px;
+	margin: 12px 0;
+}
+
+.sarathi-job-prose li {
+	margin-bottom: 6px;
+}
+
+.sarathi-job-prose p {
+	margin: 0 0 14px;
+}
+
+.sarathi-job-prose p:last-child {
+	margin-bottom: 0;
+}
+
+/* Closed notice in main column */
+.sarathi-job-closed-notice {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+	padding: 20px 24px;
+	background-color: #fff7ed;
+	border: 1px solid #fed7aa;
+	border-radius: 12px;
+	margin-bottom: 40px;
+}
+
+.sarathi-job-closed-notice svg {
+	width: 22px;
+	height: 22px;
+	color: #f97316;
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+
+.sarathi-job-closed-notice__text strong {
+	display: block;
+	font-size: 15px;
+	color: #9a3412;
+	font-weight: 700;
+	margin-bottom: 4px;
+}
+
+.sarathi-job-closed-notice__text span {
+	font-size: 14px;
+	color: #c2410c;
+	line-height: 1.5;
+}
+
+/* ==========================================================================
+   Sidebar
+   ========================================================================== */
+
+.sarathi-job-sidebar {
+	position: sticky;
+	top: 100px;
+}
+
+.sarathi-job-sidebar-card {
+	background-color: #ffffff;
+	border: 1px solid var(--border-color, #e5e7eb);
+	border-radius: 18px;
+	overflow: hidden;
+	box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.06);
+	padding: 28px;
+}
+
+/* Apply button */
+.sarathi-job-apply-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+	background-color: var(--color-primary, #07B6D5);
+	color: #ffffff;
+	font-family: var(--font-body, 'Roboto', sans-serif);
+	font-size: 15px;
+	font-weight: 600;
+	padding: 14px 24px;
+	border-radius: 50px;
+	text-decoration: none;
+	text-align: center;
+	transition: background-color 0.2s ease;
+	margin-bottom: 28px;
+}
+
+.sarathi-job-apply-btn:hover {
+	background-color: var(--color-primary-dark, #007f87);
+}
+
+.sarathi-job-apply-btn svg {
+	width: 16px;
+	height: 16px;
+}
+
+.sarathi-job-apply-btn.is-disabled {
+	background-color: #9ca3af;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+/* Job overview table */
+.sarathi-job-overview-title {
+	font-family: var(--font-heading, 'Questrial', sans-serif);
+	font-size: 15px;
+	font-weight: 700;
+	color: #374151;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	margin: 0 0 16px;
+}
+
+.sarathi-job-overview-list {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.sarathi-job-overview-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 12px;
+	font-size: 13.5px;
+	padding-bottom: 14px;
+	border-bottom: 1px solid #f1f5f9;
+}
+
+.sarathi-job-overview-item:last-child {
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+.sarathi-job-overview-label {
+	color: #6b7280;
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+.sarathi-job-overview-value {
+	color: #111827;
+	font-weight: 600;
+	text-align: right;
+}
+
+/* Closing date highlight */
+.sarathi-job-overview-value.is-closing {
+	color: #d97706;
+}
+
+/* ==========================================================================
+   Responsive — Tablet (≤ 1024px)
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+	.sarathi-job-layout-grid {
+		grid-template-columns: 1fr;
+		gap: 40px;
+	}
+
+	.sarathi-job-sidebar {
+		position: static;
+	}
+
+	.sarathi-job-sidebar-card {
+		max-width: 500px;
+	}
+
+	.sarathi-job-card {
+		grid-template-columns: 44px 1fr;
+		grid-template-rows: auto auto;
+	}
+
+	.sarathi-job-card__action {
+		grid-column: 2;
+		grid-row: 2;
+	}
+}
+
+/* ==========================================================================
+   Responsive — Mobile (≤ 767px)
+   ========================================================================== */
+
+@media (max-width: 767px) {
+	.sarathi-jobs-section {
+		padding: 50px 0 40px;
+	}
+
+	.sarathi-jobs-header {
+		text-align: left;
+		max-width: 100%;
+		margin-bottom: 28px;
+	}
+
+	.sarathi-job-card {
+		grid-template-columns: 40px 1fr;
+		grid-template-rows: auto auto;
+		padding: 20px 20px;
+		gap: 14px;
+	}
+
+	.sarathi-job-card__action {
+		grid-column: 1 / -1;
+		grid-row: 3;
+		padding-top: 4px;
+	}
+
+	.sarathi-job-single-hero {
+		padding: 32px 0 28px;
+	}
+
+	.sarathi-job-sidebar-card {
+		max-width: 100%;
+	}
+
+	.sarathi-job-apply-btn {
+		font-size: 14px;
+		padding: 12px 20px;
+	}
+}
+
+@media (max-width: 480px) {
+	.sarathi-job-card {
+		grid-template-columns: 1fr;
+	}
+
+	.sarathi-job-card__icon {
+		display: none;
+	}
+
+	.sarathi-job-card__action {
+		grid-column: 1;
+		grid-row: auto;
+	}
+}
