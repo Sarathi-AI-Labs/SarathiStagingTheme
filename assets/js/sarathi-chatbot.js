@@ -392,12 +392,43 @@
       };
     }
 
-    // Pricing / Quote
-    if (q.includes('pricing') || q.includes('cost') || q.includes('quote') || q.includes('fee')) {
+    // What services do you offer?
+    if (q.includes('what services') || q.includes('services do you offer') || q.includes('services and solutions')) {
       return {
-        category: 'Pricing',
-        text: `Our solutions and training programs are tailored to your specific scope. Would you like a quick custom quote?`,
-        chips: ['Yes, sure!', 'Talk to Advisor', 'No, thanks.']
+        category: 'Our Services',
+        text: `At **Sarathi AI Labs**, we provide cutting-edge technology and talent solutions:\n\n1. 🤖 **Agentic AI Solutions**: Autonomous multi-agent swarms (LangGraph/CrewAI), custom RAG enterprise knowledge hubs, and intelligent tool-calling.\n2. 💻 **Web & Cloud Development**: High-performance full-stack web applications, cloud microservices on AWS/GCP, and secure REST/GraphQL APIs.\n3. 🎓 **Professional Training**: Industry-ready bootcamps in Agentic AI, Full-Stack Engineering, and Test Automation.\n4. ⚡ **AI Test Automation**: Robust Playwright/Cypress end-to-end automation, CI/CD quality gates, and visual testing.\n\nWhich service would you like to explore further?`
+      };
+    }
+
+    // How can AI help my business?
+    if (q.includes('how can ai help') || q.includes('ai help my business') || q.includes('help my business')) {
+      return {
+        category: 'Business Impact',
+        text: `AI empowers your business to achieve unprecedented operational velocity and cost efficiency:\n\n- ⚡ **10x Operational Speed**: Autonomous agents execute repetitive cross-platform workflows, customer support, and data extraction 24/7.\n- 🧠 **Instant Private Intelligence**: Enterprise RAG turns internal documents, SOPs, and databases into an interactive AI expert with zero hallucinations.\n- 📉 **Reduced Operational Costs**: Automate triage, CRM data entry, and QA testing cycles while maintaining 99.9% accuracy.\n\nWould you like a free consultation to identify the high-ROI AI opportunities for your business?`
+      };
+    }
+
+    // Do you provide custom solutions?
+    if (q.includes('custom solutions') || q.includes('custom solution') || q.includes('bespoke')) {
+      return {
+        category: 'Custom Solutions',
+        text: `Yes, absolutely! Every enterprise has unique infrastructure and requirements. We build **100% custom, tailor-made solutions**:\n\n- Custom AI agent swarms integrated directly with your private APIs, ERP, and databases.\n- Tailored web platforms engineered from ground up using your chosen tech stack (Next.js, Python, Node.js, Go).\n- Dedicated on-premise or private cloud LLM deployments for strict data privacy and compliance.\n\nTell us about your project or use case, and our engineering team will propose a custom architectural roadmap.`
+      };
+    }
+
+    // How can I get started?
+    if (q.includes('get started') || q.includes('how can i start') || q.includes('how to start')) {
+      return {
+        category: 'Getting Started',
+        text: `Getting started with **Sarathi AI Labs** is simple and frictionless:\n\n1. 💬 **Share Your Goal**: Tell us about your project, software needs, or team training goals right here in the chat.\n2. 📅 **Discovery Session**: We'll schedule a complimentary 30-minute technical architecture or counseling call.\n3. 🚀 **Prototype & Delivery**: We deliver a crisp milestone roadmap, working POC, and production-ready implementation.\n\nWould you like to request a quote or connect with our lead architect?`
+      };
+    }
+
+    // Pricing / Quote
+    if (q.includes('pricing') || q.includes('cost') || q.includes('quote') || q.includes('fee') || q === 'get a quote') {
+      return {
+        category: 'Get a Quote',
+        text: `We would love to discuss your project and provide a tailored scope and quote! 💼\n\nPlease share:\n- A brief summary of your project or requirements\n- Your target timeline or budget (optional)\n- Your preferred contact email or phone number\n\nOur solutions team will analyze your needs and get back to you with a comprehensive proposal within 24 hours.`
       };
     }
 
@@ -625,66 +656,161 @@
             <div class="sarathi-welcome-bubble">
               <div class="sarathi-welcome-msg-text">
                 <p id="sarathi-welcome-text">Hi ${state.leadInfo && state.leadInfo.name ? `<strong class="sarathi-user-firstname">${state.leadInfo.name.split(' ')[0]}</strong>` : 'there'} 👋<br><br>How can we empower you with intelligent technology today?</p>
+                <div class="sarathi-welcome-action-wrap">
+                  <a href="/about" target="_blank" rel="noopener noreferrer" class="sarathi-learn-more-btn" id="sarathi-learn-more-btn" title="Learn more about Sarathi AI Labs">
+                    <span class="sarathi-btn-spark">✦</span>
+                    <span class="sarathi-learn-more-text">Learn more about Sarathi AI Labs</span>
+                    <span class="sarathi-learn-more-arrow">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
+                    </span>
+                  </a>
+                </div>
               </div>
             </div>
 
 
 
-            <!-- Clean Topic Bento Cards Grid -->
+            <!-- Clean Topic Bento Cards Grid (2x2) -->
             <div class="sarathi-topic-grid">
               
               <div class="sarathi-topic-card" data-topic="Agentic AI Solutions" style="--card-delay: 0.04s;">
-                <div class="sarathi-topic-icon-badge badge-blue">🤖</div>
+                <div class="sarathi-topic-icon-badge badge-blue">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4" y="8" width="16" height="12" rx="4"></rect>
+                    <circle cx="9" cy="13" r="1.5" fill="#0284C7"></circle>
+                    <circle cx="15" cy="13" r="1.5" fill="#0284C7"></circle>
+                    <path d="M9 17h6"></path>
+                    <line x1="12" y1="4" x2="12" y2="8"></line>
+                    <circle cx="12" cy="3.5" r="1" fill="#0284C7"></circle>
+                    <line x1="1.5" y1="14" x2="4" y2="14"></line>
+                    <line x1="20" y1="14" x2="22.5" y2="14"></line>
+                  </svg>
+                </div>
                 <div class="sarathi-topic-info">
                   <h4>Agentic AI Solutions</h4>
-                  <p>Autonomous AI agents & custom enterprise RAG</p>
+                  <p>Autonomous AI agents & enterprise RAG</p>
                 </div>
                 <span class="sarathi-topic-arrow">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
                   </svg>
                 </span>
               </div>
 
               <div class="sarathi-topic-card" data-topic="Web & Cloud Development" style="--card-delay: 0.08s;">
-                <div class="sarathi-topic-icon-badge badge-green">💻</div>
+                <div class="sarathi-topic-icon-badge badge-green">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                    <line x1="2" y1="20" x2="22" y2="20"></line>
+                  </svg>
+                </div>
                 <div class="sarathi-topic-info">
                   <h4>Web & Cloud Development</h4>
-                  <p>Modern full-stack web apps & cloud microservices</p>
+                  <p>Modern web apps & cloud solutions</p>
                 </div>
                 <span class="sarathi-topic-arrow">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
                   </svg>
                 </span>
               </div>
 
               <div class="sarathi-topic-card" data-topic="Professional Training" style="--card-delay: 0.12s;">
-                <div class="sarathi-topic-icon-badge badge-purple">🎓</div>
+                <div class="sarathi-topic-icon-badge badge-purple">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9333EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                    <path d="M6 12v5c0 3 4 5 6 5s6-2 6-5v-5"></path>
+                  </svg>
+                </div>
                 <div class="sarathi-topic-info">
                   <h4>Professional Training</h4>
-                  <p>Industry-ready engineering & tech bootcamps</p>
+                  <p>AI & technology training for teams and individuals</p>
                 </div>
                 <span class="sarathi-topic-arrow">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
                   </svg>
                 </span>
               </div>
 
-              <div class="sarathi-topic-card" data-topic="AI Test Automation" style="--card-delay: 0.16s;">
-                <div class="sarathi-topic-icon-badge badge-amber">⚡</div>
+              <div class="sarathi-topic-card" data-topic="Get a Quote" style="--card-delay: 0.16s;">
+                <div class="sarathi-topic-icon-badge badge-orange">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    <line x1="8" y1="11" x2="8.01" y2="11" stroke-width="2.5"></line>
+                    <line x1="12" y1="11" x2="12.01" y2="11" stroke-width="2.5"></line>
+                    <line x1="16" y1="11" x2="16.01" y2="11" stroke-width="2.5"></line>
+                  </svg>
+                </div>
                 <div class="sarathi-topic-info">
-                  <h4>AI Test Automation</h4>
-                  <p>Playwright, CI/CD automated QA engineering</p>
+                  <h4>Get a Quote</h4>
+                  <p>Discuss your project with our experts</p>
                 </div>
                 <span class="sarathi-topic-arrow">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
                   </svg>
                 </span>
               </div>
 
+            </div>
+
+            <!-- Popular Questions Section matching Reference UI -->
+            <div class="sarathi-popular-section">
+              <div class="sarathi-popular-header">
+                <h4 class="sarathi-popular-title">Popular questions</h4>
+                <button type="button" class="sarathi-popular-see-all">See all &gt;</button>
+              </div>
+
+              <div class="sarathi-popular-grid">
+                <button type="button" class="sarathi-popular-q-btn" data-question="What services do you offer?">
+                  <div class="sarathi-pop-q-icon pop-icon-blue">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                      <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                  </div>
+                  <span>What services do you offer?</span>
+                </button>
+
+                <button type="button" class="sarathi-popular-q-btn" data-question="How can AI help my business?">
+                  <div class="sarathi-pop-q-icon pop-icon-blue">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  </div>
+                  <span>How can AI help my business?</span>
+                </button>
+
+                <button type="button" class="sarathi-popular-q-btn" data-question="Do you provide custom solutions?">
+                  <div class="sarathi-pop-q-icon pop-icon-green">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                  </div>
+                  <span>Do you provide custom solutions?</span>
+                </button>
+
+                <button type="button" class="sarathi-popular-q-btn" data-question="How can I get started?">
+                  <div class="sarathi-pop-q-icon pop-icon-orange">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                  </div>
+                  <span>How can I get started?</span>
+                </button>
+              </div>
             </div>
 
           </div>
@@ -1170,6 +1296,24 @@
         }
       });
     });
+
+    // Popular Question Buttons Click Handlers
+    document.querySelectorAll('.sarathi-popular-q-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const q = btn.getAttribute('data-question') || btn.querySelector('span').textContent.trim();
+        if (q) {
+          handleSendMessage(q);
+        }
+      });
+    });
+
+    // See All Popular Questions Handler
+    const btnSeeAll = document.querySelector('.sarathi-popular-see-all');
+    if (btnSeeAll) {
+      btnSeeAll.addEventListener('click', () => {
+        handleSendMessage('What services and solutions do you provide?');
+      });
+    }
 
     function submitUserMessage() {
       const val = textarea.value.trim();
