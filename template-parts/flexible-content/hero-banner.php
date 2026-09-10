@@ -141,7 +141,7 @@ elseif ('inner_page' === $hero_version):
 	?>
 	<section class="sarathi-hero-banner sarathi-inner-page-banner<?php echo esc_attr($section_class); ?>"
 		id="<?php echo esc_attr($section_id); ?>" aria-label="Page Banner" <?php echo $section_style; ?>>
-		<div class="container sarathi-section-container">
+		<div class="container">
 			<div class="<?php echo esc_attr($container_class); ?>">
 
 				<div class="sarathi-inner-banner-text-content">
@@ -349,7 +349,7 @@ else:
 		</div>
 
 		<!-- Main Content Layer -->
-		<div class="container sarathi-hero-container sarathi-section-container">
+		<div class="container sarathi-hero-container">
 			<div class="sarathi-hero-content">
 
 				<?php if (!empty($eyebrow)): ?>

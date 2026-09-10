@@ -68,11 +68,16 @@ $jobs_query = new WP_Query(
 
 					// ACF fields.
 					$short_desc = get_field( 'job_short_description', $job_id );
-					$status     = get_field( 'job_status', $job_id );
+					$status       = get_field( 'job_status', $job_id );
+					$closing_date = get_field( 'job_closing_date', $job_id );
 					if ( empty( $status ) ) {
 						$status = 'open';
 					}
 					$is_open = ( 'open' === $status );
+
+					if ( $is_open && ! empty( $closing_date ) && strtotime( $closing_date ) < strtotime( 'today' ) ) {
+						$is_open = false;
+					}
 
 					// Taxonomy terms.
 					$departments = get_the_terms( $job_id, 'job_department' );
