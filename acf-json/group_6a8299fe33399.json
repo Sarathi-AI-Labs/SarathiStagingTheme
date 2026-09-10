@@ -2313,6 +2313,257 @@
                     "min": "",
                     "max": ""
                 },
+                "layout_solutions_section": {
+                    "key": "layout_solutions_section",
+                    "name": "solutions_section",
+                    "label": "Solutions Section",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_solsec_clone_section",
+                            "label": "Section Settings",
+                            "name": "section_settings",
+                            "aria-label": "",
+                            "type": "clone",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "clone": [
+                                "group_clone_section"
+                            ],
+                            "display": "seamless",
+                            "prefix_name": 0,
+                            "prefix_label": 0,
+                            "layout": "block"
+                        },
+                        {
+                            "key": "field_solsec_clone_heading",
+                            "label": "Heading Fields",
+                            "name": "heading_fields",
+                            "aria-label": "",
+                            "type": "clone",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "clone": [
+                                "group_clone_heading"
+                            ],
+                            "display": "seamless",
+                            "prefix_name": 0,
+                            "prefix_label": 0,
+                            "layout": "block"
+                        },
+                        {
+                            "key": "field_solsec_display_style",
+                            "label": "Display Style",
+                            "name": "display_style",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "Select the visual layout for solutions.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "33",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "grid": "Generic Card Grid (Top Info + Bottom Grid)",
+                                "split_cards": "Split 30/70 (Left Info + Right Cards)"
+                            },
+                            "default_value": "grid",
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "ui": 1,
+                            "ajax": 0
+                        },
+                        {
+                            "key": "field_solsec_grid_columns",
+                            "label": "Grid Columns",
+                            "name": "grid_columns",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "Number of columns for the card grid.",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_solsec_display_style",
+                                        "operator": "==",
+                                        "value": "grid"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "33",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "3": "3 Columns Grid",
+                                "4": "4 Columns Grid"
+                            },
+                            "default_value": 3,
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "ui": 1,
+                            "ajax": 0
+                        },
+                        {
+                            "key": "field_solsec_posts_per_page",
+                            "label": "Number of Solutions to Display",
+                            "name": "posts_per_page",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "Default: 3 for homepage.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "34",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 3,
+                            "min": 1,
+                            "max": 12,
+                            "step": 1
+                        },
+                        {
+                            "key": "field_solsec_orderby",
+                            "label": "Order By",
+                            "name": "orderby",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "Attribute used for sorting.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "menu_order": "Menu Order (Page Attributes)",
+                                "date": "Date (Newest First)",
+                                "title": "Title (Alphabetical)",
+                                "rand": "Random"
+                            },
+                            "default_value": "menu_order",
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "ui": 1,
+                            "ajax": 0
+                        },
+                        {
+                            "key": "field_solsec_order",
+                            "label": "Order Direction",
+                            "name": "order",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "Ascending or descending direction.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "ASC": "Ascending (ASC)",
+                                "DESC": "Descending (DESC)"
+                            },
+                            "default_value": "ASC",
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "ui": 1,
+                            "ajax": 0
+                        },
+                        {
+                            "key": "field_solsec_show_view_all",
+                            "label": "Show View All Button",
+                            "name": "show_view_all",
+                            "aria-label": "",
+                            "type": "true_false",
+                            "instructions": "Toggle the View All Solutions CTA button.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "33",
+                                "class": "",
+                                "id": ""
+                            },
+                            "message": "Display View All Solutions button",
+                            "default_value": 1,
+                            "ui": 1
+                        },
+                        {
+                            "key": "field_solsec_view_all_text",
+                            "label": "Button Text",
+                            "name": "view_all_text",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "Button text (e.g. View All Solutions).",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_solsec_show_view_all",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "33",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "View All Solutions &rarr;",
+                            "placeholder": "View All Solutions &rarr;"
+                        },
+                        {
+                            "key": "field_solsec_view_all_url",
+                            "label": "Button URL (Optional)",
+                            "name": "view_all_url",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "Leave empty to link automatically to /solutions/ archive.",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_solsec_show_view_all",
+                                        "operator": "==",
+                                        "value": "1"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "34",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "/solutions/"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
                 "layout_training_section": {
                     "key": "layout_training_section",
                     "name": "training_section",
@@ -2931,5 +3182,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1789027192
+    "modified": 1789042311
 }

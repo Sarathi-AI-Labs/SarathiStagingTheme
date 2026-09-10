@@ -17,14 +17,14 @@
 
 @media (min-width: 768px) {
     .cards-grid {
-        padding-top: 6rem;
-        padding-bottom: 5rem;
+        padding-top: 2.5rem;
+        padding-bottom: 3rem;
     }
 }
 
 @media (min-width: 1024px) {
     .cards-grid {
-        padding-top: 2rem;
+        padding-top: 2.5rem;
         padding-bottom: 3rem;
         padding-left: 2rem;
         padding-right: 2rem;
@@ -41,12 +41,12 @@
 /* Header (Eyebrow, Title, Description) */
 .cards-grid__header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 @media (min-width: 768px) {
     .cards-grid__header {
-        margin-bottom: 3.5rem;
+        margin-bottom: 1.75rem;
     }
 }
 
@@ -1366,9 +1366,25 @@
 /* Solutions Listing Card Grid */
 .cards-grid--solutions {
     background-color: var(--bg-white, #ffffff);
-    padding: 2rem 1rem 4rem 1rem;
+    padding: 1.5rem 1rem 2.5rem 1rem;
     max-width: 1100px;
     margin-inline: auto;
+}
+
+.cards-grid--solutions .cards-grid__header {
+    margin-bottom: 1.25rem;
+}
+
+.cards-grid--solutions .cards-grid__eyebrow {
+    margin-bottom: 0.35rem;
+}
+
+.cards-grid--solutions .cards-grid__title {
+    margin-bottom: 0.4rem;
+}
+
+.cards-grid--solutions .cards-grid__description {
+    margin-bottom: 0;
 }
 
 .cards-grid--solutions .cards-grid__list {
