@@ -40,6 +40,11 @@ while ( have_posts() ) :
 	}
 	$is_open = ( 'open' === $status );
 
+	// Automatically close if closing date has passed.
+	if ( $is_open && ! empty( $closing_date ) && strtotime( $closing_date ) < strtotime( 'today' ) ) {
+		$is_open = false;
+	}
+
 	// Taxonomy terms.
 	$departments = get_the_terms( $post_id, 'job_department' );
 	$locations   = get_the_terms( $post_id, 'job_location' );
@@ -58,7 +63,7 @@ while ( have_posts() ) :
 	}
 
 	// Careers landing page — link back to /careers/ or the first page using jobs_section.
-	$careers_url = home_url( '/careers/' );
+	$careers_url = home_url( '/jobs/' );
 	?>
 
 	<article id="post-<?php the_ID(); ?>" <?php post_class( 'sarathi-single-job' ); ?>>
