@@ -65,13 +65,13 @@ function custom_theme_register_job_cpt() {
 		'show_in_admin_bar'   => true,
 		'show_in_nav_menus'   => true,
 		'can_export'          => true,
-		'has_archive'         => 'careers',
+		'has_archive'         => 'jobs',
 		'exclude_from_search' => false,
 		'publicly_queryable'  => true,
 		'capability_type'     => 'post',
 		'show_in_rest'        => true,
 		'rewrite'             => array(
-			'slug'       => 'careers',
+			'slug'       => 'jobs',
 			'with_front' => false,
 		),
 	);

@@ -102,14 +102,37 @@ $archive_render = custom_theme_render_archive_flexible_content( 'careers' );
 						$dept_name     = ( $job_dept_obj && ! is_wp_error( $job_dept_obj ) ) ? $job_dept_obj[0]->name : '';
 						$location_name = ( $job_loc_obj && ! is_wp_error( $job_loc_obj ) ) ? $job_loc_obj[0]->name : '';
 						$type_name     = ( $job_type_obj && ! is_wp_error( $job_type_obj ) ) ? $job_type_obj[0]->name : '';
+
+						$status       = get_field( 'job_status', $job_id );
+						$closing_date = get_field( 'job_closing_date', $job_id );
+						if ( empty( $status ) ) {
+							$status = 'open';
+						}
+						$is_open = ( 'open' === $status );
+						
+						if ( $is_open && ! empty( $closing_date ) && strtotime( $closing_date ) < strtotime( 'today' ) ) {
+							$is_open = false;
+						}
 						?>
 						<article class="sarathi-job-card">
-							<div class="sarathi-job-card__main">
+							<div class="sarathi-job-card__icon" aria-hidden="true">
+								<svg class="sarathi-job-icon-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<rect x="5" y="12" width="30" height="22" rx="4" stroke="#07B6D5" stroke-width="1.8" fill="#f0fdfa"/>
+									<path d="M14 12V9a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3" stroke="#07B6D5" stroke-width="1.8" stroke-linecap="round"/>
+									<path d="M5 22h30" stroke="#07B6D5" stroke-width="1.5" stroke-dasharray="2 2"/>
+									<circle cx="20" cy="22" r="2.5" fill="#07B6D5"/>
+								</svg>
+							</div>
+
+							<div class="sarathi-job-card__body">
 								<h2 class="sarathi-job-card__title">
 									<a href="<?php echo esc_url( $job_url ); ?>"><?php echo esc_html( $job_title ); ?></a>
 								</h2>
 
 								<div class="sarathi-job-card__meta">
+									<span class="sarathi-job-status-badge <?php echo $is_open ? 'is-open' : 'is-closed'; ?>" style="font-size:10px; padding:3px 8px; margin-right: 4px;">
+										<?php echo $is_open ? esc_html__( 'Open', 'custom-theme' ) : esc_html__( 'Closed', 'custom-theme' ); ?>
+									</span>
 									<?php if ( ! empty( $dept_name ) ) : ?>
 										<span class="sarathi-job-meta-pill sarathi-job-meta-dept">
 											<svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1C4.24 1 2 3.24 2 6c0 3.18 4.5 7 5 7s5-3.82 5-7c0-2.76-2.24-5-5-5Zm0 6.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" fill="currentColor"/></svg>
