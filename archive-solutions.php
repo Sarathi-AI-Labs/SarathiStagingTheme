@@ -12,7 +12,7 @@ get_header();
 
 // Render Flexible Content (or fallback hero if no flexible content exists)
 $archive_render      = custom_theme_render_archive_flexible_content( 'solutions' );
-$rendered_cards_grid = in_array( 'cards_grid', $archive_render['rendered_layouts'], true );
+$rendered_cards_grid = in_array( 'cards_grid', $archive_render['rendered_layouts'], true ) || in_array( 'solutions_section', $archive_render['rendered_layouts'], true );
 ?>
 
 <div class="sarathi-solutions-archive">
@@ -37,40 +37,16 @@ $rendered_cards_grid = in_array( 'cards_grid', $archive_render['rendered_layouts
 								if ( empty( $thumb ) ) {
 									$thumb = get_template_directory_uri() . '/assets/images/UST_overview.avif';
 								}
-								
-								$icon_url = is_array( $card_icon ) && ! empty( $card_icon['url'] ) ? $card_icon['url'] : ( is_string( $card_icon ) ? $card_icon : '' );
-								if ( empty( $icon_url ) && is_numeric( $card_icon ) ) {
-									$icon_url = wp_get_attachment_url( (int) $card_icon );
-								}
 
 								if ( empty( $short_desc ) ) {
 									$short_desc = has_excerpt() ? get_the_excerpt() : wp_trim_words( get_the_content(), 18, '...' );
-								}
-
-								$title_lower = strtolower( $sol_title );
-								if ( strpos( $title_lower, 'test' ) !== false ) {
-									$fallback_svg = '<svg viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>';
-								} elseif ( strpos( $title_lower, 'agent' ) !== false || strpos( $title_lower, 'workflow' ) !== false ) {
-									$fallback_svg = '<svg viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4M8 16h0M16 16h0"></path></svg>';
-								} elseif ( strpos( $title_lower, 'data' ) !== false ) {
-									$fallback_svg = '<svg viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>';
-								} elseif ( strpos( $title_lower, 'document' ) !== false ) {
-									$fallback_svg = '<svg viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>';
-								} elseif ( strpos( $title_lower, 'strategy' ) !== false ) {
-									$fallback_svg = '<svg viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg>';
-								} else {
-									$fallback_svg = '<svg viewBox="0 0 24 24" fill="none" stroke="#0066cc" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>';
 								}
 								?>
 								<article class="cards-grid__item sarathi-solution-card">
 									<a href="<?php echo esc_url( $sol_link ); ?>" class="sarathi-solution-card__media-wrap">
 										<img src="<?php echo esc_url( $thumb ); ?>" alt="<?php echo esc_attr( $sol_title ); ?>" class="sarathi-solution-card__thumb" loading="lazy">
 										<div class="sarathi-solution-card__badge-icon">
-											<?php if ( ! empty( $icon_url ) && is_string( $icon_url ) && strpos( $icon_url, 'http' ) === 0 ) : ?>
-												<img src="<?php echo esc_url( $icon_url ); ?>" alt="" aria-hidden="true">
-											<?php else : ?>
-												<?php echo $fallback_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-											<?php endif; ?>
+											<?php echo sarathi_get_solution_icon( $sol_title, $card_icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 										</div>
 									</a>
 									<div class="cards-grid__content sarathi-solution-card__body">

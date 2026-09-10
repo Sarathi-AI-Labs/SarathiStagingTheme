@@ -1,0 +1,108 @@
+/**
+ * Solutions Section Styles - Custom Theme
+ * Extends .cards-grid--solutions and .sarathi-solution-card from cards-grid.css.
+ */
+
+/* Compact Section & Header Spacing */
+.sarathi-solutions-section,
+.cards-grid--solutions {
+	width: 100%;
+	box-sizing: border-box;
+	padding-top: 1.75rem !important;
+	padding-bottom: 2.25rem !important;
+}
+
+@media (min-width: 768px) {
+	.sarathi-solutions-section,
+	.cards-grid--solutions {
+		padding-top: 2rem !important;
+		padding-bottom: 2.5rem !important;
+	}
+}
+
+.sarathi-solutions-section .cards-grid__header,
+.cards-grid--solutions .cards-grid__header {
+	margin-bottom: 1.25rem !important;
+	text-align: center;
+}
+
+.sarathi-solutions-section .cards-grid__eyebrow,
+.cards-grid--solutions .cards-grid__eyebrow {
+	margin-bottom: 0.35rem !important;
+}
+
+.sarathi-solutions-section .cards-grid__title,
+.cards-grid--solutions .cards-grid__title {
+	margin-top: 0 !important;
+	margin-bottom: 0.4rem !important;
+	line-height: 1.25 !important;
+}
+
+.sarathi-solutions-section .cards-grid__description,
+.cards-grid--solutions .cards-grid__description {
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+	line-height: 1.5 !important;
+}
+
+/* Badge Icon internal SVG & Image sizing */
+.sarathi-solution-card__badge-icon .sarathi-sol-icon-svg {
+	width: 20px;
+	height: 20px;
+	color: var(--color-primary, #07B6D5);
+	stroke: var(--color-primary, #07B6D5);
+	display: block;
+}
+
+.sarathi-solution-card__badge-icon .sarathi-solution-custom-icon {
+	width: 22px;
+	height: 22px;
+	object-fit: contain;
+	display: block;
+}
+
+/* Split 30/70 Layout Support for Solutions */
+.sarathi-sol-split-wrapper {
+	display: grid;
+	grid-template-columns: 320px 1fr;
+	gap: 36px;
+	align-items: center;
+}
+
+.sarathi-sol-split-info {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.sarathi-sol-info-btn-wrap {
+	margin-top: 1.25rem;
+}
+
+.sarathi-sol-split-cards {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1.5rem;
+}
+
+@media (max-width: 991px) {
+	.sarathi-sol-split-wrapper {
+		grid-template-columns: 1fr;
+		gap: 24px;
+	}
+
+	.sarathi-sol-split-info {
+		text-align: center;
+		align-items: center;
+	}
+
+	.sarathi-sol-split-cards {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 640px) {
+	.sarathi-sol-split-cards {
+		grid-template-columns: 1fr;
+	}
+}

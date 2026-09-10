@@ -2,6 +2,8 @@
 /**
  * Cards Grid Section Template Part
  *
+ * Generic cards grid component for services, features, process/steps, and standard cards.
+ *
  * @package Custom_Theme
  */
 
@@ -27,53 +29,6 @@ if (empty($display_variant)) {
 $cards = get_sub_field('cards');
 if (empty($cards)) {
 	$cards = get_field('cards');
-}
-
-// Dynamic Solutions CPT Query
-$is_solutions_listing = (
-	'solutions' === $section_id ||
-	'solutions' === $display_variant ||
-	'solutions' === get_sub_field('data_source') ||
-	( ! empty( $section_eyebrow ) && stripos( $section_eyebrow, 'SOLUTION' ) !== false ) ||
-	is_page('solutions') ||
-	is_page('solutions-2')
-);
-
-if ( $is_solutions_listing ) {
-	$posts_limit = ( is_front_page() || is_home() ) ? 3 : -1;
-	$solutions_args = array(
-		'post_type'      => 'solutions',
-		'posts_per_page' => $posts_limit,
-		'post_status'    => 'publish',
-		'orderby'        => array( 'menu_order' => 'ASC', 'date' => 'ASC' ),
-	);
-	$sol_query = new WP_Query( $solutions_args );
-	if ( $sol_query->have_posts() ) {
-		$cards = array();
-		while ( $sol_query->have_posts() ) {
-			$sol_query->the_post();
-			$sid        = get_the_ID();
-			$short_desc = trim( wp_strip_all_tags( get_field( 'short_description', $sid ) ) );
-			$card_icon  = get_field( 'card_icon', $sid );
-			$icon_url   = is_array( $card_icon ) && ! empty( $card_icon['url'] ) ? $card_icon['url'] : ( is_string( $card_icon ) ? $card_icon : '' );
-			if ( empty( $icon_url ) && is_numeric( $card_icon ) ) {
-				$icon_url = wp_get_attachment_url( (int) $card_icon );
-			}
-
-			$cards[] = array(
-				'card_title'       => get_the_title(),
-				'card_link'        => array(
-					'url'   => get_permalink(),
-					'title' => __( 'Explore solution &rarr;', 'custom-theme' ),
-				),
-				'card_image'       => $icon_url,
-				'card_icon'        => $icon_url,
-				'card_description' => $short_desc,
-				'is_cpt_solution'  => true,
-			);
-		}
-		wp_reset_postdata();
-	}
 }
 
 $card_bg_color = get_sub_field('card_bg_color');
@@ -127,13 +82,10 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 					$title = !empty($card['card_title']) ? $card['card_title'] : (!empty($card['title']) ? $card['title'] : '');
 					$raw_link = !empty($card['card_link']) ? $card['card_link'] : (!empty($card['link']) ? $card['link'] : '#');
 					$link = is_array($raw_link) ? (!empty($raw_link['url']) ? $raw_link['url'] : '#') : $raw_link;
-					$link_title = is_array($raw_link) && !empty($raw_link['title']) ? $raw_link['title'] : 'Explore solution &rarr;';
+					$link_title = is_array($raw_link) && !empty($raw_link['title']) ? $raw_link['title'] : 'Explore &rarr;';
 					$img_field = !empty($card['card_image']) ? $card['card_image'] : '';
 					$img_src = is_array($img_field) ? $img_field['url'] : $img_field;
-					$card_icon_field = !empty($card['card_icon']) ? $card['card_icon'] : '';
-					$card_icon_src = is_array($card_icon_field) ? $card_icon_field['url'] : $card_icon_field;
 					$card_desc = !empty($card['card_description']) ? $card['card_description'] : '';
-					$is_solution = !empty($card['is_cpt_solution']) || ('solutions' === $display_variant);
 
 					if (empty($img_src)) {
 						$img_src = $theme_uri . '/assets/images/UST_overview.avif';
@@ -242,20 +194,10 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 				<a href="#" class="cards-grid__item">
 					<div class="cards-grid__icon-wrapper">
 						<img src="<?php echo esc_url($theme_uri . '/assets/images/UST_overview.avif'); ?>"
-							alt="Sarathi Overview" loading="lazy" aria-hidden="true">
+							alt="Overview" loading="lazy" aria-hidden="true">
 					</div>
 					<div class="cards-grid__content">
-						<h3 class="cards-grid__item-title">Sarathi Overview</h3>
-					</div>
-				</a>
-
-				<a href="#" class="cards-grid__item">
-					<div class="cards-grid__icon-wrapper">
-						<img src="<?php echo esc_url($theme_uri . '/assets/images/Early_years_program.avif'); ?>"
-							alt="AI Solutions" loading="lazy" aria-hidden="true">
-					</div>
-					<div class="cards-grid__content">
-						<h3 class="cards-grid__item-title">AI Solutions</h3>
+						<h3 class="cards-grid__item-title">Overview</h3>
 					</div>
 				</a>
 			<?php endif; ?>
@@ -281,16 +223,11 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 			</div>
 		<?php endif; ?>
 
-		<?php 
-		$cta_url = !empty($section_cta['url']) ? $section_cta['url'] : ( ( 'solutions' === $section_id || $is_solutions_listing ) ? get_post_type_archive_link('solutions') : '' );
-		$cta_title = !empty($section_cta['title']) ? $section_cta['title'] : ( ( 'solutions' === $section_id || $is_solutions_listing ) ? __('View All Solutions &rarr;', 'custom-theme') : '' );
-		$cta_target = !empty($section_cta['target']) ? $section_cta['target'] : '_self';
-		if (!empty($cta_url) && !empty($cta_title)): 
-		?>
+		<?php if (!empty($section_cta) && is_array($section_cta) && !empty($section_cta['url']) && !empty($section_cta['title'])): ?>
 			<div class="cards-grid__footer">
-				<a href="<?php echo esc_url($cta_url); ?>" class="sarathi-btn-outline-solutions"
-					target="<?php echo esc_attr($cta_target); ?>">
-					<span><?php echo wp_kses_post($cta_title); ?></span>
+				<a href="<?php echo esc_url($section_cta['url']); ?>" class="btn btn-primary"
+					target="<?php echo !empty($section_cta['target']) ? esc_attr($section_cta['target']) : '_self'; ?>">
+					<span><?php echo esc_html($section_cta['title']); ?></span>
 				</a>
 			</div>
 		<?php endif; ?>
