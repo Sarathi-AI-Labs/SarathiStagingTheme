@@ -9,7 +9,7 @@
    CSS DESIGN TOKENS (CLEAN & MINIMALIST)
    ========================================================================== */
 :root {
-  --sarathi-primary: #07b6d5;
+  --sarathi-primary: #07B6D5;
   --sarathi-primary-hover: #07b6d5;
   --sarathi-primary-subtle: #EFF6FF;
   --sarathi-primary-tint: #DBEAFE;
@@ -17,14 +17,14 @@
   --sarathi-bg-window: #FFFFFF;
   --sarathi-bg-header: #FFFFFF;
   --sarathi-bg-canvas: #FFFFFF;
-  --sarathi-bg-card: #FFFFFF;
+  --sarathi-bg-card: #FAF8F5;
   --sarathi-bg-input: #FFFFFF;
 
   --sarathi-border: #E2E8F0;
   --sarathi-border-hover: #BFDBFE;
   --sarathi-border-focus: #07b6d5;
 
-  --sarathi-text-main: #0F172A;
+  --sarathi-text-main: #1e1206;
   --sarathi-text-secondary: #334155;
   --sarathi-text-muted: #64748B;
   --sarathi-text-subtle: #94A3B8;
@@ -48,7 +48,7 @@
 /* Dark Mode Tokens */
 #sarathi-ai-root[data-theme="dark"],
 .sarathi-chat-window[data-theme="dark"] {
-  --sarathi-primary: #3B82F6;
+  --sarathi-primary: #07B6D5;
   --sarathi-primary-hover: #60A5FA;
   --sarathi-primary-subtle: rgba(59, 130, 246, 0.14);
   --sarathi-primary-tint: rgba(59, 130, 246, 0.25);
@@ -269,7 +269,7 @@
 .sarathi-chat-window .sarathi-chat-header {
   position: relative;
   z-index: 10;
-  background: linear-gradient(135deg, #0968e5 0%, #0099ff 100%);
+  background: #07B6D5;
   color: #FFFFFF;
   padding: 0;
   display: flex;
@@ -534,7 +534,7 @@
 }
 
 /* ==========================================================================
-   FULLSCREEN STUDIO MODE
+   FULLSCREEN STUDIO MODE (Clean, Minimalistic & Perfectly Proportioned)
    ========================================================================== */
 .sarathi-chat-window.sarathi-fullscreen-mode {
   position: fixed !important;
@@ -552,6 +552,7 @@
   transform: none !important;
   box-shadow: none !important;
   transition: opacity 0.2s ease !important;
+  background: #FFFFFF !important;
 }
 
 body.sarathi-fullscreen-active {
@@ -561,19 +562,117 @@ body.sarathi-fullscreen-active {
 .sarathi-chat-window.sarathi-fullscreen-mode .sarathi-chat-header {
   border-radius: 0 !important;
   cursor: default !important;
-}
-
-.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-chat-header-main,
-.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-chat-body,
-.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-composer-container {
-  max-width: 860px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
+  padding: 0 !important;
 }
 
 .sarathi-chat-window.sarathi-fullscreen-mode .sarathi-chat-header-main {
-  padding: 18px 24px 6px 24px;
+  max-width: min(1200px, 94vw) !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  padding: 16px 20px 6px 20px !important;
+  box-sizing: border-box !important;
+}
+
+.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-chat-body {
+  max-width: min(1200px, 94vw) !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  padding: 16px 20px 0 20px !important;
+  box-sizing: border-box !important;
+}
+
+.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-composer-container {
+  max-width: min(1200px, 94vw) !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  padding: 8px 20px 18px 20px !important;
+  box-sizing: border-box !important;
+  background: transparent !important;
+}
+
+.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-composer-pill {
+  width: 100% !important;
+  border-radius: 16px !important;
+  padding: 10px 16px !important;
+  box-shadow: 0 4px 20px rgba(10, 37, 64, 0.08), 0 1px 4px rgba(10, 37, 64, 0.04) !important;
+}
+
+/* Fullscreen Welcome Hub Layout */
+.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-welcome-screen {
+  padding: 10px 0 20px 0 !important;
+  gap: 16px !important;
+}
+
+.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-welcome-bubble {
+  padding: 16px 20px !important;
+  border-radius: 16px !important;
+}
+
+/* Fullscreen Desktop: 4 Columns Bento Cards & Questions */
+@media (min-width: 900px) {
+  .sarathi-chat-window.sarathi-fullscreen-mode .sarathi-topic-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .sarathi-chat-window.sarathi-fullscreen-mode .sarathi-topic-card {
+    padding: 12px 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .sarathi-chat-window.sarathi-fullscreen-mode .sarathi-popular-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .sarathi-chat-window.sarathi-fullscreen-mode .sarathi-popular-q-btn {
+    padding: 8px 12px !important;
+    justify-content: flex-start !important;
+    border-radius: 12px !important;
+  }
+}
+
+/* Fullscreen Conversation Stream */
+.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-messages-list {
+  padding: 12px 0 24px 0 !important;
+  gap: 14px !important;
+}
+
+.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-message {
+  max-width: 78% !important;
+}
+
+.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-message.assistant .sarathi-msg-bubble {
+  padding: 16px 22px !important;
+  font-size: 14px !important;
+  line-height: 1.62 !important;
+  border-radius: 18px !important;
+}
+
+.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-message.user .sarathi-msg-bubble {
+  padding: 13px 20px !important;
+  font-size: 14px !important;
+  border-radius: 18px !important;
+}
+
+.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-typing-wrapper {
+  padding: 8px 0 20px 0 !important;
+  max-width: 78% !important;
+}
+
+.sarathi-chat-window.sarathi-fullscreen-mode .sarathi-thinking-card {
+  max-width: 520px !important;
+  padding: 16px 20px !important;
+  border-radius: 20px 20px 20px 6px !important;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-chat-window.sarathi-fullscreen-mode {
+  background: #0f172a !important;
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-chat-window.sarathi-fullscreen-mode .sarathi-composer-pill {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* ==========================================================================
@@ -739,20 +838,36 @@ body.sarathi-fullscreen-active {
 
 /* Chatbot Welcome Greeting Bubble */
 .sarathi-welcome-bubble {
-  background: var(--sarathi-bg-card);
-  border: 1px solid var(--sarathi-border);
+  background: #FAF8F5;
+  border: 1px solid rgba(226, 222, 214, 0.88);
   border-radius: 18px 18px 18px 4px;
   padding: 14px 16px;
-  box-shadow: 0 4px 18px -3px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 4px 18px -3px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
   animation: sarathiBotReveal 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .sarathi-welcome-msg-text p {
   font-size: 13.5px;
-  line-height: 1.55;
+  line-height: 1.5;
   color: var(--sarathi-text-main);
   margin: 0;
   font-weight: 500;
+}
+
+.sarathi-welcome-greeting {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--sarathi-text-main);
+  margin-bottom: 5px;
+}
+
+.sarathi-welcome-question {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--sarathi-text-main);
+  line-height: 1.45;
 }
 
 .sarathi-user-firstname {
@@ -854,12 +969,6 @@ body.sarathi-fullscreen-active {
   color: #0284C7;
 }
 
-.sarathi-welcome-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 0 0 4px 0;
-}
 
 .sarathi-hub-header {
   display: flex;
@@ -1150,7 +1259,7 @@ body.sarathi-fullscreen-active {
 }
 
 .sarathi-message.user .sarathi-msg-bubble {
-  background: #0a2540;
+  background: linear-gradient(135deg, #07B6D5);
   color: #FFFFFF;
   border-radius: 18px 18px 4px 18px;
   padding: 12px 18px;
@@ -1158,19 +1267,206 @@ body.sarathi-fullscreen-active {
   line-height: 1.5;
   font-weight: 500;
   letter-spacing: -0.01em;
-  box-shadow: 0 4px 14px rgba(10, 37, 64, 0.22);
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.28), 0 2px 6px rgba(13, 148, 136, 0.18);
   word-break: break-word;
   position: relative;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 #sarathi-ai-root[data-theme="dark"] .sarathi-message.user .sarathi-msg-bubble {
-  background: #1D4ED8;
-  box-shadow: 0 4px 16px rgba(29, 78, 216, 0.35);
+  background: linear-gradient(135deg, #047857 0%, #0d9488 60%, #1d4ed8 100%);
+  box-shadow: 0 4px 18px rgba(5, 150, 105, 0.35);
 }
 
 .sarathi-message.user .sarathi-msg-bubble:hover {
-  box-shadow: 0 6px 18px rgba(10, 37, 64, 0.3);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.35), 0 2px 8px rgba(2, 132, 199, 0.2);
+}
+
+/* User Message Bubble Wrapper & Inline Edit Mode */
+.sarathi-user-bubble-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  position: relative;
+  max-width: 100%;
+}
+
+.sarathi-user-bubble-wrapper.is-editing {
+  width: 100%;
+}
+
+.sarathi-edit-msg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  border-radius: 50%;
+  background: rgba(10, 37, 64, 0.05);
+  border: 1px solid rgba(10, 37, 64, 0.09);
+  color: #64748b;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.sarathi-message.user:hover .sarathi-edit-msg-btn,
+.sarathi-edit-msg-btn:focus,
+.sarathi-edit-msg-btn:hover {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.sarathi-edit-msg-btn:hover {
+  background: #059669;
+  color: #ffffff;
+  border-color: #059669;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.28);
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-edit-msg-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #94a3b8;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-edit-msg-btn:hover {
+  background: #059669;
+  color: #ffffff;
+  border-color: #059669;
+}
+
+@media (hover: none) {
+  .sarathi-edit-msg-btn {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+}
+
+.sarathi-edited-badge {
+  display: inline-block;
+  font-size: 10px;
+  opacity: 0.68;
+  margin-left: 6px;
+  font-style: italic;
+  font-weight: 400;
+  user-select: none;
+}
+
+.sarathi-inline-edit-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  min-width: 230px;
+  background: #ffffff;
+  border: 1.5px solid #059669;
+  border-radius: 14px;
+  padding: 10px 12px;
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.15);
+  animation: sarathiUserBubbleSpring 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-inline-edit-box {
+  background: #1e293b;
+  border-color: #059669;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.sarathi-inline-edit-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #0f172a;
+  font-family: inherit;
+  font-size: 13.5px;
+  line-height: 1.5;
+  font-weight: 500;
+  resize: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  min-height: 24px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-inline-edit-input {
+  color: #f8fafc;
+}
+
+.sarathi-inline-edit-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(5, 150, 105, 0.12);
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-inline-edit-actions {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.sarathi-btn-cancel-edit {
+  background: transparent;
+  border: 1px solid rgba(15, 23, 42, 0.16);
+  color: #64748b;
+  border-radius: 7px;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sarathi-btn-cancel-edit:hover {
+  background: rgba(15, 23, 42, 0.06);
+  color: #0f172a;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-btn-cancel-edit {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #94a3b8;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-btn-cancel-edit:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.sarathi-btn-save-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #059669 0%, #0d9488 60%, #0284c7 100%);
+  border: none;
+  color: #ffffff;
+  border-radius: 7px;
+  padding: 4px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.28);
+}
+
+.sarathi-btn-save-edit:hover {
+  background: #11385f;
+  box-shadow: 0 4px 10px rgba(10, 37, 64, 0.3);
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-btn-save-edit {
+  background: #2563eb;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-btn-save-edit:hover {
+  background: #1d4ed8;
 }
 
 /* Assistant Message Bubble (Clean White Speech Card matching Reference UI) */
@@ -1181,14 +1477,14 @@ body.sarathi-fullscreen-active {
 }
 
 .sarathi-message.assistant .sarathi-msg-bubble {
-  background: #FFFFFF;
+  background: #FAF8F5;
   color: #1e293b;
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  border: 1px solid rgba(226, 222, 214, 0.9);
   border-radius: 18px 18px 18px 4px;
   padding: 14px 18px;
   font-size: 13.5px;
   line-height: 1.58;
-  box-shadow: 0 4px 18px rgba(10, 37, 64, 0.06), 0 1px 3px rgba(10, 37, 64, 0.03);
+  box-shadow: 0 4px 18px rgba(10, 37, 64, 0.05), 0 1px 3px rgba(10, 37, 64, 0.03);
   word-break: break-word;
   position: relative;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -1206,6 +1502,10 @@ body.sarathi-fullscreen-active {
   font-weight: 600;
   color: #0f172a;
   margin-top: 6px;
+}
+
+.sarathi-message.assistant .sarathi-msg-bubble .sarathi-md-p + .sarathi-md-question {
+  margin-top: 4px;
 }
 
 #sarathi-ai-root[data-theme="dark"] .sarathi-message.assistant .sarathi-msg-bubble {
@@ -1536,6 +1836,411 @@ body.sarathi-fullscreen-active {
 
 .sarathi-md-link:hover .sarathi-link-arrow {
   transform: translate(2px, -2px);
+}
+
+/* ==========================================================================
+   Advanced Dynamic Action Cards (Contact, Blog, About, Solutions, Training, etc.)
+   ========================================================================== */
+.sarathi-action-card-wrap {
+  margin-top: 10px;
+  margin-bottom: 4px;
+  width: 100%;
+}
+
+.sarathi-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border-radius: 14px;
+  text-decoration: none !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 14px rgba(10, 37, 64, 0.07), 0 1px 3px rgba(10, 37, 64, 0.04);
+}
+
+.sarathi-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(10, 37, 64, 0.14), 0 2px 6px rgba(10, 37, 64, 0.06);
+}
+
+.sarathi-action-btn:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.sarathi-action-main {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  flex: 1;
+}
+
+.sarathi-action-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 10px;
+  transition: transform 0.25s ease;
+}
+
+.sarathi-action-btn:hover .sarathi-action-icon-box {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.sarathi-action-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.sarathi-action-header-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.sarathi-action-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+.sarathi-action-title {
+  font-size: 13.5px;
+  font-weight: 650;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+.sarathi-action-subtitle {
+  font-size: 11px;
+  line-height: 1.3;
+  margin-top: 2px;
+  opacity: 0.78;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sarathi-action-arrow-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sarathi-action-btn:hover .sarathi-action-arrow-circle {
+  transform: translateX(4px);
+}
+
+/* Category: Contact (Emerald / Mint) */
+.sarathi-action-contact {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1.5px solid rgba(16, 185, 129, 0.4);
+}
+.sarathi-action-contact .sarathi-action-icon-box {
+  background: #10b981;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(16, 185, 129, 0.3);
+}
+.sarathi-action-contact .sarathi-action-badge {
+  color: #059669;
+}
+.sarathi-action-contact .sarathi-action-title {
+  color: #064e3b;
+}
+.sarathi-action-contact .sarathi-action-subtitle {
+  color: #047857;
+}
+.sarathi-action-contact .sarathi-action-arrow-circle {
+  background: rgba(16, 185, 129, 0.16);
+  color: #059669;
+}
+.sarathi-action-contact:hover {
+  border-color: #10b981;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);
+}
+
+/* Category: Blog & Articles (Violet / Purple) */
+.sarathi-action-blog {
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+  border: 1.5px solid rgba(139, 92, 246, 0.4);
+}
+.sarathi-action-blog .sarathi-action-icon-box {
+  background: #8b5cf6;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(139, 92, 246, 0.3);
+}
+.sarathi-action-blog .sarathi-action-badge {
+  color: #7c3aed;
+}
+.sarathi-action-blog .sarathi-action-title {
+  color: #4c1d95;
+}
+.sarathi-action-blog .sarathi-action-subtitle {
+  color: #6d28d9;
+}
+.sarathi-action-blog .sarathi-action-arrow-circle {
+  background: rgba(139, 92, 246, 0.16);
+  color: #7c3aed;
+}
+.sarathi-action-blog:hover {
+  border-color: #8b5cf6;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.25);
+}
+
+/* Category: About (Deep Navy / Sky Blue) */
+.sarathi-action-about {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1.5px solid rgba(14, 165, 233, 0.38);
+}
+.sarathi-action-about .sarathi-action-icon-box {
+  background: #0a2540;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(10, 37, 64, 0.3);
+}
+.sarathi-action-about .sarathi-action-badge {
+  color: #0284c7;
+}
+.sarathi-action-about .sarathi-action-title {
+  color: #0a2540;
+}
+.sarathi-action-about .sarathi-action-subtitle {
+  color: #0369a1;
+}
+.sarathi-action-about .sarathi-action-arrow-circle {
+  background: rgba(10, 37, 64, 0.1);
+  color: #0a2540;
+}
+.sarathi-action-about:hover {
+  border-color: #0a2540;
+  box-shadow: 0 8px 24px rgba(10, 37, 64, 0.22);
+}
+
+/* Category: Training & Courses (Amber / Warm Gold) */
+.sarathi-action-training {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1.5px solid rgba(245, 158, 11, 0.45);
+}
+.sarathi-action-training .sarathi-action-icon-box {
+  background: #f59e0b;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(245, 158, 11, 0.35);
+}
+.sarathi-action-training .sarathi-action-badge {
+  color: #d97706;
+}
+.sarathi-action-training .sarathi-action-title {
+  color: #78350f;
+}
+.sarathi-action-training .sarathi-action-subtitle {
+  color: #b45309;
+}
+.sarathi-action-training .sarathi-action-arrow-circle {
+  background: rgba(245, 158, 11, 0.18);
+  color: #d97706;
+}
+.sarathi-action-training:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
+}
+
+/* Category: Solutions & Services (Electric Blue / Azure) */
+.sarathi-action-solutions {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border: 1.5px solid rgba(37, 99, 235, 0.38);
+}
+.sarathi-action-solutions .sarathi-action-icon-box {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.3);
+}
+.sarathi-action-solutions .sarathi-action-badge {
+  color: #2563eb;
+}
+.sarathi-action-solutions .sarathi-action-title {
+  color: #1e3a8a;
+}
+.sarathi-action-solutions .sarathi-action-subtitle {
+  color: #1d4ed8;
+}
+.sarathi-action-solutions .sarathi-action-arrow-circle {
+  background: rgba(37, 99, 235, 0.16);
+  color: #2563eb;
+}
+.sarathi-action-solutions:hover {
+  border-color: #2563eb;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);
+}
+
+/* Category: Careers & Jobs (Rose / Crimson) */
+.sarathi-action-careers {
+  background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+  border: 1.5px solid rgba(244, 63, 94, 0.38);
+}
+.sarathi-action-careers .sarathi-action-icon-box {
+  background: #f43f5e;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(244, 63, 94, 0.3);
+}
+.sarathi-action-careers .sarathi-action-badge {
+  color: #e11d48;
+}
+.sarathi-action-careers .sarathi-action-title {
+  color: #881337;
+}
+.sarathi-action-careers .sarathi-action-subtitle {
+  color: #be123c;
+}
+.sarathi-action-careers .sarathi-action-arrow-circle {
+  background: rgba(244, 63, 94, 0.16);
+  color: #e11d48;
+}
+.sarathi-action-careers:hover {
+  border-color: #f43f5e;
+  box-shadow: 0 8px 24px rgba(244, 63, 94, 0.25);
+}
+
+/* Category: Consultation (Cyan / Teal) */
+.sarathi-action-consultation {
+  background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+  border: 1.5px solid rgba(6, 182, 212, 0.4);
+}
+.sarathi-action-consultation .sarathi-action-icon-box {
+  background: #0891b2;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(8, 145, 178, 0.3);
+}
+.sarathi-action-consultation .sarathi-action-badge {
+  color: #0891b2;
+}
+.sarathi-action-consultation .sarathi-action-title {
+  color: #164e63;
+}
+.sarathi-action-consultation .sarathi-action-subtitle {
+  color: #0e7490;
+}
+.sarathi-action-consultation .sarathi-action-arrow-circle {
+  background: rgba(8, 145, 178, 0.16);
+  color: #0891b2;
+}
+.sarathi-action-consultation:hover {
+  border-color: #0891b2;
+  box-shadow: 0 8px 24px rgba(8, 145, 178, 0.25);
+}
+
+/* Dark Mode Support for Dynamic Action Cards */
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-btn {
+  background: rgba(30, 41, 59, 0.88);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-btn:hover {
+  background: rgba(30, 41, 59, 0.98);
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-title {
+  color: #f8fafc;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-subtitle {
+  color: #94a3b8;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-contact {
+  border-color: rgba(16, 185, 129, 0.5);
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-contact .sarathi-action-badge {
+  color: #34d399;
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-contact .sarathi-action-arrow-circle {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-blog {
+  border-color: rgba(139, 92, 246, 0.5);
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-blog .sarathi-action-badge {
+  color: #a78bfa;
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-blog .sarathi-action-arrow-circle {
+  background: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-about {
+  border-color: rgba(56, 189, 248, 0.5);
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-about .sarathi-action-badge {
+  color: #38bdf8;
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-about .sarathi-action-arrow-circle {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-training {
+  border-color: rgba(245, 158, 11, 0.5);
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-training .sarathi-action-badge {
+  color: #fbbf24;
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-training .sarathi-action-arrow-circle {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-solutions {
+  border-color: rgba(59, 130, 246, 0.5);
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-solutions .sarathi-action-badge {
+  color: #60a5fa;
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-solutions .sarathi-action-arrow-circle {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-careers {
+  border-color: rgba(244, 63, 94, 0.5);
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-careers .sarathi-action-badge {
+  color: #fb7185;
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-careers .sarathi-action-arrow-circle {
+  background: rgba(244, 63, 94, 0.2);
+  color: #fb7185;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-consultation {
+  border-color: rgba(6, 182, 212, 0.5);
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-consultation .sarathi-action-badge {
+  color: #22d3ee;
+}
+#sarathi-ai-root[data-theme="dark"] .sarathi-action-consultation .sarathi-action-arrow-circle {
+  background: rgba(6, 182, 212, 0.2);
+  color: #22d3ee;
 }
 
 /* Blockquote */
@@ -1887,121 +2592,323 @@ body.sarathi-fullscreen-active {
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
+
+
 /* ==========================================================================
-   QUICK REPLY BUTTONS / CLICKABLE OPTIONS
+   ADVANCED AI THINKING INDICATOR (REASONING & PIPELINE ENGINE)
    ========================================================================== */
-.sarathi-quick-replies,
-.sarathi-welcome-pills,
-.sarathi-quick-btn,
-.sarathi-chips-row,
-.sarathi-chip-btn {
-  display: none !important;
-}
-
-/* Backward-compatible flow chips */
-.sarathi-chips-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin-top: 10px;
-  justify-content: flex-end;
-}
-
-.sarathi-chip-btn {
-  background: var(--sarathi-bg-card);
-  border: 1px solid var(--sarathi-border);
-  color: var(--sarathi-text-secondary);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: var(--sarathi-radius-full);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
-}
-
-.sarathi-chip-btn .chip-spark {
-  color: var(--sarathi-primary);
-  font-size: 11px;
-}
-
-.sarathi-chip-btn .chip-arrow {
-  color: var(--sarathi-text-subtle);
-  font-size: 11px;
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.sarathi-chip-btn:hover {
-  background: #0a2540;
-  color: #FFFFFF;
-  border-color: #0a2540;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px -2px rgba(10, 37, 64, 0.3);
-}
-
-.sarathi-chip-btn:hover .chip-spark,
-.sarathi-chip-btn:hover .chip-arrow {
-  color: #FFFFFF;
-}
-
-.sarathi-chip-btn:hover .chip-arrow {
-  transform: translateX(3px);
-}
-
-/* Minimalist Typing Indicator */
 .sarathi-typing-wrapper {
-  padding: 4px 16px 10px;
+  padding: 6px 16px 14px;
   align-self: flex-start;
+  max-width: 100%;
   animation: sarathiBubbleSpring 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-.sarathi-typing-bubble {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #FFFFFF;
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  padding: 10px 16px;
-  border-radius: 18px 18px 18px 4px;
-  box-shadow: 0 4px 16px rgba(10, 37, 64, 0.06);
+.sarathi-thinking-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(250, 248, 245, 0.98);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 222, 214, 0.95);
+  border-radius: 18px 18px 18px 6px;
+  box-shadow: 0 6px 20px -2px rgba(10, 37, 64, 0.08), 0 2px 6px rgba(10, 37, 64, 0.04);
+  padding: 13px 16px;
+  min-width: 290px;
+  max-width: 440px;
+  transition: all 0.25s ease;
 }
 
-#sarathi-ai-root[data-theme="dark"] .sarathi-typing-bubble {
-  background: #1E293B;
-  border-color: rgba(255, 255, 255, 0.1);
+#sarathi-ai-root[data-theme="dark"] .sarathi-thinking-card {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 28px -4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.06);
 }
 
-.sarathi-typing-dots {
+.sarathi-thinking-header {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 11px;
 }
 
-.sarathi-typing-dots span {
-  width: 7px;
-  height: 7px;
-  background: #1e88e5;
+.sarathi-thinking-avatar-box {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sarathi-thinking-avatar-ring {
+  position: absolute;
+  inset: -2px;
   border-radius: 50%;
-  animation: sarathiDotBounce 1.2s infinite ease-in-out both;
+  background: conic-gradient(from 0deg, #38bdf8, #6366f1, #06b6d4, #38bdf8);
+  animation: sarathiRingSpin 3s linear infinite;
+  opacity: 0.85;
 }
 
-.sarathi-typing-dots span:nth-child(1) {
-  animation-delay: -0.32s;
+.sarathi-thinking-avatar-inner {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-.sarathi-typing-dots span:nth-child(2) {
-  animation-delay: -0.16s;
+.sarathi-thinking-avatar-inner svg {
+  width: 22px;
+  height: 22px;
 }
 
-.sarathi-typing-dots span:nth-child(3) {
-  animation-delay: 0s;
+.sarathi-thinking-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%;
 }
 
-.sarathi-typing-text {
-  display: none;
+.sarathi-thinking-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.sarathi-thinking-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: space-between;
+}
+
+.sarathi-thinking-sparkle {
+  color: #0284c7;
+  font-size: 13px;
+  line-height: 1;
+  animation: sarathiSparkleGlow 1.8s ease-in-out infinite;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-thinking-sparkle {
+  color: #38bdf8;
+}
+
+.sarathi-thinking-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #0a2540;
+  letter-spacing: -0.01em;
+  flex: 1;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-thinking-title {
+  color: #f8fafc;
+}
+
+.sarathi-thinking-timer-pill {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: #0284c7;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 10px;
+  padding: 1px 7px;
+  letter-spacing: 0.02em;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-thinking-timer-pill {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.sarathi-thinking-status-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sarathi-thinking-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.7);
+  animation: sarathiStatusPulse 1.4s infinite ease-in-out;
+  flex-shrink: 0;
+}
+
+.sarathi-thinking-step-text {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-thinking-step-text {
+  color: #94a3b8;
+}
+
+/* Pipeline Multi-Stage Tracker */
+.sarathi-thinking-pipeline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px;
+  padding: 6px 8px;
+  background: rgba(241, 245, 249, 0.65);
+  border-radius: 10px;
+  border: 1px solid rgba(226, 232, 240, 0.7);
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-thinking-pipeline {
+  background: rgba(15, 23, 42, 0.55);
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+.sarathi-thinking-stage {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #94a3b8;
+  transition: all 0.25s ease;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-thinking-stage {
+  color: #64748b;
+}
+
+.sarathi-thinking-stage.active {
+  color: #0284c7;
+  background: rgba(56, 189, 248, 0.16);
+  font-weight: 600;
+  transform: scale(1.02);
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-thinking-stage.active {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.22);
+}
+
+.sarathi-thinking-stage.completed {
+  color: #10b981;
+  font-weight: 600;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-thinking-stage.completed {
+  color: #34d399;
+}
+
+.sarathi-thinking-stage .stage-icon {
+  font-size: 11px;
+  line-height: 1;
+}
+
+.sarathi-thinking-stage .stage-label {
+  font-size: 10.5px;
+  letter-spacing: -0.01em;
+}
+
+.sarathi-thinking-connector {
+  flex: 1;
+  height: 2px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  transition: background 0.3s ease;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-thinking-connector {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sarathi-thinking-connector.filled {
+  background: linear-gradient(90deg, #38bdf8, #10b981);
+}
+
+/* Shimmer Neural Track */
+.sarathi-thinking-neural-track {
+  position: relative;
+  width: 100%;
+  height: 3px;
+  background: rgba(226, 232, 240, 0.8);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 1px;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-thinking-neural-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sarathi-thinking-neural-pulse {
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #38bdf8, #6366f1, #38bdf8, transparent);
+  animation: sarathiNeuralFlow 1.6s infinite ease-in-out;
+}
+
+/* Animations for Thinking State */
+@keyframes sarathiRingSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes sarathiSparkleGlow {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.18);
+    color: #38bdf8;
+  }
+}
+
+@keyframes sarathiStatusPulse {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+    box-shadow: 0 0 10px #10b981;
+  }
+}
+
+@keyframes sarathiNeuralFlow {
+  0% {
+    left: -40%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
 /* ==========================================================================
@@ -2150,14 +3057,14 @@ body.sarathi-fullscreen-active {
   transform: scale(1.2);
 }
 
-/* Prominent Dark Navy Circular Send Button (Matching Reference UI) */
+/* Prominent Cyan Circular Send Button */
 .sarathi-send-btn {
   width: 36px;
   height: 36px;
   min-width: 36px;
   min-height: 36px;
   border-radius: 50%;
-  background: #0a2540;
+  background: #07B6D5;
   color: #FFFFFF !important;
   border: none;
   display: flex;
@@ -2167,13 +3074,13 @@ body.sarathi-fullscreen-active {
   transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
   flex-shrink: 0;
   padding: 0;
-  box-shadow: 0 3px 10px rgba(10, 37, 64, 0.35);
+  box-shadow: 0 3px 10px rgba(7, 182, 213, 0.35);
   position: relative;
 }
 
 #sarathi-ai-root[data-theme="dark"] .sarathi-send-btn {
-  background: #2563EB;
-  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.4);
+  background: #07B6D5;
+  box-shadow: 0 3px 10px rgba(7, 182, 213, 0.4);
 }
 
 .sarathi-send-btn svg {
@@ -2185,14 +3092,14 @@ body.sarathi-fullscreen-active {
 }
 
 .sarathi-send-btn:hover {
-  background: #11365b;
+  background: #069db8;
   transform: scale(1.08);
-  box-shadow: 0 5px 16px rgba(10, 37, 64, 0.45);
+  box-shadow: 0 5px 16px rgba(7, 182, 213, 0.45);
 }
 
 #sarathi-ai-root[data-theme="dark"] .sarathi-send-btn:hover {
-  background: #1D4ED8;
-  box-shadow: 0 5px 16px rgba(37, 99, 235, 0.55);
+  background: #069db8;
+  box-shadow: 0 5px 16px rgba(7, 182, 213, 0.55);
 }
 
 .sarathi-send-btn:hover svg {
@@ -2513,12 +3420,30 @@ body.sarathi-fullscreen-active {
   }
 
   .sarathi-chat-header {
-    padding: 10px 14px !important;
-    min-height: 52px;
+    padding: 0 !important;
+    min-height: auto;
+  }
+
+  .sarathi-chat-header-main {
+    padding: 12px 14px 4px 14px !important;
+  }
+
+  .sarathi-header-wave {
+    width: 100% !important;
+    margin-top: -1px !important;
+    margin-bottom: -2px !important;
+    display: block !important;
   }
 
   .sarathi-chat-header-actions {
     gap: 6px !important;
+  }
+
+  /* Hide fullscreen option only in mobile view */
+  .sarathi-btn-fullscreen,
+  #sarathi-btn-fullscreen,
+  #sarathi-menu-fullscreen {
+    display: none !important;
   }
 
   .sarathi-icon-btn {
