@@ -788,6 +788,51 @@ body.sarathi-fullscreen-active {
   border-color: var(--sarathi-primary) !important;
 }
 
+.sarathi-gate-phone-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.sarathi-phone-prefix {
+  position: absolute;
+  left: 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--sarathi-text-secondary);
+  pointer-events: none;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 8px;
+  border-right: 1.5px solid var(--sarathi-border);
+  height: 22px;
+  line-height: 22px;
+  z-index: 2;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.sarathi-gate-phone-wrap:focus-within .sarathi-phone-prefix {
+  border-right-color: var(--sarathi-primary);
+  color: var(--sarathi-primary);
+}
+
+.sarathi-gate-phone-input {
+  padding-left: 58px !important;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-phone-prefix {
+  color: var(--sarathi-text-muted);
+  border-right-color: var(--sarathi-border);
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-gate-phone-wrap:focus-within .sarathi-phone-prefix {
+  border-right-color: var(--sarathi-primary);
+  color: var(--sarathi-primary);
+}
+
 .sarathi-gate-error {
   color: #EF4444;
   font-size: 12px;

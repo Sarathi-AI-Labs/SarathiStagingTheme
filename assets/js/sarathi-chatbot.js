@@ -758,9 +758,9 @@
     return shuffled.slice(0, 3);
   }
 
-  // Helper to determine if lead details (Name, Email, Phone) are complete
+  // Helper to determine if lead details (Name, and at least one of Email or Phone) are complete
   function isLeadComplete(info) {
-    return Boolean(info && info.name && info.email && info.phone);
+    return Boolean(info && info.name && (info.email || info.phone));
   }
 
   // Build Floating UI DOM with Scoped High-Tech Design
@@ -882,19 +882,22 @@
             
             <div class="sarathi-gate-form">
               <div class="sarathi-gate-input-group">
-                <input type="text" id="sarathi-gate-name" class="sarathi-gate-input" placeholder="Your Name" required autocomplete="name">
+                <input type="text" id="sarathi-gate-name" class="sarathi-gate-input" placeholder="Your Name" autocomplete="name">
               </div>
 
               <div class="sarathi-gate-input-group">
-                <input type="email" id="sarathi-gate-email" class="sarathi-gate-input" placeholder="Work Email" required autocomplete="email">
+                <input type="email" id="sarathi-gate-email" class="sarathi-gate-input" placeholder="Work Email" autocomplete="email">
               </div>
 
               <div class="sarathi-gate-input-group">
-                <input type="tel" id="sarathi-gate-phone" class="sarathi-gate-input" placeholder="Phone Number" required autocomplete="tel">
+                <div class="sarathi-gate-phone-wrap">
+                  <span class="sarathi-phone-prefix">+91</span>
+                  <input type="tel" id="sarathi-gate-phone" class="sarathi-gate-input sarathi-gate-phone-input" placeholder="Phone Number" autocomplete="tel" maxlength="10" inputmode="numeric">
+                </div>
               </div>
 
               <div class="sarathi-gate-error" id="sarathi-gate-error">
-                <span>Please fill in Name, Email, and Phone Number to continue.</span>
+                <span>Please fill in your details to continue.</span>
               </div>
 
               <button class="sarathi-gate-btn" id="sarathi-gate-submit">
@@ -1416,62 +1419,73 @@
     function handleGateSubmission() {
       const name = gateName ? gateName.value.trim() : '';
       const email = gateEmail ? gateEmail.value.trim() : '';
-      const phone = gatePhone ? gatePhone.value.trim() : '';
+      const rawPhone = gatePhone ? gatePhone.value.trim() : '';
 
+      // Normalize phone: strip any non-digit characters and handle pasted country codes
+      let phoneClean = rawPhone.replace(/\D/g, '');
+      if (phoneClean.startsWith('91') && phoneClean.length === 12) {
+        phoneClean = phoneClean.slice(2);
+      } else if (phoneClean.startsWith('0') && phoneClean.length === 11) {
+        phoneClean = phoneClean.slice(1);
+      }
+      phoneClean = phoneClean.slice(0, 10);
+
+      function showGateError(msg, focusElem) {
+        if (gateError) {
+          gateError.innerHTML = `<span>${msg}</span>`;
+          gateError.style.display = 'flex';
+          gateError.classList.add('shake');
+          setTimeout(() => gateError.classList.remove('shake'), 500);
+        }
+        if (focusElem) focusElem.focus();
+      }
+
+      // 1. Name is always mandatory
+      if (!name) {
+        showGateError('Please enter your name.', gateName);
+        return;
+      }
+
+      // 2. Either Email OR Phone Number (or both) must be provided
+      if (!email && !phoneClean) {
+        showGateError('Please provide either your email or phone number.', gateEmail || gatePhone);
+        return;
+      }
+
+      // 3. If Email is provided, validate email format
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const phoneClean = phone.replace(/[\s\-\(\)\+]/g, '');
-
-      if (!name || !email || !phone) {
-        if (gateError) {
-          gateError.innerHTML = '<span>Please fill in Name, Email, and Phone Number.</span>';
-          gateError.style.display = 'flex';
-          gateError.classList.add('shake');
-          setTimeout(() => gateError.classList.remove('shake'), 500);
-        }
+      if (email && !emailRegex.test(email)) {
+        showGateError('Please enter a valid email address.', gateEmail);
         return;
       }
 
-      if (!emailRegex.test(email)) {
-        if (gateError) {
-          gateError.innerHTML = '<span>Please enter a valid email address.</span>';
-          gateError.style.display = 'flex';
-          gateError.classList.add('shake');
-          setTimeout(() => gateError.classList.remove('shake'), 500);
-        }
-        if (gateEmail) gateEmail.focus();
-        return;
-      }
-
-      if (phoneClean.length < 7) {
-        if (gateError) {
-          gateError.innerHTML = '<span>Please enter a valid phone number.</span>';
-          gateError.style.display = 'flex';
-          gateError.classList.add('shake');
-          setTimeout(() => gateError.classList.remove('shake'), 500);
-        }
-        if (gatePhone) gatePhone.focus();
+      // 4. If Phone is provided, validate that it is exactly 10 digits
+      if ((rawPhone || phoneClean) && phoneClean.length !== 10) {
+        showGateError('Please enter a valid 10-digit phone number.', gatePhone);
         return;
       }
 
       if (gateError) gateError.style.display = 'none';
 
+      // Save lead info: phone is stored clean WITHOUT +91
+      const contactVal = (email && phoneClean) ? `${email} | ${phoneClean}` : (email || phoneClean);
       state.leadInfo = { 
         name, 
-        email,
-        phone,
-        contact: `${email} | ${phone}`,
+        email: email || '',
+        phone: phoneClean || '',
+        contact: contactVal,
         interest: 'General Inquiry',
         timestamp: new Date().toISOString() 
       };
       safeStorage.setItem(CONFIG.storageKeyLead, JSON.stringify(state.leadInfo));
 
-      // Post lead to webhook
+      // Post lead to webhook without +91
       if (CONFIG.leadEndpoint) {
         const leadPayload = {
           name: name,
-          email: email,
-          phone: phone,
-          contact: `${email} | ${phone}`,
+          email: email || '',
+          phone: phoneClean || '',
+          contact: contactVal,
           interest: 'General Inquiry',
           visitor_id: state.visitorId,
           conversation_id: state.conversationId,
@@ -1500,6 +1514,19 @@
 
     if (gateSubmit) {
       gateSubmit.addEventListener('click', handleGateSubmission);
+    }
+
+    // Phone input restriction: allow only digits, strip pasted country code, max 10 digits
+    if (gatePhone) {
+      gatePhone.addEventListener('input', (e) => {
+        let val = e.target.value.replace(/\D/g, '');
+        if (val.startsWith('91') && val.length > 10) {
+          val = val.slice(2);
+        } else if (val.startsWith('0') && val.length > 10) {
+          val = val.slice(1);
+        }
+        e.target.value = val.slice(0, 10);
+      });
     }
 
     [gateName, gateEmail, gatePhone].filter(Boolean).forEach(input => {
@@ -1593,6 +1620,22 @@
       };
       btnClose.addEventListener('click', handleClose);
       btnClose.addEventListener('pointerdown', (e) => e.stopPropagation());
+    }
+
+    // Auto-minimize only in mobile view (<= 768px) when any redirect link/button is clicked
+    if (chatWindow) {
+      chatWindow.addEventListener('click', (e) => {
+        // Only apply in mobile view, never in laptop/desktop view
+        if (window.innerWidth > 768) return;
+
+        const link = e.target.closest('a');
+        if (!link) return;
+
+        const href = link.getAttribute('href');
+        if (href && href !== '#' && !href.startsWith('javascript:')) {
+          toggleChat(false);
+        }
+      });
     }
 
     // Topic Card Click Handlers
@@ -1759,8 +1802,8 @@
             sessionId: state.conversationId,
             name: (state.leadInfo && state.leadInfo.name) || '',
             email: (state.leadInfo && state.leadInfo.email) || '',
-            phone: (state.leadInfo && (state.leadInfo.phone || state.leadInfo.contact)) || '',
-            contact: (state.leadInfo && (state.leadInfo.phone || state.leadInfo.contact || state.leadInfo.email)) || '',
+            phone: (state.leadInfo && state.leadInfo.phone) || '',
+            contact: (state.leadInfo && state.leadInfo.contact) || (state.leadInfo && (state.leadInfo.phone || state.leadInfo.email)) || '',
             page_url: window.location.href,
             page_title: document.title,
             timestamp: new Date().toISOString()
@@ -2190,9 +2233,13 @@
     // Render Initial State
     renderChatHistory();
 
-    // Auto-restore chat open state across pages if previously open
+    // Auto-restore chat open state across pages if previously open (desktop only; keep minimized on mobile so page is visible)
     if (state.isOpen) {
-      toggleChat(true);
+      if (window.innerWidth > 768) {
+        toggleChat(true);
+      } else {
+        toggleChat(false);
+      }
     }
   }
 
