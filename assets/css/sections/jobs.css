@@ -66,10 +66,12 @@
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
+	width: 100%;
 }
 
 .sarathi-job-card {
 	display: grid;
+	width: 100%;
 	grid-template-columns: 52px 1fr auto;
 	gap: 20px;
 	align-items: center;
