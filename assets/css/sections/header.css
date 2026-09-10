@@ -303,10 +303,13 @@ body {
 }
 
 .sarathi-header-nav-link:hover,
-.sarathi-header-nav li>a:hover,
+.sarathi-header-nav li>a:hover {
+	color: #1a1c23;
+}
+
 .sarathi-header-nav li.current-menu-item>a,
 .sarathi-header-nav li.current-menu-parent>a {
-	color: #1a1c23;
+	color: var(--color-primary);
 }
 
 /* Add a CTA button styling to the header */
