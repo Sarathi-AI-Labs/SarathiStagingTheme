@@ -39,6 +39,13 @@ if (file_exists($theme_inc_dir . 'acf-options.php')) {
 	require_once $theme_inc_dir . 'acf-options.php';
 }
 
+/**
+ * Unified Archive Settings system.
+ */
+if (file_exists($theme_inc_dir . 'archive-settings.php')) {
+	require_once $theme_inc_dir . 'archive-settings.php';
+}
+
 
 /**
  * Training custom post type.
@@ -71,6 +78,13 @@ if (file_exists($theme_inc_dir . 'sarathi-rag-api.php')) {
 
 
 delete_option('wpstg_is_staging_site');
+
+if ( ! get_option( 'sarathi_archive_rules_flushed_v1' ) ) {
+	add_action( 'init', function() {
+		flush_rewrite_rules( false );
+		update_option( 'sarathi_archive_rules_flushed_v1', 1 );
+	}, 99 );
+}
 
 /**
  * Filter Jobs Archive based on GET parameters.

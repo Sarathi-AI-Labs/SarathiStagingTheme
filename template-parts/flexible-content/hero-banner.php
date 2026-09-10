@@ -23,6 +23,12 @@ $hero_version = custom_theme_get_sub_field('hero_version');
 if (empty($hero_version)) {
 	$hero_version = custom_theme_get_sub_field('hero_variant', 'default');
 }
+
+// On archive pages and blog home, default hero layout to inner_page matching inner pages (does not affect normal pages)
+if ( ( is_archive() || is_home() ) && ( 'default' === $hero_version || empty( $hero_version ) ) ) {
+	$hero_version = 'inner_page';
+}
+
 $section_class .= ' layout-' . esc_attr($hero_version);
 
 // =========================================================================
@@ -118,6 +124,9 @@ elseif ('inner_page' === $hero_version):
 	$heading = !empty($headings['heading']) ? $headings['heading'] : '';
 	$subheading = !empty($headings['subheading']) ? $headings['subheading'] : '';
 	$description = custom_theme_get_sub_field('hero_description');
+	if (empty($description) && !empty($subheading)) {
+		$description = $subheading;
+	}
 
 	$side_position = custom_theme_get_sub_field('side_content_position');
 	$side_type = custom_theme_get_sub_field('side_content_type');
@@ -161,6 +170,10 @@ elseif ('inner_page' === $hero_version):
 				<?php elseif ('text' === $side_type && !empty($side_text)): ?>
 					<div class="sarathi-inner-banner-side-content type-text">
 						<?php echo wp_kses_post($side_text); ?>
+					</div>
+				<?php elseif ( has_action( 'sarathi_inner_hero_side_content' ) ): ?>
+					<div class="sarathi-inner-banner-side-content type-custom">
+						<?php do_action( 'sarathi_inner_hero_side_content' ); ?>
 					</div>
 				<?php endif; ?>
 

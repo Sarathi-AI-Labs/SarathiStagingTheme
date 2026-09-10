@@ -41,13 +41,7 @@ if ( function_exists( 'acf_add_options_page' ) ) {
 		'parent_slug'	=> 'theme-settings',
 	) );
 
-	// Training Archive Settings Subpage (Under Trainings CPT)
-	acf_add_options_sub_page( array(
-		'page_title' 	=> __( 'Training Archive Settings', 'custom-theme' ),
-		'menu_title'	=> __( 'Archive Settings', 'custom-theme' ),
-		'menu_slug' 	=> 'training-archive-settings',
-		'parent_slug'	=> 'edit.php?post_type=training',
-	) );
+	// Archive settings subpages are dynamically registered via inc/archive-settings.php
 } 
 
 function remove_custom_header_settings_menu() {
