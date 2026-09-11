@@ -22,7 +22,23 @@ while ( have_posts() ) :
 	if ( empty( $short_desc ) ) {
 		$short_desc = wp_strip_all_tags( get_the_content() );
 	}
-	$pills = get_field( 'solution_pills', $post_id );
+	$pills     = get_field( 'solution_pills', $post_id );
+	$card_icon = get_field( 'card_icon', $post_id );
+	if ( empty( $card_icon ) ) {
+		$card_icon = get_post_meta( $post_id, 'card_icon', true );
+	}
+
+	// Hero Featured Image resolution
+	$hero_img_url = get_the_post_thumbnail_url( $post_id, 'large' );
+	if ( empty( $hero_img_url ) && function_exists( 'sarathi_resolve_image_url' ) ) {
+		$hero_img_url = sarathi_resolve_image_url( get_field( 'solution_image', $post_id ), 'large' );
+		if ( empty( $hero_img_url ) ) {
+			$hero_img_url = sarathi_resolve_image_url( get_field( 'featured_image', $post_id ), 'large' );
+		}
+	}
+	if ( empty( $hero_img_url ) ) {
+		$hero_img_url = get_template_directory_uri() . '/assets/images/UST_overview.avif';
+	}
 
 	// Section 1: Overview
 	$overview_title   = get_field( 'overview_title', $post_id );
@@ -182,10 +198,14 @@ while ( have_posts() ) :
 								<?php foreach ( $pills as $pill ) : 
 									$ptext = ! empty( $pill['pill_text'] ) ? $pill['pill_text'] : '';
 									if ( empty( $ptext ) ) continue;
+									$picon = ! empty( $pill['pill_icon'] ) ? $pill['pill_icon'] : '';
+									$picon_url = function_exists( 'sarathi_resolve_image_url' ) ? sarathi_resolve_image_url( $picon, 'thumbnail' ) : '';
 									$ptype = ! empty( $pill['type'] ) ? $pill['type'] : 'gear';
 								?>
 									<span class="sarathi-sol-pill">
-										<?php if ( 'gear' === $ptype ) : ?>
+										<?php if ( ! empty( $picon_url ) ) : ?>
+											<img src="<?php echo esc_url( $picon_url ); ?>" alt="" aria-hidden="true" class="sarathi-sol-pill__img" loading="lazy" />
+										<?php elseif ( 'gear' === $ptype ) : ?>
 											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
 										<?php elseif ( 'chip' === $ptype ) : ?>
 											<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
@@ -202,11 +222,16 @@ while ( have_posts() ) :
 
 					<!-- Right Media (Laptop Mockup / Featured Image) -->
 					<div class="sarathi-sol-hero__media">
-						<?php if ( has_post_thumbnail() ) : ?>
-							<?php the_post_thumbnail( 'large', array( 'class' => 'sarathi-sol-hero__img', 'alt' => esc_attr( $solution_title ) ) ); ?>
-						<?php else : ?>
-							<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/UST_overview.avif' ); ?>" alt="<?php echo esc_attr( $solution_title ); ?>" class="sarathi-sol-hero__img">
-						<?php endif; ?>
+						<div class="sarathi-sol-hero__media-wrap">
+							<img src="<?php echo esc_url( $hero_img_url ); ?>" alt="<?php echo esc_attr( $solution_title ); ?>" class="sarathi-sol-hero__img" loading="eager" fetchpriority="high">
+							<?php 
+							$hero_badge_html = sarathi_get_solution_icon( $solution_title, $card_icon, $post_id );
+							if ( ! empty( $hero_badge_html ) ) : ?>
+								<div class="sarathi-sol-hero__badge-icon">
+									<?php echo $hero_badge_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								</div>
+							<?php endif; ?>
+						</div>
 					</div>
 
 				</div>
@@ -241,12 +266,9 @@ while ( have_posts() ) :
 								<div class="cards-grid cards-grid--standard" style="padding: 0 !important;">
 									<div class="cards-grid__list" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important; gap: 1rem !important;">
 										<?php foreach ( $challenge_cards as $ch ) : 
-											$ch_title = ! empty( $ch['card_title'] ) ? $ch['card_title'] : '';
-											$ch_icon  = ! empty( $ch['card_icon'] ) ? $ch['card_icon'] : '';
-											$ch_icon_url = is_array( $ch_icon ) ? ( ! empty( $ch_icon['url'] ) ? $ch_icon['url'] : '' ) : ( is_string( $ch_icon ) ? $ch_icon : '' );
-											if ( empty( $ch_icon_url ) && is_numeric( $ch_icon ) ) {
-												$ch_icon_url = wp_get_attachment_url( (int) $ch_icon );
-											}
+											$ch_title    = ! empty( $ch['card_title'] ) ? $ch['card_title'] : '';
+											$ch_icon     = ! empty( $ch['card_icon'] ) ? $ch['card_icon'] : '';
+											$ch_icon_url = function_exists( 'sarathi_resolve_image_url' ) ? sarathi_resolve_image_url( $ch_icon, 'thumbnail' ) : '';
 										?>
 											<div class="cards-grid__item" style="padding: 1.5rem 1rem; text-align: center; align-items: center;">
 												<?php if ( ! empty( $ch_icon_url ) ) : ?>
@@ -271,9 +293,9 @@ while ( have_posts() ) :
 								<div class="sarathi-sol-prose entry-content">
 									<?php echo wp_kses_post( wpautop( $solution_section_content ) ); ?>
 								</div>
-								<?php if ( ! empty( $solution_section_image ) ) : 
-									$so_img_url = is_array( $solution_section_image ) ? $solution_section_image['url'] : wp_get_attachment_url( (int) $solution_section_image );
-								?>
+								<?php 
+								$so_img_url = function_exists( 'sarathi_resolve_image_url' ) ? sarathi_resolve_image_url( $solution_section_image, 'large' ) : '';
+								if ( ! empty( $so_img_url ) ) : ?>
 									<div class="sarathi-sol-section-media" style="margin-top: 1.5rem;">
 										<img src="<?php echo esc_url( $so_img_url ); ?>" alt="<?php echo esc_attr( $solution_section_title ); ?>" style="width: 100%; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.06);">
 									</div>
@@ -290,13 +312,10 @@ while ( have_posts() ) :
 								<?php endif; ?>
 								<div class="sarathi-sol-action-grid">
 									<?php foreach ( $action_cards as $ac ) : 
-										$ac_title = ! empty( $ac['card_title'] ) ? $ac['card_title'] : '';
-										$ac_desc  = ! empty( $ac['card_desc'] ) ? $ac['card_desc'] : '';
-										$ac_img   = ! empty( $ac['card_image'] ) ? $ac['card_image'] : '';
-										$ac_img_url = is_array( $ac_img ) ? ( ! empty( $ac_img['url'] ) ? $ac_img['url'] : '' ) : ( is_string( $ac_img ) ? $ac_img : '' );
-										if ( empty( $ac_img_url ) && is_numeric( $ac_img ) ) {
-											$ac_img_url = wp_get_attachment_url( (int) $ac_img );
-										}
+										$ac_title   = ! empty( $ac['card_title'] ) ? $ac['card_title'] : '';
+										$ac_desc    = ! empty( $ac['card_desc'] ) ? $ac['card_desc'] : '';
+										$ac_img     = ! empty( $ac['card_image'] ) ? $ac['card_image'] : '';
+										$ac_img_url = function_exists( 'sarathi_resolve_image_url' ) ? sarathi_resolve_image_url( $ac_img, 'large' ) : '';
 									?>
 										<div class="sarathi-sol-action-card">
 											<?php if ( ! empty( $ac_img_url ) ) : ?>
@@ -326,13 +345,10 @@ while ( have_posts() ) :
 								<div class="cards-grid cards-grid--standard" style="padding: 0 !important;">
 									<div class="cards-grid__list" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)) !important; gap: 1.25rem !important;">
 										<?php foreach ( $capabilities_cards as $cap ) : 
-											$cap_title = ! empty( $cap['card_title'] ) ? $cap['card_title'] : '';
-											$cap_desc  = ! empty( $cap['card_desc'] ) ? $cap['card_desc'] : '';
-											$cap_icon  = ! empty( $cap['card_icon'] ) ? $cap['card_icon'] : '';
-											$cap_icon_url = is_array( $cap_icon ) ? ( ! empty( $cap_icon['url'] ) ? $cap_icon['url'] : '' ) : ( is_string( $cap_icon ) ? $cap_icon : '' );
-											if ( empty( $cap_icon_url ) && is_numeric( $cap_icon ) ) {
-												$cap_icon_url = wp_get_attachment_url( (int) $cap_icon );
-											}
+											$cap_title    = ! empty( $cap['card_title'] ) ? $cap['card_title'] : '';
+											$cap_desc     = ! empty( $cap['card_desc'] ) ? $cap['card_desc'] : '';
+											$cap_icon     = ! empty( $cap['card_icon'] ) ? $cap['card_icon'] : '';
+											$cap_icon_url = function_exists( 'sarathi_resolve_image_url' ) ? sarathi_resolve_image_url( $cap_icon, 'thumbnail' ) : '';
 										?>
 											<div class="cards-grid__item" style="padding: 1.25rem; align-items: flex-start; text-align: left;">
 												<?php if ( ! empty( $cap_icon_url ) ) : ?>
@@ -366,13 +382,10 @@ while ( have_posts() ) :
 								<div class="sarathi-sol-process-grid">
 									<?php foreach ( $process_steps as $step ) : 
 										$step_i++;
-										$s_title = ! empty( $step['step_title'] ) ? $step['step_title'] : '';
-										$s_desc  = ! empty( $step['step_desc'] ) ? $step['step_desc'] : '';
-										$s_icon  = ! empty( $step['step_icon'] ) ? $step['step_icon'] : '';
-										$s_icon_url = is_array( $s_icon ) ? ( ! empty( $s_icon['url'] ) ? $s_icon['url'] : '' ) : ( is_string( $s_icon ) ? $s_icon : '' );
-										if ( empty( $s_icon_url ) && is_numeric( $s_icon ) ) {
-											$s_icon_url = wp_get_attachment_url( (int) $s_icon );
-										}
+										$s_title    = ! empty( $step['step_title'] ) ? $step['step_title'] : '';
+										$s_desc     = ! empty( $step['step_desc'] ) ? $step['step_desc'] : '';
+										$s_icon     = ! empty( $step['step_icon'] ) ? $step['step_icon'] : '';
+										$s_icon_url = function_exists( 'sarathi_resolve_image_url' ) ? sarathi_resolve_image_url( $s_icon, 'thumbnail' ) : '';
 									?>
 										<div class="sarathi-sol-process-card">
 											<div class="sarathi-sol-process-card__header">

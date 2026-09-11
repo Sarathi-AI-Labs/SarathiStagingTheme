@@ -150,7 +150,16 @@ $has_header = ( ! empty( $eyebrow ) || ! empty( $heading ) || ! empty( $descript
 							$s_link     = get_permalink();
 							$short_desc = get_field( 'short_description', $s_id );
 							$card_icon  = get_field( 'card_icon', $s_id );
-							$thumb      = get_the_post_thumbnail_url( $s_id, 'large' );
+							if ( empty( $card_icon ) ) {
+								$card_icon = get_post_meta( $s_id, 'card_icon', true );
+							}
+							$thumb = get_the_post_thumbnail_url( $s_id, 'large' );
+							if ( empty( $thumb ) && function_exists( 'sarathi_resolve_image_url' ) ) {
+								$thumb = sarathi_resolve_image_url( get_field( 'solution_image', $s_id ), 'large' );
+								if ( empty( $thumb ) ) {
+									$thumb = sarathi_resolve_image_url( get_field( 'featured_image', $s_id ), 'large' );
+								}
+							}
 							if ( empty( $thumb ) ) {
 								$thumb = $theme_uri . '/assets/images/UST_overview.avif';
 							}
@@ -163,7 +172,7 @@ $has_header = ( ! empty( $eyebrow ) || ! empty( $heading ) || ! empty( $descript
 								<a href="<?php echo esc_url( $s_link ); ?>" class="sarathi-solution-card__media-wrap">
 									<img src="<?php echo esc_url( $thumb ); ?>" alt="<?php echo esc_attr( $s_title ); ?>" class="sarathi-solution-card__thumb" loading="lazy">
 									<div class="sarathi-solution-card__badge-icon">
-										<?php echo sarathi_get_solution_icon( $s_title, $card_icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+										<?php echo sarathi_get_solution_icon( $s_title, $card_icon, $s_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 									</div>
 								</a>
 								<div class="cards-grid__content sarathi-solution-card__body">
@@ -248,7 +257,16 @@ $has_header = ( ! empty( $eyebrow ) || ! empty( $heading ) || ! empty( $descript
 						$s_link     = get_permalink();
 						$short_desc = get_field( 'short_description', $s_id );
 						$card_icon  = get_field( 'card_icon', $s_id );
-						$thumb      = get_the_post_thumbnail_url( $s_id, 'large' );
+						if ( empty( $card_icon ) ) {
+							$card_icon = get_post_meta( $s_id, 'card_icon', true );
+						}
+						$thumb = get_the_post_thumbnail_url( $s_id, 'large' );
+						if ( empty( $thumb ) && function_exists( 'sarathi_resolve_image_url' ) ) {
+							$thumb = sarathi_resolve_image_url( get_field( 'solution_image', $s_id ), 'large' );
+							if ( empty( $thumb ) ) {
+								$thumb = sarathi_resolve_image_url( get_field( 'featured_image', $s_id ), 'large' );
+							}
+						}
 						if ( empty( $thumb ) ) {
 							$thumb = $theme_uri . '/assets/images/UST_overview.avif';
 						}
@@ -261,7 +279,7 @@ $has_header = ( ! empty( $eyebrow ) || ! empty( $heading ) || ! empty( $descript
 							<a href="<?php echo esc_url( $s_link ); ?>" class="sarathi-solution-card__media-wrap">
 								<img src="<?php echo esc_url( $thumb ); ?>" alt="<?php echo esc_attr( $s_title ); ?>" class="sarathi-solution-card__thumb" loading="lazy">
 								<div class="sarathi-solution-card__badge-icon">
-									<?php echo sarathi_get_solution_icon( $s_title, $card_icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+									<?php echo sarathi_get_solution_icon( $s_title, $card_icon, $s_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 								</div>
 							</a>
 							<div class="cards-grid__content sarathi-solution-card__body">

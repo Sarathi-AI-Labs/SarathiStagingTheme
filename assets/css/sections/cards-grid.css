@@ -882,6 +882,7 @@
     margin: 0 0 1rem 0;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -1519,6 +1520,7 @@
     flex-grow: 1;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -1671,11 +1673,46 @@
     align-items: center;
 }
 
+.sarathi-sol-hero__media-wrap {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+}
+
 .sarathi-sol-hero__img {
     max-width: 100%;
     height: auto;
     border-radius: 12px;
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+    display: block;
+}
+
+.sarathi-sol-hero__badge-icon {
+    position: absolute;
+    bottom: -16px;
+    left: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    border: 3px solid #ffffff;
+    padding: 6px;
+    box-sizing: border-box;
+}
+
+.sarathi-sol-hero__badge-icon img,
+.sarathi-sol-hero__badge-icon svg {
+    width: 26px;
+    height: 26px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .sarathi-sol-eyebrow {
@@ -1732,9 +1769,16 @@
 }
 
 .sarathi-sol-pill svg,
-.sarathi-sol-pill img {
-    width: 16px;
-    height: 16px;
+.sarathi-sol-pill img,
+.sarathi-sol-pill__img {
+    width: 18px;
+    height: 18px;
+    max-width: 18px;
+    max-height: 18px;
+    object-fit: contain;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
     color: var(--color-primary, #0066cc);
 }
 
