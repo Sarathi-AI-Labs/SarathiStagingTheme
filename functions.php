@@ -76,6 +76,13 @@ if (file_exists($theme_inc_dir . 'sarathi-rag-api.php')) {
 	require_once $theme_inc_dir . 'sarathi-rag-api.php';
 }
 
+/**
+ * Instagram Feed integration & Meta Graph API.
+ */
+if (file_exists($theme_inc_dir . 'instagram/bootstrap.php')) {
+	require_once $theme_inc_dir . 'instagram/bootstrap.php';
+}
+
 
 delete_option('wpstg_is_staging_site');
 
