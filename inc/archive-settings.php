@@ -241,6 +241,11 @@ function custom_theme_render_archive_flexible_content( $archive_key, $args = arr
 			$rendered_layouts[] = $layout;
 
 			$template      = str_replace( '_', '-', $layout );
+
+			// Conditionally enqueue section assets
+			wp_enqueue_style( 'custom-theme-' . $template );
+			wp_enqueue_script( 'custom-theme-' . $template );
+
 			$template_path = 'template-parts/flexible-content/' . $template;
 
 			if ( locate_template( $template_path . '.php' ) ) {

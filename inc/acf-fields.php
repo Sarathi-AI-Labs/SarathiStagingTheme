@@ -254,7 +254,7 @@ function custom_theme_get_image_fields( $prefix = '' ) {
  * Ensures exactly one DB post exists per field group key, preventing duplicate rows in admin.
  */
 add_action(
-	'admin_init',
+	'acf/update_field_group',
 	function() {
 		global $wpdb;
 
