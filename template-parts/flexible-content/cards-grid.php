@@ -80,11 +80,14 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 				foreach ($cards as $card): 
 					$card_idx++;
 					$title = !empty($card['card_title']) ? $card['card_title'] : (!empty($card['title']) ? $card['title'] : '');
-					$raw_link = !empty($card['card_link']) ? $card['card_link'] : (!empty($card['link']) ? $card['link'] : '#');
-					$link = is_array($raw_link) ? (!empty($raw_link['url']) ? $raw_link['url'] : '#') : $raw_link;
+					$raw_link = !empty($card['card_link']) ? $card['card_link'] : (!empty($card['link']) ? $card['link'] : '');
+					$link = is_array($raw_link) ? (!empty($raw_link['url']) ? $raw_link['url'] : '') : $raw_link;
 					$link_title = is_array($raw_link) && !empty($raw_link['title']) ? $raw_link['title'] : 'Explore &rarr;';
-					$img_field = !empty($card['card_image']) ? $card['card_image'] : '';
-					$img_src = is_array($img_field) ? $img_field['url'] : $img_field;
+					$link_target = is_array($raw_link) && !empty($raw_link['target']) ? $raw_link['target'] : '';
+					$target_attr = (!empty($link_target) && '_self' !== $link_target) ? ' target="' . esc_attr($link_target) . '" rel="noopener noreferrer"' : '';
+					$has_link = !empty($link) && '#' !== $link;
+					$img_field = !empty($card['card_image']) ? $card['card_image'] : (!empty($card['card_icon']) ? $card['card_icon'] : '');
+					$img_src = function_exists('sarathi_resolve_image_url') ? sarathi_resolve_image_url($img_field, 'large') : (is_array($img_field) ? (!empty($img_field['url']) ? $img_field['url'] : '') : $img_field);
 					$card_desc = !empty($card['card_description']) ? $card['card_description'] : '';
 
 					if (empty($img_src)) {
@@ -113,7 +116,7 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 					// STANDARD / FEATURED / MINIMAL / OTHER EXISTING VARIANTS
 					else:
 						$extend_service = !empty($card['extend_service']) ? $card['extend_service'] : false;
-						$is_link_wrapped = ($display_variant === 'standard' || $display_variant === 'minimal') && !$extend_service;
+						$is_link_wrapped = ($display_variant === 'standard' || $display_variant === 'minimal') && !$extend_service && $has_link;
 
 						$item_classes = 'cards-grid__item';
 						if ($extend_service) {
@@ -156,7 +159,7 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 						}
 						?>
 
-						<<?php echo $is_link_wrapped ? 'a href="' . esc_url($link) . '"' : 'div'; ?>
+						<<?php echo $is_link_wrapped ? 'a href="' . esc_url($link) . '"' . $target_attr : 'div'; ?>
 							class="<?php echo esc_attr($item_classes); ?>"<?php echo $custom_card_style_attr; ?><?php echo $detail_data; ?>>
 
 							<div class="cards-grid__icon-wrapper">
@@ -166,8 +169,8 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 
 							<div class="cards-grid__content">
 								<h3 class="cards-grid__item-title">
-									<?php if (!empty($link) && '#' !== $link): ?>
-										<a href="<?php echo esc_url($link); ?>" style="color: inherit; text-decoration: none;"><?php echo esc_html($title); ?></a>
+									<?php if (!$is_link_wrapped && !$extend_service && $has_link): ?>
+										<a href="<?php echo esc_url($link); ?>" style="color: inherit; text-decoration: none;"<?php echo $target_attr; ?>><?php echo esc_html($title); ?></a>
 									<?php else: ?>
 										<?php echo esc_html($title); ?>
 									<?php endif; ?>
@@ -176,8 +179,8 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 									<p class="cards-grid__item-desc"><?php echo esc_html(wp_strip_all_tags($card_desc)); ?></p>
 								<?php endif; ?>
 
-								<?php if ($display_variant === 'featured'): ?>
-									<a href="<?php echo esc_url($link); ?>" class="cards-grid__item-link"><?php echo $link_title; ?></a>
+								<?php if ($display_variant === 'featured' && $has_link): ?>
+									<a href="<?php echo esc_url($link); ?>" class="cards-grid__item-link"<?php echo $target_attr; ?>><?php echo $link_title; ?></a>
 								<?php endif; ?>
 
 								<?php if ($extend_service): ?>

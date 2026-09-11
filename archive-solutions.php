@@ -33,7 +33,16 @@ $rendered_cards_grid = in_array( 'cards_grid', $archive_render['rendered_layouts
 								$sol_link   = get_permalink();
 								$short_desc = get_field( 'short_description', $sol_id );
 								$card_icon  = get_field( 'card_icon', $sol_id );
-								$thumb      = get_the_post_thumbnail_url( $sol_id, 'large' );
+								if ( empty( $card_icon ) ) {
+									$card_icon = get_post_meta( $sol_id, 'card_icon', true );
+								}
+								$thumb = get_the_post_thumbnail_url( $sol_id, 'large' );
+								if ( empty( $thumb ) && function_exists( 'sarathi_resolve_image_url' ) ) {
+									$thumb = sarathi_resolve_image_url( get_field( 'solution_image', $sol_id ), 'large' );
+									if ( empty( $thumb ) ) {
+										$thumb = sarathi_resolve_image_url( get_field( 'featured_image', $sol_id ), 'large' );
+									}
+								}
 								if ( empty( $thumb ) ) {
 									$thumb = get_template_directory_uri() . '/assets/images/UST_overview.avif';
 								}
@@ -46,7 +55,7 @@ $rendered_cards_grid = in_array( 'cards_grid', $archive_render['rendered_layouts
 									<a href="<?php echo esc_url( $sol_link ); ?>" class="sarathi-solution-card__media-wrap">
 										<img src="<?php echo esc_url( $thumb ); ?>" alt="<?php echo esc_attr( $sol_title ); ?>" class="sarathi-solution-card__thumb" loading="lazy">
 										<div class="sarathi-solution-card__badge-icon">
-											<?php echo sarathi_get_solution_icon( $sol_title, $card_icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+											<?php echo sarathi_get_solution_icon( $sol_title, $card_icon, $sol_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 										</div>
 									</a>
 									<div class="cards-grid__content sarathi-solution-card__body">

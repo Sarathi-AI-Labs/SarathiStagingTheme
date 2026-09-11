@@ -74,24 +74,68 @@ function custom_theme_register_solutions_cpt() {
 add_action( 'init', 'custom_theme_register_solutions_cpt', 0 );
 
 /**
+ * Safely extract an image URL from ACF array, attachment ID, or URL string.
+ *
+ * @param mixed  $image_data ACF array, attachment ID, or URL string.
+ * @param string $size       Optional image size (default 'full').
+ * @return string Image URL or empty string.
+ */
+function sarathi_resolve_image_url( $image_data, $size = '' ) {
+	if ( empty( $image_data ) ) {
+		return '';
+	}
+
+	if ( is_array( $image_data ) ) {
+		if ( ! empty( $size ) && ! empty( $image_data['sizes'][ $size ] ) ) {
+			return $image_data['sizes'][ $size ];
+		}
+		if ( ! empty( $image_data['url'] ) ) {
+			return $image_data['url'];
+		}
+		if ( ! empty( $image_data['ID'] ) ) {
+			return wp_get_attachment_image_url( (int) $image_data['ID'], $size ? $size : 'full' );
+		}
+		if ( ! empty( $image_data['id'] ) ) {
+			return wp_get_attachment_image_url( (int) $image_data['id'], $size ? $size : 'full' );
+		}
+	}
+
+	if ( is_numeric( $image_data ) && (int) $image_data > 0 ) {
+		$url = wp_get_attachment_image_url( (int) $image_data, $size ? $size : 'full' );
+		return $url ? $url : wp_get_attachment_url( (int) $image_data );
+	}
+
+	if ( is_string( $image_data ) ) {
+		$trimmed = trim( $image_data );
+		if ( is_numeric( $trimmed ) && (int) $trimmed > 0 ) {
+			$url = wp_get_attachment_image_url( (int) $trimmed, $size ? $size : 'full' );
+			return $url ? $url : wp_get_attachment_url( (int) $trimmed );
+		}
+		return $trimmed;
+	}
+
+	return '';
+}
+
+/**
  * Get solution card icon HTML (custom image or SVG fallback).
  *
  * @param string       $title       Solution title for contextual fallback.
  * @param array|string $custom_icon Custom icon array, URL, or attachment ID.
+ * @param int          $post_id     Optional post ID to lookup icon if not passed.
  * @return string HTML img tag or SVG markup.
  */
-function sarathi_get_solution_icon( $title = '', $custom_icon = '' ) {
-	$icon_url = '';
-
-	if ( is_array( $custom_icon ) && ! empty( $custom_icon['url'] ) ) {
-		$icon_url = $custom_icon['url'];
-	} elseif ( is_numeric( $custom_icon ) && (int) $custom_icon > 0 ) {
-		$icon_url = wp_get_attachment_url( (int) $custom_icon );
-	} elseif ( is_string( $custom_icon ) && ! empty( $custom_icon ) ) {
-		$icon_url = $custom_icon;
+function sarathi_get_solution_icon( $title = '', $custom_icon = '', $post_id = 0 ) {
+	if ( empty( $custom_icon ) && ! empty( $post_id ) ) {
+		$custom_icon = get_field( 'card_icon', $post_id );
+		if ( empty( $custom_icon ) ) {
+			$custom_icon = get_post_meta( $post_id, 'card_icon', true );
+		}
 	}
 
-	if ( ! empty( $icon_url ) && strpos( $icon_url, 'http' ) === 0 ) {
+	$icon_url = sarathi_resolve_image_url( $custom_icon, 'thumbnail' );
+
+	if ( ! empty( $icon_url ) ) {
 		return '<img src="' . esc_url( $icon_url ) . '" alt="" class="sarathi-solution-custom-icon" loading="lazy" aria-hidden="true" />';
 	}
 
