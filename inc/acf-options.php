@@ -41,6 +41,14 @@ if ( function_exists( 'acf_add_options_page' ) ) {
 		'parent_slug'	=> 'theme-settings',
 	) );
 
+	// Instagram Feed Settings Subpage
+	acf_add_options_sub_page( array(
+		'page_title' 	=> __( 'Instagram Feed Settings', 'custom-theme' ),
+		'menu_title'	=> __( 'Instagram Feed', 'custom-theme' ),
+		'menu_slug' 	=> 'instagram-feed-settings',
+		'parent_slug'	=> 'theme-settings',
+	) );
+
 	// Archive settings subpages are dynamically registered via inc/archive-settings.php
 } 
 

@@ -3126,6 +3126,252 @@
                     ],
                     "min": "",
                     "max": ""
+                },
+                "layout_instagram_feed_section": {
+                    "key": "layout_instagram_feed_section",
+                    "name": "instagram_feed_section",
+                    "label": "Instagram Feed Section",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_insta_feed_clone_section",
+                            "label": "Section Settings",
+                            "name": "section_settings",
+                            "aria-label": "",
+                            "type": "clone",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "clone": [
+                                "group_clone_section"
+                            ],
+                            "display": "seamless",
+                            "prefix_name": 0,
+                            "prefix_label": 0,
+                            "layout": "block"
+                        },
+                        {
+                            "key": "field_insta_feed_clone_heading",
+                            "label": "Heading Fields",
+                            "name": "heading_fields",
+                            "aria-label": "",
+                            "type": "clone",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "clone": [
+                                "group_clone_heading"
+                            ],
+                            "display": "seamless",
+                            "prefix_name": 0,
+                            "prefix_label": 0,
+                            "layout": "block"
+                        },
+                        {
+                            "key": "field_insta_feed_description",
+                            "label": "Section Description",
+                            "name": "description",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "Introductory description text displayed next to the heading.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "maxlength": "",
+                            "rows": 3,
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_insta_feed_mode",
+                            "label": "Select Layout Mode",
+                            "name": "feed_mode",
+                            "aria-label": "",
+                            "type": "radio",
+                            "instructions": "Choose whether to automatically display the newest posts or select specific posts manually.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "automatic": "Automatic (Display Latest Posts)",
+                                "manual": "Fixed / Manual (Select Specific Posts)"
+                            },
+                            "default_value": "automatic",
+                            "return_format": "value",
+                            "allow_null": 0,
+                            "other_choice": 0,
+                            "layout": "horizontal",
+                            "save_other_choice": 0
+                        },
+                        {
+                            "key": "field_insta_feed_posts_count",
+                            "label": "Number of Posts",
+                            "name": "posts_count",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "Number of recent posts to display.",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_insta_feed_mode",
+                                        "operator": "==",
+                                        "value": "automatic"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 6,
+                            "min": 1,
+                            "max": 24,
+                            "step": 1
+                        },
+                        {
+                            "key": "field_insta_feed_manual_posts",
+                            "label": "Select Instagram Posts",
+                            "name": "manual_instagram_posts",
+                            "aria-label": "",
+                            "type": "checkbox",
+                            "instructions": "Select the specific Instagram posts to display for this section instance.",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_insta_feed_mode",
+                                        "operator": "==",
+                                        "value": "manual"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "100",
+                                "class": "sarathi-insta-posts-picker",
+                                "id": ""
+                            },
+                            "choices": {},
+                            "default_value": [],
+                            "return_format": "value",
+                            "allow_custom": 0,
+                            "layout": "horizontal",
+                            "toggle": 0,
+                            "save_custom": 0
+                        },
+                        {
+                            "key": "field_insta_feed_columns",
+                            "label": "Columns",
+                            "name": "columns",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "Grid column count on desktop.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "33",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "3": "3 Columns",
+                                "4": "4 Columns"
+                            },
+                            "default_value": "3",
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "ui": 1
+                        },
+                        {
+                            "key": "field_insta_feed_show_caption",
+                            "label": "Show Caption on Hover",
+                            "name": "show_caption",
+                            "aria-label": "",
+                            "type": "true_false",
+                            "instructions": "Display caption excerpt overlay on hover.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "33",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 1,
+                            "ui": 1
+                        },
+                        {
+                            "key": "field_insta_feed_show_date",
+                            "label": "Show Post Date",
+                            "name": "show_date",
+                            "aria-label": "",
+                            "type": "true_false",
+                            "instructions": "Display post publication date in hover card.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "33",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 1,
+                            "ui": 1
+                        },
+                        {
+                            "key": "field_insta_feed_cta_button",
+                            "label": "Instagram Follow Button",
+                            "name": "cta_button",
+                            "aria-label": "",
+                            "type": "link",
+                            "instructions": "Optional CTA link to Instagram profile (e.g. Follow @sarathiailabs).",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array"
+                        },
+                        {
+                            "key": "field_insta_feed_signature",
+                            "label": "Signature / Accent Text",
+                            "name": "signature_text",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "Optional accent text rendered in script font.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Follow us @sarathiailabs"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
                 }
             },
             "min": "",
