@@ -17,6 +17,11 @@
  * @package Custom_Theme
  */
 
+// Ensure jobs assets are loaded since the single page layout is hardcoded
+// Jobs inherits layout and tokens from training-section
+wp_enqueue_style( 'custom-theme-training-section' );
+wp_enqueue_style( 'custom-theme-jobs-section' );
+
 get_header();
 
 while ( have_posts() ) :

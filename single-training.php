@@ -5,6 +5,10 @@
  * @package Custom_Theme
  */
 
+// Ensure training section assets are loaded since the single page layout is hardcoded
+wp_enqueue_style( 'custom-theme-training-section' );
+wp_enqueue_script( 'custom-theme-training-section' );
+
 get_header();
 
 $theme_uri = get_template_directory_uri();

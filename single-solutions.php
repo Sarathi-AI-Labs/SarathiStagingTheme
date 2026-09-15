@@ -6,6 +6,11 @@
  * @package Custom_Theme
  */
 
+// Ensure solutions and cards-grid assets are loaded since the single page layout is hardcoded
+wp_enqueue_style( 'custom-theme-solutions-section' );
+wp_enqueue_style( 'custom-theme-cards-grid' );
+wp_enqueue_script( 'custom-theme-cards-grid' );
+
 get_header();
 
 while ( have_posts() ) :

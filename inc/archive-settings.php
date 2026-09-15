@@ -276,6 +276,10 @@ function custom_theme_render_archive_flexible_content( $archive_key, $args = arr
 		}
 	}
 
+	// Ensure hero-banner assets are loaded since the fallback hero is hardcoded
+	wp_enqueue_style( 'custom-theme-hero-banner' );
+	wp_enqueue_script( 'custom-theme-hero-banner' );
+
 	?>
 	<section class="sarathi-hero-banner sarathi-inner-page-banner layout-inner_page" id="hero" aria-label="<?php echo esc_attr( $config['label'] ); ?> Banner">
 		<div class="container sarathi-section-container">

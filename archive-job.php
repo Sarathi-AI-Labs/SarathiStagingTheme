@@ -8,6 +8,11 @@
  * @package Custom_Theme
  */
 
+// Ensure required assets are loaded since the archive grid is hardcoded
+// Jobs inherits layout and tokens from training-section
+wp_enqueue_style( 'custom-theme-training-section' );
+wp_enqueue_style( 'custom-theme-jobs-section' );
+
 get_header();
 
 $theme_uri    = get_template_directory_uri();

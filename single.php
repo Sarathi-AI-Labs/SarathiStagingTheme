@@ -5,6 +5,10 @@
  * @package Custom_Theme
  */
 
+// Ensure cards-grid assets are loaded since the related articles grid is hardcoded
+wp_enqueue_style( 'custom-theme-cards-grid' );
+wp_enqueue_script( 'custom-theme-cards-grid' );
+
 get_header();
 
 while ( have_posts() ) :
