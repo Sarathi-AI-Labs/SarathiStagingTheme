@@ -12,6 +12,10 @@ $theme_uri        = get_template_directory_uri();
 $section_settings = custom_theme_get_section_settings();
 $section_id       = ! empty( $section_settings['id'] ) ? $section_settings['id'] : 'solutions';
 $section_class    = ! empty( $section_settings['class'] ) ? ' ' . $section_settings['class'] : '';
+
+// Ensure cards-grid assets are loaded since solutions-section inherits from it
+wp_enqueue_style( 'custom-theme-cards-grid' );
+wp_enqueue_script( 'custom-theme-cards-grid' );
 $section_style    = ! empty( $section_settings['style'] ) ? ' style="' . esc_attr( $section_settings['style'] ) . '"' : '';
 
 // Heading fields

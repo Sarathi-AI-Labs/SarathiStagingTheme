@@ -12,6 +12,9 @@
 $section_settings = custom_theme_get_section_settings();
 $section_id       = ! empty( $section_settings['id'] ) ? $section_settings['id'] : 'open-positions';
 $section_class    = ! empty( $section_settings['class'] ) ? ' ' . $section_settings['class'] : '';
+
+// Ensure training section assets are loaded since jobs-section inherits from it
+wp_enqueue_style( 'custom-theme-training-section' );
 $section_style    = ! empty( $section_settings['style'] ) ? ' style="' . esc_attr( $section_settings['style'] ) . '"' : '';
 
 // Heading fields.

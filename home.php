@@ -8,6 +8,10 @@
  * @package Custom_Theme
  */
 
+// Ensure cards-grid assets are loaded since the blog grid is hardcoded
+wp_enqueue_style( 'custom-theme-cards-grid' );
+wp_enqueue_script( 'custom-theme-cards-grid' );
+
 get_header();
 
 // Query & Filter Parameters
@@ -22,10 +26,6 @@ $categories     = get_categories(
 );
 
 // Search and category form moved below into the main grid layout to persist across hero banner replacements.
-
-// Ensure cards-grid assets are loaded since the blog grid is hardcoded
-wp_enqueue_style( 'custom-theme-cards-grid' );
-wp_enqueue_script( 'custom-theme-cards-grid' );
 
 // Render Flexible Content (or fallback hero preserving legacy blog hero options)
 $archive_render = custom_theme_render_archive_flexible_content( 'blog' );

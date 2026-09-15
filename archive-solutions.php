@@ -8,6 +8,11 @@
  * @package Custom_Theme
  */
 
+// Ensure required assets are loaded since the archive grid is hardcoded
+wp_enqueue_style( 'custom-theme-solutions-section' );
+wp_enqueue_style( 'custom-theme-cards-grid' );
+wp_enqueue_script( 'custom-theme-cards-grid' );
+
 get_header();
 
 // Render Flexible Content (or fallback hero if no flexible content exists)

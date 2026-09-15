@@ -6,6 +6,10 @@
  * @package Custom_Theme
  */
 
+// Ensure cards-grid assets are loaded since the archive grid is hardcoded
+wp_enqueue_style( 'custom-theme-cards-grid' );
+wp_enqueue_script( 'custom-theme-cards-grid' );
+
 get_header();
 
 $current_cat_id = is_category() ? get_queried_object_id() : 0;
