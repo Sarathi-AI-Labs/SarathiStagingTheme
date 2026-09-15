@@ -254,7 +254,7 @@ function custom_theme_get_image_fields( $prefix = '' ) {
  * Ensures exactly one DB post exists per field group key, preventing duplicate rows in admin.
  */
 add_action(
-	'acf/update_field_group',
+	'admin_init',
 	function() {
 		global $wpdb;
 
@@ -724,14 +724,6 @@ function custom_theme_populate_nav_menus( $field ) {
 }
 add_filter( 'acf/load_field/name=header_menu', 'custom_theme_populate_nav_menus' );
 add_filter( 'acf/load_field/key=field_header_menu', 'custom_theme_populate_nav_menus' );
-
-// Dynamically populate any footer menu column field (e.g. footer_menu_col_1, footer_menu_col_5, etc.)
-add_filter('acf/load_field', function($field) {
-    if (strpos($field['name'], 'footer_menu_col_') === 0) {
-        return custom_theme_populate_nav_menus($field);
-    }
-    return $field;
-});
 
 
 /**

@@ -13,7 +13,7 @@
 	overflow: hidden;
 	margin-top: -66px;
 	padding-top: 120px;
-	padding-bottom: 40px;
+	padding-bottom: 90px;
 	box-sizing: border-box;
 }
 
@@ -22,7 +22,7 @@
 		min-height: calc(100vh - 80px);
 		margin-top: -80px;
 		padding-top: 135px;
-		padding-bottom: 50px;
+		padding-bottom: 105px;
 	}
 }
 
@@ -93,7 +93,7 @@
 @media (min-width: 992px) {
 	.sarathi-hero-floating-logo-wrap {
 		top: 50%;
-		width: min(92vw, 1200px);
+		width: min(92vw, 1050px);
 		/* DESKTOP WATERMARK WIDTH */
 	}
 }
@@ -158,7 +158,7 @@
 	position: relative;
 	z-index: 2;
 	width: 100%;
-	max-width: 1440px;
+	max-width: 1200px;
 	margin: 0 auto;
 	padding-left: 20px;
 	padding-right: 20px;
@@ -169,14 +169,14 @@
 	flex-direction: column;
 	align-items: center;
 	text-align: center;
-	max-width: 1200px;
+	max-width: 960px;
 	margin: 0 auto;
 }
 
 /* Eyebrow: Sarathi AI Labs */
 .sarathi-hero-eyebrow {
 	font-family: var(--font-body, 'Inter', sans-serif);
-	font-size: clamp(20px, 2.1vw, 30px);
+	font-size: clamp(20px, 2.4vw, 30px);
 	font-weight: 600;
 	color: #07B6D5;
 	line-height: 36px;
@@ -195,9 +195,9 @@
 /* Main Heading: Space Grotesk 700 72px -1.8px letter-spacing */
 .sarathi-hero-heading {
 	font-family: var(--font-heading, 'Space Grotesk', sans-serif);
-	font-size: clamp(38px, 5vw, 72px);
+	font-size: clamp(38px, 5.5vw, 72px);
 	font-weight: 700;
-	line-height: 1.1;
+	line-height: 72px;
 	margin-top: 0;
 	margin-bottom: 20px;
 	letter-spacing: -1.8px;
@@ -235,7 +235,7 @@
 /* Subheading / Secondary Heading */
 .sarathi-hero-subheading {
 	font-family: var(--font-heading, 'Space Grotesk', sans-serif);
-	font-size: clamp(26px, 3.3vw, 48px);
+	font-size: clamp(26px, 3.5vw, 48px);
 	font-weight: 700;
 	color: #1A1C23;
 	line-height: 1.15;
@@ -247,7 +247,7 @@
 /* Description: Inter 300 24px 32px line-height 0px spacing */
 .sarathi-hero-description {
 	font-family: var(--font-body, 'Inter', sans-serif);
-	font-size: clamp(17px, 1.7vw, 24px);
+	font-size: clamp(17px, 1.8vw, 24px);
 	font-weight: 300;
 	color: #6B7280;
 	line-height: 32px;
@@ -358,7 +358,7 @@
 .sarathi-inner-page-banner {
 	position: relative;
 	width: 100%;
-	height: auto;
+	height: 360px;
 	/* Spec: Desktop 360px */
 	min-height: 360px;
 	display: flex;
@@ -508,7 +508,7 @@
 
 @media (max-width: 991px) {
 	.sarathi-inner-page-banner {
-		height: auto;
+		height: 300px;
 		/* Spec: Tablet 300px */
 		min-height: 300px;
 	}
@@ -536,7 +536,7 @@
 
 @media (max-width: 767px) {
 	.sarathi-inner-page-banner {
-		height: auto;
+		height: 230px;
 		/* Spec: Mobile 230px */
 		min-height: 230px;
 	}
