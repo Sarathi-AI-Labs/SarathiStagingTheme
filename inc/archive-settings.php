@@ -50,10 +50,9 @@ function custom_theme_get_archive_configs() {
 			'storage_id'    => 'training_archive',
 			'archive_url'   => home_url( '/trainings/' ),
 			'fallback_hero' => array(
-				// Preserves existing database options where available
-				'eyebrow'     => custom_theme_get_field( 'eyebrow', 'option', __( 'SPECIALIZED TRAINING PROGRAMS', 'custom-theme' ) ),
-				'heading'     => custom_theme_get_field( 'heading', 'option', __( 'Accelerate Innovation Through Hands-On Training', 'custom-theme' ) ),
-				'description' => custom_theme_get_field( 'subheading', 'option', __( 'Intensive bootcamps and workshops crafted by industry leaders to bridge skill gaps in modern AI, DevOps, and Quality Engineering.', 'custom-theme' ) ),
+				'eyebrow'     => __( 'SPECIALIZED TRAINING PROGRAMS', 'custom-theme' ),
+				'heading'     => __( 'Accelerate Innovation Through Hands-On Training', 'custom-theme' ),
+				'description' => __( 'Intensive bootcamps and workshops crafted by industry leaders to bridge skill gaps in modern AI, DevOps, and Quality Engineering.', 'custom-theme' ),
 			),
 		),
 		'careers' => array(

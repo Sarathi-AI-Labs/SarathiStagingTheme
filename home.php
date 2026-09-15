@@ -21,55 +21,11 @@ $categories     = get_categories(
 	)
 );
 
-// Hook blog search & category filter form into the hero side content
-add_action( 'sarathi_inner_hero_side_content', function() use ( $categories, $search_query, $current_cat_id ) {
-	?>
-	<div class="sarathi-inner-banner-side-content type-form">
-		<form role="search" method="get" class="sarathi-blog-filter-form" action="<?php echo esc_url( home_url( '/blog/' ) ); ?>">
-			<!-- Search Input -->
-			<div class="sarathi-blog-search-wrap">
-				<label for="blog-search-input" class="screen-reader-text">
-					<?php esc_html_e( 'Search articles', 'custom-theme' ); ?>
-				</label>
-				<svg class="sarathi-search-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-					<path fill-rule="evenodd"
-						d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-						clip-rule="evenodd" />
-				</svg>
-				<input type="search" id="blog-search-input" class="sarathi-blog-search-input" name="s"
-					value="<?php echo esc_attr( $search_query ); ?>"
-					placeholder="<?php esc_attr_e( 'Search articles...', 'custom-theme' ); ?>"
-					aria-label="<?php esc_attr_e( 'Search articles', 'custom-theme' ); ?>" />
-			</div>
+// Search and category form moved below into the main grid layout to persist across hero banner replacements.
 
-			<!-- Category Select Dropdown -->
-			<div class="sarathi-blog-cat-select-wrap">
-				<label for="blog-cat-select" class="screen-reader-text">
-					<?php esc_html_e( 'Filter by category', 'custom-theme' ); ?>
-				</label>
-				<select name="cat" id="blog-cat-select" class="sarathi-blog-cat-select"
-					aria-label="<?php esc_attr_e( 'Filter by category', 'custom-theme' ); ?>" onchange="this.form.submit()">
-					<option value="0">
-						<?php esc_html_e( 'All Categories', 'custom-theme' ); ?>
-					</option>
-					<?php if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
-						<?php foreach ( $categories as $cat ) : ?>
-							<option value="<?php echo esc_attr( $cat->term_id ); ?>" <?php selected( $current_cat_id, $cat->term_id ); ?>>
-								<?php echo esc_html( $cat->name ); ?> (<?php echo esc_html( $cat->count ); ?>)
-							</option>
-						<?php endforeach; ?>
-					<?php endif; ?>
-				</select>
-				<svg class="sarathi-select-arrow" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-					<path fill-rule="evenodd"
-						d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-						clip-rule="evenodd" />
-				</svg>
-			</div>
-		</form>
-	</div>
-	<?php
-} );
+// Ensure cards-grid assets are loaded since the blog grid is hardcoded
+wp_enqueue_style( 'custom-theme-cards-grid' );
+wp_enqueue_script( 'custom-theme-cards-grid' );
 
 // Render Flexible Content (or fallback hero preserving legacy blog hero options)
 $archive_render = custom_theme_render_archive_flexible_content( 'blog' );
@@ -80,6 +36,54 @@ $archive_render = custom_theme_render_archive_flexible_content( 'blog' );
 	<!-- Blog Cards Grid -->
 	<section class="cards-grid cards-grid--blog" id="blog-posts-grid" style="padding-top: 3.5rem;">
 		<div class="cards-grid__container">
+
+			<!-- Blog Filter Bar -->
+			<div class="sarathi-blog-filter-bar" style="display: flex; justify-content: flex-end; margin-bottom: 2rem; width: 100%;">
+				<div class="sarathi-blog-hero__right">
+					<form role="search" method="get" class="sarathi-blog-filter-form" action="<?php echo esc_url( home_url( '/blog/' ) ); ?>">
+						<!-- Search Input -->
+						<div class="sarathi-blog-search-wrap">
+							<label for="blog-search-input" class="screen-reader-text">
+								<?php esc_html_e( 'Search articles', 'custom-theme' ); ?>
+							</label>
+							<svg class="sarathi-search-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+								<path fill-rule="evenodd"
+									d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+									clip-rule="evenodd" />
+							</svg>
+							<input type="search" id="blog-search-input" class="sarathi-blog-search-input" name="s"
+								value="<?php echo esc_attr( $search_query ); ?>"
+								placeholder="<?php esc_attr_e( 'Search articles...', 'custom-theme' ); ?>"
+								aria-label="<?php esc_attr_e( 'Search articles', 'custom-theme' ); ?>" />
+						</div>
+
+						<!-- Category Select Dropdown -->
+						<div class="sarathi-blog-cat-select-wrap">
+							<label for="blog-cat-select" class="screen-reader-text">
+								<?php esc_html_e( 'Filter by category', 'custom-theme' ); ?>
+							</label>
+							<select name="cat" id="blog-cat-select" class="sarathi-blog-cat-select"
+								aria-label="<?php esc_attr_e( 'Filter by category', 'custom-theme' ); ?>" onchange="this.form.submit()">
+								<option value="0">
+									<?php esc_html_e( 'All Categories', 'custom-theme' ); ?>
+								</option>
+								<?php if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
+									<?php foreach ( $categories as $cat ) : ?>
+										<option value="<?php echo esc_attr( $cat->term_id ); ?>" <?php selected( $current_cat_id, $cat->term_id ); ?>>
+											<?php echo esc_html( $cat->name ); ?> (<?php echo esc_html( $cat->count ); ?>)
+										</option>
+									<?php endforeach; ?>
+								<?php endif; ?>
+							</select>
+							<svg class="sarathi-select-arrow" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+								<path fill-rule="evenodd"
+									d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+									clip-rule="evenodd" />
+							</svg>
+						</div>
+					</form>
+				</div>
+			</div>
 
 			<?php if ( have_posts() ) : ?>
 				<div class="cards-grid__list sarathi-blog-grid">

@@ -39,6 +39,9 @@ add_action( 'sarathi_inner_hero_side_content', function() use ( $categories, $cu
 
 // Render Flexible Content (or fallback hero preserving existing training options)
 $archive_render = custom_theme_render_archive_flexible_content( 'training' );
+
+// Ensure training section assets are loaded since the archive grid is hardcoded
+wp_enqueue_style( 'custom-theme-training-section' );
 ?>
 
 <div class="sarathi-training-archive">
