@@ -50,10 +50,9 @@ function custom_theme_get_archive_configs() {
 			'storage_id'    => 'training_archive',
 			'archive_url'   => home_url( '/trainings/' ),
 			'fallback_hero' => array(
-				// Preserves existing database options where available
-				'eyebrow'     => custom_theme_get_field( 'eyebrow', 'option', __( 'SPECIALIZED TRAINING PROGRAMS', 'custom-theme' ) ),
-				'heading'     => custom_theme_get_field( 'heading', 'option', __( 'Accelerate Innovation Through Hands-On Training', 'custom-theme' ) ),
-				'description' => custom_theme_get_field( 'subheading', 'option', __( 'Intensive bootcamps and workshops crafted by industry leaders to bridge skill gaps in modern AI, DevOps, and Quality Engineering.', 'custom-theme' ) ),
+				'eyebrow'     => __( 'SPECIALIZED TRAINING PROGRAMS', 'custom-theme' ),
+				'heading'     => __( 'Accelerate Innovation Through Hands-On Training', 'custom-theme' ),
+				'description' => __( 'Intensive bootcamps and workshops crafted by industry leaders to bridge skill gaps in modern AI, DevOps, and Quality Engineering.', 'custom-theme' ),
 			),
 		),
 		'careers' => array(
@@ -241,6 +240,11 @@ function custom_theme_render_archive_flexible_content( $archive_key, $args = arr
 			$rendered_layouts[] = $layout;
 
 			$template      = str_replace( '_', '-', $layout );
+
+			// Conditionally enqueue section assets
+			wp_enqueue_style( 'custom-theme-' . $template );
+			wp_enqueue_script( 'custom-theme-' . $template );
+
 			$template_path = 'template-parts/flexible-content/' . $template;
 
 			if ( locate_template( $template_path . '.php' ) ) {

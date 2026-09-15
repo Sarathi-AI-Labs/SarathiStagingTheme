@@ -74,10 +74,10 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 		<!-- Cards Grid -->
 		<div class="cards-grid__list">
 			<?php if (!empty($cards) && is_array($cards)): ?>
-				<?php 
+				<?php
 				$total_cards = count($cards);
 				$card_idx = 0;
-				foreach ($cards as $card): 
+				foreach ($cards as $card):
 					$card_idx++;
 					$title = !empty($card['card_title']) ? $card['card_title'] : (!empty($card['title']) ? $card['title'] : '');
 					$raw_link = !empty($card['card_link']) ? $card['card_link'] : (!empty($card['link']) ? $card['link'] : '');
@@ -112,8 +112,8 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 								<?php endif; ?>
 							</div>
 						</div>
-					<?php 
-					// STANDARD / FEATURED / MINIMAL / OTHER EXISTING VARIANTS
+						<?php
+						// STANDARD / FEATURED / MINIMAL / OTHER EXISTING VARIANTS
 					else:
 						$extend_service = !empty($card['extend_service']) ? $card['extend_service'] : false;
 						$is_link_wrapped = ($display_variant === 'standard' || $display_variant === 'minimal') && !$extend_service && $has_link;
@@ -159,81 +159,90 @@ $has_header = !empty($section_eyebrow) || !empty($section_title) || !empty($sect
 						}
 						?>
 
-						<<?php echo $is_link_wrapped ? 'a href="' . esc_url($link) . '"' . $target_attr : 'div'; ?>
-							class="<?php echo esc_attr($item_classes); ?>"<?php echo $custom_card_style_attr; ?><?php echo $detail_data; ?>>
+						<?php if ($is_link_wrapped): ?>
+							<a href="<?php echo esc_url($link); ?>" <?php echo $target_attr; ?>
+								class="<?php echo esc_attr($item_classes); ?>" <?php echo $custom_card_style_attr; ?><?php echo $detail_data; ?>>
+							<?php else: ?>
+								<div class="<?php echo esc_attr($item_classes); ?>" <?php echo $custom_card_style_attr; ?><?php echo $detail_data; ?>>
+								<?php endif; ?>
 
-							<div class="cards-grid__icon-wrapper">
-								<img src="<?php echo esc_url($img_src); ?>" alt="<?php echo esc_attr($title); ?>" loading="lazy"
-									aria-hidden="true">
-							</div>
+								<div class="cards-grid__icon-wrapper">
+									<img src="<?php echo esc_url($img_src); ?>" alt="<?php echo esc_attr($title); ?>" loading="lazy"
+										aria-hidden="true">
+								</div>
 
-							<div class="cards-grid__content">
-								<h3 class="cards-grid__item-title">
-									<?php if (!$is_link_wrapped && !$extend_service && $has_link): ?>
-										<a href="<?php echo esc_url($link); ?>" style="color: inherit; text-decoration: none;"<?php echo $target_attr; ?>><?php echo esc_html($title); ?></a>
-									<?php else: ?>
-										<?php echo esc_html($title); ?>
+								<div class="cards-grid__content">
+									<h3 class="cards-grid__item-title">
+										<?php if (!empty($link) && '#' !== $link): ?>
+											<a href="<?php echo esc_url($link); ?>"
+												style="color: inherit; text-decoration: none;"><?php echo esc_html($title); ?></a>
+										<?php else: ?>
+											<?php echo esc_html($title); ?>
+										<?php endif; ?>
+									</h3>
+									<?php if (!empty($card_desc)): ?>
+										<p class="cards-grid__item-desc"><?php echo esc_html(wp_strip_all_tags($card_desc)); ?></p>
 									<?php endif; ?>
-								</h3>
-								<?php if (!empty($card_desc)): ?>
-									<p class="cards-grid__item-desc"><?php echo esc_html(wp_strip_all_tags($card_desc)); ?></p>
-								<?php endif; ?>
 
-								<?php if ($display_variant === 'featured' && $has_link): ?>
-									<a href="<?php echo esc_url($link); ?>" class="cards-grid__item-link"<?php echo $target_attr; ?>><?php echo $link_title; ?></a>
-								<?php endif; ?>
+									<?php if ($display_variant === 'featured' && $has_link): ?>
+										<a href="<?php echo esc_url($link); ?>" class="cards-grid__item-link" <?php echo $target_attr; ?>><?php echo $link_title; ?></a>
+									<?php endif; ?>
 
-								<?php if ($extend_service): ?>
-									<button type="button" class="cards-grid__item-btn js-explore-service">Explore Service
-										&rarr;</button>
-								<?php endif; ?>
-							</div>
+									<?php if ($extend_service): ?>
+										<button type="button" class="cards-grid__item-btn js-explore-service">Explore Service
+											&rarr;</button>
+									<?php endif; ?>
+								</div>
 
-						</<?php echo $is_link_wrapped ? 'a' : 'div'; ?>>
-					<?php endif; ?>
-				<?php endforeach; ?>
-			<?php else: ?>
-				<!-- Default Static Cards Fallback -->
-				<a href="#" class="cards-grid__item">
-					<div class="cards-grid__icon-wrapper">
-						<img src="<?php echo esc_url($theme_uri . '/assets/images/UST_overview.avif'); ?>"
-							alt="Overview" loading="lazy" aria-hidden="true">
-					</div>
-					<div class="cards-grid__content">
-						<h3 class="cards-grid__item-title">Overview</h3>
-					</div>
-				</a>
-			<?php endif; ?>
-		</div>
-
-		<?php if ($display_variant === 'standard'): ?>
-			<!-- Shared Details Area for Extended Services -->
-			<div class="cards-grid__shared-details" style="display: none;">
-				<div class="cards-grid__shared-details-inner">
-					<div class="cards-grid__shared-details-content">
-						<span class="cards-grid__shared-eyebrow js-shared-eyebrow"></span>
-						<h3 class="cards-grid__shared-title js-shared-title"></h3>
-						<div class="cards-grid__shared-desc js-shared-desc"></div>
-						<div class="cards-grid__shared-features js-shared-features"></div>
-						<div class="cards-grid__shared-btn-wrapper js-shared-btn-wrapper" style="display: none;">
-							<a href="#" class="btn btn-primary js-shared-btn"></a>
+								<?php if ($is_link_wrapped): ?>
+							</a>
+						<?php else: ?>
 						</div>
-					</div>
-					<div class="cards-grid__shared-details-image">
-						<img src="" alt="" class="js-shared-image" aria-hidden="true" loading="lazy">
+					<?php endif; ?>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		<?php else: ?>
+			<!-- Default Static Cards Fallback -->
+			<a href="#" class="cards-grid__item">
+				<div class="cards-grid__icon-wrapper">
+					<img src="<?php echo esc_url($theme_uri . '/assets/images/UST_overview.avif'); ?>" alt="Overview"
+						loading="lazy" aria-hidden="true">
+				</div>
+				<div class="cards-grid__content">
+					<h3 class="cards-grid__item-title">Overview</h3>
+				</div>
+			</a>
+		<?php endif; ?>
+	</div>
+
+	<?php if ($display_variant === 'standard'): ?>
+		<!-- Shared Details Area for Extended Services -->
+		<div class="cards-grid__shared-details" style="display: none;">
+			<div class="cards-grid__shared-details-inner">
+				<div class="cards-grid__shared-details-content">
+					<span class="cards-grid__shared-eyebrow js-shared-eyebrow"></span>
+					<h3 class="cards-grid__shared-title js-shared-title"></h3>
+					<div class="cards-grid__shared-desc js-shared-desc"></div>
+					<div class="cards-grid__shared-features js-shared-features"></div>
+					<div class="cards-grid__shared-btn-wrapper js-shared-btn-wrapper" style="display: none;">
+						<a href="#" class="btn btn-primary js-shared-btn"></a>
 					</div>
 				</div>
+				<div class="cards-grid__shared-details-image">
+					<img src="" alt="" class="js-shared-image" aria-hidden="true" loading="lazy">
+				</div>
 			</div>
-		<?php endif; ?>
+		</div>
+	<?php endif; ?>
 
-		<?php if (!empty($section_cta) && is_array($section_cta) && !empty($section_cta['url']) && !empty($section_cta['title'])): ?>
-			<div class="cards-grid__footer">
-				<a href="<?php echo esc_url($section_cta['url']); ?>" class="btn btn-primary"
-					target="<?php echo !empty($section_cta['target']) ? esc_attr($section_cta['target']) : '_self'; ?>">
-					<span><?php echo esc_html($section_cta['title']); ?></span>
-				</a>
-			</div>
-		<?php endif; ?>
+	<?php if (!empty($section_cta) && is_array($section_cta) && !empty($section_cta['url']) && !empty($section_cta['title'])): ?>
+		<div class="cards-grid__footer">
+			<a href="<?php echo esc_url($section_cta['url']); ?>" class="btn btn-primary"
+				target="<?php echo !empty($section_cta['target']) ? esc_attr($section_cta['target']) : '_self'; ?>">
+				<span><?php echo esc_html($section_cta['title']); ?></span>
+			</a>
+		</div>
+	<?php endif; ?>
 
 	</div>
 </section>
