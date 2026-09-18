@@ -680,13 +680,14 @@ body.sarathi-fullscreen-active {
    ========================================================================== */
 .sarathi-chat-body {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: auto !important;
   overflow-x: hidden !important;
   position: relative;
   display: flex;
   flex-direction: column;
   background: #FFFFFF !important;
   border-top: none !important;
+  scroll-behavior: smooth;
 }
 
 .sarathi-chat-body::-webkit-scrollbar {
@@ -1279,13 +1280,14 @@ body.sarathi-fullscreen-active {
    CONVERSATION STREAM & MESSAGES (ULTRA-PREMIUM AI UI)
    ========================================================================== */
 .sarathi-chat-messages {
-  flex: 1;
-  padding: 18px 16px 28px 16px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 18px 16px 24px 16px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  overflow-y: auto;
-  scroll-behavior: smooth;
+  gap: 18px;
+  overflow: visible !important;
+  flex-shrink: 0;
 }
 
 .sarathi-message {
@@ -1562,6 +1564,147 @@ body.sarathi-fullscreen-active {
 
 #sarathi-ai-root[data-theme="dark"] .sarathi-md-question {
   color: #F8FAFC;
+}
+
+/* ==========================================================================
+   RECOMMENDED QUESTIONS / FOLLOW-UP CHIPS (Ultra-Premium AI Capsules)
+   ========================================================================== */
+.sarathi-recommended-chips-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  animation: sarathiBubbleSpring 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.sarathi-recommended-chips-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #64748B;
+  letter-spacing: 0.02em;
+  padding-left: 2px;
+  user-select: none;
+}
+
+.sarathi-rec-spark {
+  font-size: 11px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+.sarathi-recommended-chips-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.sarathi-recommend-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 9999px;
+  padding: 5px 12px 5px 10px;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #1E293B;
+  line-height: 1.35;
+  cursor: pointer;
+  text-align: left;
+  user-select: none;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 100%;
+  word-break: break-word;
+  outline: none;
+}
+
+.sarathi-rec-chip-icon {
+  color: #07B6D5;
+  font-size: 10px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.sarathi-rec-chip-text {
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+}
+
+.sarathi-rec-chip-arrow {
+  color: #94A3B8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.sarathi-recommend-chip-btn:hover {
+  background: #F0FDFA;
+  border-color: #07B6D5;
+  color: #0891B2;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(7, 182, 213, 0.16);
+}
+
+.sarathi-recommend-chip-btn:hover .sarathi-rec-chip-icon {
+  transform: scale(1.2);
+  color: #0891B2;
+}
+
+.sarathi-recommend-chip-btn:hover .sarathi-rec-chip-arrow {
+  color: #07B6D5;
+  transform: translateX(2px);
+}
+
+.sarathi-recommend-chip-btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 1px 4px rgba(7, 182, 213, 0.1);
+}
+
+/* Dark Mode */
+#sarathi-ai-root[data-theme="dark"] .sarathi-recommended-chips-title {
+  color: #94A3B8;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-recommend-chip-btn {
+  background: #1E293B;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #E2E8F0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-recommend-chip-btn .sarathi-rec-chip-icon {
+  color: #38BDF8;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-recommend-chip-btn:hover {
+  background: #0f172a;
+  border-color: #38BDF8;
+  color: #38BDF8;
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.25);
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-recommend-chip-btn:hover .sarathi-rec-chip-icon,
+#sarathi-ai-root[data-theme="dark"] .sarathi-recommend-chip-btn:hover .sarathi-rec-chip-arrow {
+  color: #38BDF8;
 }
 
 /* Markdown Headers in Chat */
@@ -1866,6 +2009,10 @@ body.sarathi-fullscreen-active {
   font-weight: 600;
   border-bottom: 1px dotted var(--sarathi-primary);
   transition: all 0.18s ease;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  cursor: pointer;
+  display: inline;
 }
 
 .sarathi-md-link:hover {
@@ -1876,11 +2023,30 @@ body.sarathi-fullscreen-active {
 .sarathi-link-arrow {
   display: inline-block;
   font-size: 10px;
+  margin-left: 2px;
+  white-space: nowrap;
   transition: transform 0.2s ease;
 }
 
 .sarathi-md-link:hover .sarathi-link-arrow {
   transform: translate(2px, -2px);
+}
+
+.sarathi-email-link,
+.sarathi-phone-link {
+  font-weight: 600;
+  color: var(--sarathi-primary);
+  white-space: nowrap;
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-md-link {
+  color: #38bdf8;
+  border-bottom-color: rgba(56, 189, 248, 0.45);
+}
+
+#sarathi-ai-root[data-theme="dark"] .sarathi-md-link:hover {
+  color: #7dd3fc;
+  border-bottom-color: #7dd3fc;
 }
 
 /* ==========================================================================
@@ -1904,8 +2070,13 @@ body.sarathi-fullscreen-active {
   text-decoration: none !important;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
   transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 4px 14px rgba(10, 37, 64, 0.07), 0 1px 3px rgba(10, 37, 64, 0.04);
+}
+
+.sarathi-action-btn * {
+  cursor: pointer;
 }
 
 .sarathi-action-btn:hover {
@@ -2190,6 +2361,34 @@ body.sarathi-fullscreen-active {
 .sarathi-action-consultation:hover {
   border-color: #0891b2;
   box-shadow: 0 8px 24px rgba(8, 145, 178, 0.25);
+}
+
+/* Category: External Links (Slate / Indigo) */
+.sarathi-action-external {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1.5px solid rgba(100, 116, 139, 0.35);
+}
+.sarathi-action-external .sarathi-action-icon-box {
+  background: #475569;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(71, 85, 105, 0.3);
+}
+.sarathi-action-external .sarathi-action-badge {
+  color: #475569;
+}
+.sarathi-action-external .sarathi-action-title {
+  color: #1e293b;
+}
+.sarathi-action-external .sarathi-action-subtitle {
+  color: #64748b;
+}
+.sarathi-action-external .sarathi-action-arrow-circle {
+  background: rgba(71, 85, 105, 0.14);
+  color: #475569;
+}
+.sarathi-action-external:hover {
+  border-color: #334155;
+  box-shadow: 0 8px 24px rgba(71, 85, 105, 0.22);
 }
 
 /* Dark Mode Support for Dynamic Action Cards */
