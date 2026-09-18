@@ -171,11 +171,13 @@
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
 
-    // Code blocks with syntax copy button & terminal bar
+    // Protect code blocks first with unique placeholders so subsequent formatting doesn't alter code
+    const codeBlocks = [];
     html = html.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g, function (match, lang, code) {
       const displayLang = (lang || 'CODE').toUpperCase();
       const codeId = 'code_' + Math.random().toString(36).substring(2, 8);
-      return `
+      const placeholder = `%%%SARATHI_CODE_BLOCK_${codeBlocks.length}%%%`;
+      codeBlocks.push(`
         <div class="sarathi-code-container">
           <div class="sarathi-code-header">
             <div class="sarathi-code-dots">
@@ -194,11 +196,17 @@
           </div>
           <pre><code id="${codeId}">${code.trim()}</code></pre>
         </div>
-      `;
+      `);
+      return placeholder;
     });
 
-    // Inline code
-    html = html.replace(/`([^`]+)`/g, '<code class="sarathi-inline-code">$1</code>');
+    // Protect inline code with placeholders
+    const inlineCodes = [];
+    html = html.replace(/`([^`]+)`/g, function (match, code) {
+      const placeholder = `%%%SARATHI_INLINE_CODE_${inlineCodes.length}%%%`;
+      inlineCodes.push(`<code class="sarathi-inline-code">${code}</code>`);
+      return placeholder;
+    });
 
     // Headers with gradient underlines
     html = html.replace(/^### (.*$)/gim, '<h3 class="sarathi-md-h3">$1</h3>');
@@ -309,7 +317,16 @@
         normTitle === 'visit' ||
         normTitle === 'link' ||
         normTitle === 'website' ||
-        normTitle === 'page'
+        normTitle === 'page' ||
+        /^https?:\/\//i.test(normTitle) ||
+        /^(?:[a-zA-Z0-9-]+\.)+(?:com|local|org|net|cloud|io|app)/i.test(normTitle) ||
+        normTitle.includes('sarathiailabs.com') ||
+        normTitle.includes('sarathiai') ||
+        normTitle === (rawUrl || '').toLowerCase().trim() ||
+        normTitle === href.toLowerCase().trim() ||
+        /^\/?blog\/?$/i.test(normTitle) ||
+        /^\/?about\/?$/i.test(normTitle) ||
+        /^\/?contact\/?$/i.test(normTitle)
       );
 
       // --- PRIORITY 1: Match Exact URL Path Destination ---
@@ -332,7 +349,7 @@
           category: 'contact',
           href: isInternal ? (normPath.startsWith('/') ? href : '/contact/') : href,
           badge: 'Direct Connect',
-          title: isGenericTitle ? 'Contact Us Directly' : linkTitle,
+          title: isGenericTitle ? 'Contact Page' : linkTitle,
           subtitle: 'Call, email or visit our office',
           isInternal,
           icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`
@@ -478,7 +495,7 @@
           category: 'contact',
           href: isInternal ? '/contact/' : href,
           badge: 'Direct Connect',
-          title: isGenericTitle ? 'Contact Us Directly' : linkTitle,
+          title: isGenericTitle ? 'Contact Page' : linkTitle,
           subtitle: 'Call, email or visit our office',
           isInternal,
           icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`
@@ -496,7 +513,22 @@
         };
       }
 
-      // --- PRIORITY 4: Default Fallback ---
+      // --- PRIORITY 4: External or General Destination ---
+      if (!isInternal && href && href !== '#') {
+        let domain = '';
+        try { domain = new URL(href).hostname.replace(/^www\./i, ''); } catch (e) {}
+        return {
+          category: 'external',
+          href: href,
+          badge: domain.toUpperCase() || 'External Link',
+          title: isGenericTitle ? (domain || 'Visit Resource') : linkTitle,
+          subtitle: href,
+          isInternal: false,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`
+        };
+      }
+
+      // --- PRIORITY 5: Default Fallback ---
       return {
         category: 'about',
         href: isInternal ? (normPath.startsWith('/') ? href : '/about/') : href,
@@ -508,19 +540,108 @@
       };
     }
 
-    // Links [title](url) - rendered as Advanced Dynamic Action Cards
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (match, title, url) {
-      const btn = resolveDynamicButtonConfig(url, title, raw);
+    function createActionCardHtml(btn) {
       return `\n<div class="sarathi-action-card-wrap"><a href="${btn.href}" class="sarathi-action-btn sarathi-action-${btn.category} ${btn.isInternal ? 'sarathi-internal-link' : ''}" target="${btn.isInternal ? '_self' : '_blank'}" rel="${btn.isInternal ? '' : 'noopener noreferrer'}"><div class="sarathi-action-main"><div class="sarathi-action-icon-box">${btn.icon}</div><div class="sarathi-action-info"><div class="sarathi-action-header-row"><span class="sarathi-action-badge">${btn.badge}</span></div><div class="sarathi-action-title">${btn.title}</div><div class="sarathi-action-subtitle">${btn.subtitle}</div></div></div><div class="sarathi-action-arrow-circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div></a></div>\n`;
-    });
+    }
+
+    // Helper: Autolink inline URLs, emails, and phone numbers inside text lines
+    function autolinkInline(str) {
+      if (!str) return '';
+
+      const protectedLinks = [];
+
+      // 1. Convert markdown inline links [title](url) to <a> tags with placeholders
+      str = str.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (match, title, url) {
+        const btn = resolveDynamicButtonConfig(url, title, raw);
+        const hasArrow = /[\u2197↗]|&nearr;/i.test(title);
+        const arrow = hasArrow ? '' : '<span class="sarathi-link-arrow">↗</span>';
+        const displayTitle = (btn.isInternal && /^https?:\/\//i.test(title)) ? btn.title : title;
+        const linkHtml = `<a href="${btn.href}" class="sarathi-md-link ${btn.isInternal ? 'sarathi-internal-link' : ''}" target="${btn.isInternal ? '_self' : '_blank'}" rel="${btn.isInternal ? '' : 'noopener noreferrer'}">${displayTitle}${arrow}</a>`;
+        const placeholder = `%%%SARATHI_INLINE_LINK_${protectedLinks.length}%%%`;
+        protectedLinks.push(linkHtml);
+        return placeholder;
+      });
+
+      // 2. Tokenize by HTML tags so we never touch URLs/emails/phones inside tag attributes (like href="...")
+      const parts = str.split(/(<[^>]+>)/g);
+      let processed = parts.map(part => {
+        if (part.startsWith('<') && part.endsWith('>')) {
+          return part; // Leave HTML tags completely untouched
+        }
+
+        let textPart = part;
+
+        // Autolink Raw URLs: http/https (excludes brackets and parentheses to prevent regex bleed)
+        textPart = textPart.replace(/(?:&lt;|<)?(https?:\/\/[^\s<>"'`()[\]]+)(?:&gt;|>)?/gi, function (match, url) {
+          const cleanUrl = url.replace(/[.,;:!?]+$/, '');
+          const btn = resolveDynamicButtonConfig(cleanUrl, '', raw);
+          const linkLabel = (btn && btn.title && btn.title !== cleanUrl) ? btn.title : cleanUrl;
+          return `<a href="${btn.href}" class="sarathi-md-link ${btn.isInternal ? 'sarathi-internal-link' : ''}" target="${btn.isInternal ? '_self' : '_blank'}" rel="${btn.isInternal ? '' : 'noopener noreferrer'}">${linkLabel}<span class="sarathi-link-arrow">↗</span></a>`;
+        });
+
+        // Autolink Email Addresses: e.g. support@sarathiailabs.com
+        textPart = textPart.replace(/\b([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\b/gi, function (match, email) {
+          return `<a href="mailto:${email}" class="sarathi-md-link sarathi-email-link">${email}</a>`;
+        });
+
+        // Autolink Phone Numbers: e.g. Phone: +911234567458 or +911234567458
+        textPart = textPart.replace(/(Phone:\s*)?(\+?\d{1,4}[- ]?\d{7,12}\b)/gi, function (match, prefix, digits) {
+          const rawDigits = (digits || '').trim();
+          const cleanDigits = rawDigits.replace(/[\s-]/g, '');
+          // Validate minimum 10 digits
+          if (cleanDigits.replace(/\D/g, '').length < 10) return match;
+          const telHref = cleanDigits.startsWith('+') ? cleanDigits : ('+' + cleanDigits);
+          return `${prefix || ''}<a href="tel:${telHref}" class="sarathi-md-link sarathi-phone-link">${rawDigits}</a>`;
+        });
+
+        return textPart;
+      }).join('');
+
+      // 3. Restore protected inline links
+      protectedLinks.forEach((linkHtml, idx) => {
+        processed = processed.replace(`%%%SARATHI_INLINE_LINK_${idx}%%%`, linkHtml);
+      });
+
+      return processed;
+    }
 
     // Standard Blockquote
     html = html.replace(/^&gt;\s*(.*$)/gim, '<blockquote class="sarathi-blockquote"><span class="quote-glyph">“</span><p>$1</p></blockquote>');
+
+    // Helper: join consecutive lines within a paragraph block cleanly
+    function joinParagraphLines(linesArr) {
+      if (linesArr.length === 0) return '';
+      if (linesArr.length === 1) return autolinkInline(linesArr[0]);
+
+      let result = '';
+      for (let i = 0; i < linesArr.length; i++) {
+        const cur = linesArr[i].trim();
+        if (i === 0) {
+          result = autolinkInline(cur);
+          continue;
+        }
+        const prev = linesArr[i - 1].trim();
+
+        // Check if current line is a key-value pair (e.g. Email:, Phone:, *Email:*, <em>Phone:</em>, etc.)
+        const isKeyValueLine = /^(?:<[^>]+>)*\s*(?:Email|Phone|Address|Hours|Mobile|Tel|Location|Website|Office|Contact)\s*(?:<[^>]+>)*\s*:/i.test(cur);
+        const isPrevUnfinished = !/[.?!:]$/.test(prev);
+        const isCurContinuation = !isKeyValueLine && (isPrevUnfinished || /^[a-z0-9,;)\]]|^\[/i.test(cur));
+
+        if (isCurContinuation) {
+          result += ' ' + autolinkInline(cur);
+        } else {
+          result += '<br>' + autolinkInline(cur);
+        }
+      }
+      return result;
+    }
 
     // Line-by-line Clean Minimalist Markdown Formatter
     const lines = html.split('\n');
     let out = [];
     let listBuffer = [];
+    let listActionButtons = [];
+    let pBuffer = [];
 
     function flushList() {
       if (listBuffer.length === 0) return;
@@ -531,18 +652,110 @@
       lHtml += '</ul>';
       out.push(lHtml);
       listBuffer = [];
+
+      if (listActionButtons.length > 0) {
+        listActionButtons.forEach(btn => {
+          out.push(createActionCardHtml(btn));
+        });
+        listActionButtons = [];
+      }
+    }
+
+    function flushParagraph() {
+      if (pBuffer.length === 0) return;
+
+      // Extract any web destination links to render as Action Cards directly after the sentence
+      const actionButtons = [];
+      const seenActionKeys = new Set();
+
+      pBuffer.forEach(line => {
+        // 1. Markdown links: [Title](url)
+        const mdLinkMatches = [...line.matchAll(/\[([^\]]+)\]\(([^)\s]+)\)/g)];
+        mdLinkMatches.forEach(m => {
+          const title = m[1];
+          const url = m[2];
+          if (url && !url.startsWith('mailto:') && !url.startsWith('tel:')) {
+            const btn = resolveDynamicButtonConfig(url, title, raw);
+            const key = (btn.category + ':' + (btn.href || '').replace(/\/+$/, '')).toLowerCase();
+            if (btn && btn.href && !seenActionKeys.has(key)) {
+              seenActionKeys.add(key);
+              actionButtons.push(btn);
+            }
+          }
+        });
+
+        // 2. Any raw URLs: http/https anywhere in the line outside markdown links
+        const lineWithoutMd = line.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, ' ');
+        const rawUrlMatches = [...lineWithoutMd.matchAll(/(?:&lt;|<)?(https?:\/\/[^\s<>"'`()[\]]+)(?:&gt;|>)?/gi)];
+        rawUrlMatches.forEach(m => {
+          const rawUrl = m[1].replace(/[.,;:!?]+$/, '');
+          if (rawUrl && !rawUrl.startsWith('mailto:') && !rawUrl.startsWith('tel:')) {
+            const btn = resolveDynamicButtonConfig(rawUrl, '', raw);
+            const key = (btn.category + ':' + (btn.href || '').replace(/\/+$/, '')).toLowerCase();
+            if (btn && btn.href && !seenActionKeys.has(key)) {
+              seenActionKeys.add(key);
+              actionButtons.push(btn);
+            }
+          }
+        });
+      });
+
+      // Filter and clean lines for paragraph output
+      let linesToJoin = [];
+      pBuffer.forEach(line => {
+        let cleaned = line.trim();
+
+        if (actionButtons.length > 0) {
+          // If line is solely a markdown link, bracketed URL, or raw URL, drop it completely (rendered by action card below)
+          const isSoleLink = /^\s*\[?\s*(?:https?:\/\/[^\s\])]+|\[[^\]]+\]\([^)\s]+\))\s*\]?\s*$/i.test(cleaned);
+          if (isSoleLink) return;
+
+          // If line is just stray brackets or parentheses e.g. '[', ']', '[]', '()'
+          if (/^\s*[\[\]()]+\s*$/.test(cleaned)) return;
+
+          // Clean trailing raw URLs or markdown links at the end of an intro line e.g. 'blog page: [http...](...)' or 'blog page: http...'
+          cleaned = cleaned.replace(/(?::\s*|\s+)?\[https?:\/\/[^\]]+\]\([^)\s]+\)\s*$/gi, ':');
+          cleaned = cleaned.replace(/(?::\s*|\s+)?https?:\/\/[^\s<>"'`()[\]]+\s*$/gi, ':');
+          cleaned = cleaned.replace(/:\s*\[\s*$/g, ':'); // Clean dangling ': ['
+          cleaned = cleaned.replace(/\s*\[\s*$/g, '');   // Clean dangling '['
+        }
+
+        if (cleaned && !/^\s*[\[\]()]+\s*$/.test(cleaned)) {
+          linesToJoin.push(cleaned);
+        }
+      });
+
+      const joined = joinParagraphLines(linesToJoin);
+      if (joined) {
+        const textOnly = joined.replace(/<br>/gi, ' ').replace(/<[^>]+>/g, '').trim();
+        const isClosingQuestion = (textOnly.endsWith('?') && (textOnly.startsWith('What') || textOnly.startsWith('How') || textOnly.startsWith('Would you') || textOnly.startsWith('Which') || textOnly.startsWith('Feel free') || textOnly.startsWith('Can I') || textOnly.startsWith('Shall we') || textOnly.startsWith('Is there')));
+        if (isClosingQuestion) {
+          out.push(`<p class="sarathi-md-question">${joined}</p>`);
+        } else {
+          out.push(`<p class="sarathi-md-p">${joined}</p>`);
+        }
+      }
+
+      // Display the Action Card directly AFTER the link sentence!
+      actionButtons.forEach(btn => {
+        out.push(createActionCardHtml(btn));
+      });
+
+      pBuffer = [];
     }
 
     lines.forEach((line) => {
       const trimmed = line.trim();
       if (!trimmed) {
         flushList();
+        flushParagraph();
         return;
       }
 
-      // If it's already an HTML block tag (table, code, header, blockquote, action card)
-      if (trimmed.startsWith('<div class="sarathi-code') || trimmed.startsWith('<div class="sarathi-table') || trimmed.startsWith('<div class="sarathi-action-card-wrap') || trimmed.startsWith('<h') || trimmed.startsWith('<blockquote')) {
+      // If it's a code block placeholder or block HTML tag (table, header, blockquote)
+      if (trimmed.startsWith('%%%SARATHI_CODE_BLOCK_') || trimmed.startsWith('<div class="sarathi-code') || trimmed.startsWith('<div class="sarathi-table') || trimmed.startsWith('<h') || trimmed.startsWith('<blockquote')) {
         flushList();
+        flushParagraph();
         out.push(trimmed);
         return;
       }
@@ -550,31 +763,48 @@
       // Bullet list items
       const bulletMatch = trimmed.match(/^[-*•]\s+(.*)$/);
       if (bulletMatch) {
-        listBuffer.push(bulletMatch[1]);
+        flushParagraph();
+        const itemText = bulletMatch[1];
+        const mdLinkMatches = [...itemText.matchAll(/\[([^\]]+)\]\(([^)]+)\)/g)];
+        mdLinkMatches.forEach(m => {
+          const url = m[2];
+          if (url && !url.startsWith('mailto:') && !url.startsWith('tel:')) {
+            const btn = resolveDynamicButtonConfig(url, m[1], raw);
+            const key = (btn.category + ':' + (btn.href || '').replace(/\/+$/, '')).toLowerCase();
+            const exists = listActionButtons.some(b => (b.category + ':' + (b.href || '').replace(/\/+$/, '')).toLowerCase() === key);
+            if (btn && btn.href && !exists) listActionButtons.push(btn);
+          }
+        });
+        listBuffer.push(autolinkInline(itemText));
         return;
       }
 
       // Numbered list items
       const numberMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
       if (numberMatch) {
-        listBuffer.push(`<strong>${numberMatch[1]}.</strong> ${numberMatch[2]}`);
+        flushParagraph();
+        listBuffer.push(`<strong>${numberMatch[1]}.</strong> ${autolinkInline(numberMatch[2])}`);
         return;
       }
 
       flushList();
-
-      // Check if it's a closing question
-      const isClosingQuestion = (trimmed.endsWith('?') && (trimmed.startsWith('What') || trimmed.startsWith('How') || trimmed.startsWith('Would you') || trimmed.startsWith('Which') || trimmed.startsWith('Feel free') || trimmed.startsWith('Can I') || trimmed.startsWith('Shall we') || trimmed.startsWith('Is there')));
-      if (isClosingQuestion) {
-        out.push(`<p class="sarathi-md-question">${trimmed}</p>`);
-      } else {
-        out.push(`<p class="sarathi-md-p">${trimmed}</p>`);
-      }
+      pBuffer.push(trimmed);
     });
 
     flushList();
+    flushParagraph();
 
-    return out.join('');
+    let finalHtml = out.join('');
+
+    // Restore protected code blocks and inline code
+    codeBlocks.forEach((cb, i) => {
+      finalHtml = finalHtml.replace(`%%%SARATHI_CODE_BLOCK_${i}%%%`, cb);
+    });
+    inlineCodes.forEach((ic, i) => {
+      finalHtml = finalHtml.replace(`%%%SARATHI_INLINE_CODE_${i}%%%`, ic);
+    });
+
+    return finalHtml;
   }
 
   // Intelligent Sarathi AI Knowledge Engine (Simple, Crisp & Actionable)
@@ -635,6 +865,15 @@
       };
     }
 
+    // 5. Blog & Insights
+    if (q.includes('blog') || q.includes('article') || q.includes('news') || q.includes('insight') || q.includes('read') || q.includes('publication')) {
+      return {
+        category: 'AI Insights & Blog',
+        text: `You can find **Sarathi AI Labs'** latest engineering articles, tutorials, and architectural insights directly on our blog:\n\n[Explore Blog & Insights](/blog/)\n\nWe regularly publish deep-dives into autonomous agents, enterprise RAG architectures, and modern cloud engineering.`,
+        chips: ['Agentic AI Solutions', 'Web & Cloud Development', 'Professional Training']
+      };
+    }
+
     // Contact / Human Advisor
     if (q.includes('advisor') || q.includes('contact') || q.includes('talk') || q.includes('human') || q.includes('phone') || q.includes('email') || q.includes('call')) {
       return {
@@ -677,10 +916,15 @@
     }
 
     // Pricing / Quote
-    if (q.includes('pricing') || q.includes('cost') || q.includes('quote') || q.includes('fee') || q === 'get a quote') {
+    if (q.includes('pricing') || q.includes('cost') || q.includes('quote') || q.includes('quate') || q.includes('quotation') || q.includes('fee') || q.includes('rate') || q.includes('budget') || q.includes('estimate') || q === 'get a quote' || q === 'get a quate') {
       return {
         category: 'Get a Quote',
-        text: `We would love to discuss your project and provide a tailored scope and quote! 💼\n\nPlease share:\n- A brief summary of your project or requirements\n- Your target timeline or budget (optional)\n- Your preferred contact email or phone number\n\nOur solutions team will analyze your needs and get back to you with a comprehensive proposal within 24 hours.`
+        text: `We would love to discuss your project and provide a tailored scope and quote! 💼\n\nPlease share:\n- A brief summary of your project or requirements\n- Your target timeline or budget (optional)\n- Your preferred contact email or phone number\n\nOur solutions team will analyze your needs and get back to you with a comprehensive proposal within 24 hours.`,
+        chips: [
+          'Request a custom project estimate',
+          'What is your typical project timeline?',
+          'Book a 30-minute scope consultation'
+        ]
       };
     }
 
@@ -688,7 +932,7 @@
     return {
       category: 'Sarathi Concierge',
       text: `Hi there! I can empower you with **Agentic AI Solutions**, **Web & Cloud Development**, **Professional Training**, or **AI Test Automation**.\n\nWhich area would you like to explore?`,
-      chips: ['Agentic AI Solutions', 'Web & Cloud Development', 'Professional Training', 'AI Test Automation']
+      chips: ['Agentic AI Solutions', 'Web & Cloud Development', 'AI Test Automation']
     };
   }
 
@@ -697,6 +941,13 @@
     const q = (userQuery + ' ' + aiResponseText).toLowerCase();
 
     const recommendationPools = {
+      quote: [
+        'Request a custom project estimate',
+        'What is your typical project timeline?',
+        'Book a 30-minute scope consultation',
+        'What details do you need for a proposal?',
+        'Talk to a solutions architect'
+      ],
       agentic: [
         'How do multi-agent swarms communicate?',
         'Can we connect private enterprise databases?',
@@ -732,29 +983,36 @@
         'Talk to a solutions architect'
       ],
       general: [
-        'What is your typical project delivery timeline?',
-        'Can you share case studies or demos of past work?',
-        'How do we get started with a new project?',
-        'Do you offer custom enterprise solutions?',
+        'Tell me about Agentic AI Solutions',
+        'What Web & Cloud Development do you offer?',
+        'How does your Test Automation work?',
+        'Can you provide a custom project quote?',
         'Can I speak with a technical advisor?'
       ]
     };
 
     let pool = recommendationPools.general;
-    if (q.includes('agentic') || q.includes('autonomous') || q.includes('rag') || q.includes('swarm') || q.includes('llm')) {
+    if (q.includes('quote') || q.includes('quate') || q.includes('quotation') || q.includes('pricing') || q.includes('price') || q.includes('cost') || q.includes('budget') || q.includes('estimate') || q.includes('proposal')) {
+      pool = recommendationPools.quote;
+    } else if (q.includes('agentic') || q.includes('autonomous') || q.includes('rag') || q.includes('swarm') || q.includes('llm') || q.includes('agent')) {
       pool = recommendationPools.agentic;
-    } else if (q.includes('web') || q.includes('cloud') || q.includes('fullstack') || q.includes('frontend') || q.includes('backend') || q.includes('api') || q.includes('devops')) {
+    } else if (q.includes('web') || q.includes('cloud') || q.includes('fullstack') || q.includes('frontend') || q.includes('backend') || q.includes('api') || q.includes('devops') || q.includes('next.js') || q.includes('react')) {
       pool = recommendationPools.web;
-    } else if (q.includes('training') || q.includes('course') || q.includes('bootcamp') || q.includes('learn') || q.includes('syllabus') || q.includes('enroll')) {
+    } else if (q.includes('training') || q.includes('course') || q.includes('bootcamp') || q.includes('learn') || q.includes('syllabus') || q.includes('enroll') || q.includes('curriculum')) {
       pool = recommendationPools.training;
-    } else if (q.includes('test') || q.includes('automation') || q.includes('qa') || q.includes('playwright') || q.includes('selenium') || q.includes('bug')) {
+    } else if (q.includes('test') || q.includes('automation') || q.includes('qa') || q.includes('playwright') || q.includes('selenium') || q.includes('bug') || q.includes('cypress') || q.includes('quality')) {
       pool = recommendationPools.test;
-    } else if (q.includes('contact') || q.includes('talk') || q.includes('call') || q.includes('email') || q.includes('phone') || q.includes('advisor') || q.includes('meet')) {
+    } else if (q.includes('contact') || q.includes('talk') || q.includes('call') || q.includes('email') || q.includes('phone') || q.includes('advisor') || q.includes('meet') || q.includes('human') || q.includes('hire')) {
       pool = recommendationPools.contact;
     }
 
-    // Shuffle and return 3 distinct recommendations
-    const shuffled = [...pool].sort(() => 0.5 - Math.random());
+    // Filter out options that closely match the query to avoid redundant recommendations
+    const cleanUserQuery = userQuery.toLowerCase().trim();
+    const filtered = pool.filter(opt => opt.toLowerCase().trim() !== cleanUserQuery);
+    const poolToUse = filtered.length >= 2 ? filtered : pool;
+
+    // Shuffle and return 2-3 distinct recommendations
+    const shuffled = [...poolToUse].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, 3);
   }
 
@@ -1632,7 +1890,7 @@
         if (!link) return;
 
         const href = link.getAttribute('href');
-        if (href && href !== '#' && !href.startsWith('javascript:')) {
+        if (href && href !== '#' && !href.startsWith('javascript:') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
           toggleChat(false);
         }
       });
@@ -1999,18 +2257,73 @@
         messagesList.innerHTML = '';
       }
 
-      state.history.forEach((msg) => {
+      // Identify the index of the latest assistant message
+      const lastBotIndex = state.history.map(m => m.sender).lastIndexOf('assistant');
+
+      state.history.forEach((msg, idx) => {
         const isBot = msg.sender === 'assistant';
+        const isLatestBot = isBot && (idx === lastBotIndex);
         const msgEl = document.createElement('div');
         msgEl.className = `sarathi-message ${isBot ? 'assistant' : 'user'}`;
         msgEl.id = msg.id;
 
         if (isBot) {
+          let chipsHtml = '';
+          if (isLatestBot && !state.isTyping) {
+            let chipsToShow = (msg.chips && Array.isArray(msg.chips) && msg.chips.length > 0) ? msg.chips.slice(0, 3) : [];
+            if (chipsToShow.length === 0) {
+              const lastUserMsg = [...state.history].reverse().find(m => m.sender === 'user');
+              const lastUserText = lastUserMsg ? lastUserMsg.text : '';
+              chipsToShow = getRecommendedQuestions(lastUserText, msg.text).slice(0, 3);
+              msg.chips = chipsToShow;
+              saveChatHistory();
+            }
+
+            if (chipsToShow && chipsToShow.length > 0) {
+              chipsHtml = `
+                <div class="sarathi-recommended-chips-wrap">
+                  <div class="sarathi-recommended-chips-title">
+                    <span class="sarathi-rec-spark">💡</span>
+                    <span>Suggested follow-ups:</span>
+                  </div>
+                  <div class="sarathi-recommended-chips-list">
+                    ${chipsToShow.map(chip => `
+                      <button type="button" class="sarathi-recommend-chip-btn" data-question="${escapeHtml(chip)}" title="Ask: ${escapeHtml(chip)}">
+                        <span class="sarathi-rec-chip-icon">✦</span>
+                        <span class="sarathi-rec-chip-text">${escapeHtml(chip)}</span>
+                        <span class="sarathi-rec-chip-arrow">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                          </svg>
+                        </span>
+                      </button>
+                    `).join('')}
+                  </div>
+                </div>
+              `;
+            }
+          }
+
           msgEl.innerHTML = `
             <div class="sarathi-msg-bubble sarathi-bot-bubble">
               <div class="sarathi-markdown">${renderMarkdown(msg.text)}</div>
             </div>
+            ${chipsHtml}
           `;
+
+          // Interactive click listeners for recommended question chips
+          msgEl.querySelectorAll('.sarathi-recommend-chip-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (state.isTyping) return;
+              const q = btn.getAttribute('data-question') || (btn.querySelector('.sarathi-rec-chip-text') && btn.querySelector('.sarathi-rec-chip-text').textContent.trim()) || btn.textContent.trim();
+              if (q) {
+                handleSendMessage(q);
+              }
+            });
+          });
         } else if (msg.id === currentEditingMsgId) {
           msgEl.innerHTML = `
             <div class="sarathi-user-bubble-wrapper is-editing">
@@ -2116,19 +2429,63 @@
         }
       });
 
-      scrollToLatestExchange(false);
+      scrollToLatestExchange(true);
     }
 
-    function scrollToLatestExchange(smooth = false) {
+    function scrollToLatestExchange(smooth = true) {
       const body = document.getElementById('sarathi-body');
-      if (!body) return;
+      const messagesList = document.getElementById('sarathi-messages-list');
+      const typingWrap = document.getElementById('sarathi-typing-wrap');
 
-      setTimeout(() => {
-        body.scrollTo({
-          top: body.scrollHeight,
-          behavior: smooth ? 'smooth' : 'auto'
-        });
-      }, 40);
+      const performScroll = () => {
+        // Target element to ensure visibility
+        let targetEl = null;
+        if (typingWrap && typingWrap.style.display !== 'none') {
+          targetEl = typingWrap;
+        } else if (messagesList && messagesList.lastElementChild) {
+          targetEl = messagesList.lastElementChild;
+        }
+
+        // Scroll both body and messagesList container
+        if (body) {
+          const maxScroll = Math.max(body.scrollHeight, body.offsetHeight, 999999);
+          body.scrollTo({
+            top: maxScroll,
+            behavior: smooth ? 'smooth' : 'auto'
+          });
+          body.scrollTop = maxScroll;
+        }
+
+        if (messagesList && messagesList.scrollHeight > messagesList.clientHeight) {
+          const maxScroll = Math.max(messagesList.scrollHeight, messagesList.offsetHeight, 999999);
+          messagesList.scrollTo({
+            top: maxScroll,
+            behavior: smooth ? 'smooth' : 'auto'
+          });
+          messagesList.scrollTop = maxScroll;
+        }
+
+        // Use scrollIntoView on target element for guaranteed visibility
+        if (targetEl) {
+          try {
+            targetEl.scrollIntoView({
+              behavior: smooth ? 'smooth' : 'auto',
+              block: 'end',
+              inline: 'nearest'
+            });
+          } catch (err) {
+            targetEl.scrollIntoView(false);
+          }
+        }
+      };
+
+      // Perform immediately and repeatedly across layout phases
+      performScroll();
+      requestAnimationFrame(performScroll);
+      setTimeout(performScroll, 50);
+      setTimeout(performScroll, 150);
+      setTimeout(performScroll, 300);
+      setTimeout(performScroll, 500);
     }
 
     function formatTime(date) {
