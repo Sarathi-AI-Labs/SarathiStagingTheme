@@ -21,4 +21,4 @@ jobs:
           remote-user: u488451890
           private-ssh-key: ${{ secrets.SSH_KEY }}
           ssh-port: 65002
-          destination-path: /home/u488451890/domains/new.sarathiailabs.com/public_html/wp-content/themes/custom-theme/
+          destination-path: /home/u488451890/domains/sarathiailabs.com/public_html/wp-content/themes/custom-theme/
