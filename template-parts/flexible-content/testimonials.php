@@ -160,20 +160,19 @@ if ($card_count === 1) {
 		<div class="sarathi-testimonials-pagination"></div>
 
 	</div>
-	<<<<<<< HEAD=======<!-- Testimonial Modal -->
-		<div class="sarathi-testimonials-modal" aria-hidden="true" role="dialog" aria-modal="true">
-			<div class="sarathi-testimonials-modal-overlay"></div>
-			<div class="sarathi-testimonials-modal-content">
-				<button class="sarathi-testimonials-modal-close" aria-label="Close modal">&times;</button>
-				<div class="sarathi-testimonials-modal-body">
-					<div class="sarathi-testimonials-quote-icon">
-						<i class="fas fa-quote-left"></i>
-					</div>
-					<div class="sarathi-testimonials-modal-photo-wrapper"></div>
-					<div class="sarathi-testimonials-modal-text"></div>
-					<div class="sarathi-testimonials-modal-author"></div>
+	<!-- Testimonial Modal -->
+	<div class="sarathi-testimonials-modal" aria-hidden="true" role="dialog" aria-modal="true">
+		<div class="sarathi-testimonials-modal-overlay"></div>
+		<div class="sarathi-testimonials-modal-content">
+			<button class="sarathi-testimonials-modal-close" aria-label="Close modal">&times;</button>
+			<div class="sarathi-testimonials-modal-body">
+				<div class="sarathi-testimonials-quote-icon">
+					<i class="fas fa-quote-left"></i>
 				</div>
+				<div class="sarathi-testimonials-modal-photo-wrapper"></div>
+				<div class="sarathi-testimonials-modal-text"></div>
+				<div class="sarathi-testimonials-modal-author"></div>
 			</div>
 		</div>
-		>>>>>>> f1ecd395def36b6dcf2325b807af4e2e86fc226d
+	</div>
 </section>

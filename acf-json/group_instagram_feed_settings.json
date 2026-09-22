@@ -1,0 +1,280 @@
+{
+    "key": "group_instagram_feed_settings",
+    "title": "Instagram Feed Settings",
+    "fields": [
+        {
+            "key": "field_insta_tab_status",
+            "label": "Connection Status & Diagnostics",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_insta_connection_diagnostic",
+            "label": "Connection Overview",
+            "name": "instagram_connection_diagnostic",
+            "aria-label": "",
+            "type": "message",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "new_lines": "",
+            "esc_html": 0
+        },
+        {
+            "key": "field_insta_tab_credentials",
+            "label": "API Configuration",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_insta_account_id",
+            "label": "Instagram Account ID",
+            "name": "instagram_account_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Your numerical Instagram Business/Professional Account ID from Meta Business Suite / Graph API (e.g. 17841428741416965).",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "17841428741416965",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_insta_username",
+            "label": "Instagram Username",
+            "name": "instagram_username",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Your Instagram account username handle without the @ symbol (e.g. sarathiailabs).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "sarathiailabs",
+            "placeholder": "sarathiailabs",
+            "prepend": "@",
+            "append": "",
+            "maxlength": ""
+        },
+        {
+            "key": "field_insta_access_token",
+            "label": "Meta Graph API Access Token",
+            "name": "instagram_access_token",
+            "aria-label": "",
+            "type": "password",
+            "instructions": "Long-Lived Page or User Access Token generated via Meta Developers / Graph API Explorer with instagram_basic scope. Stored securely on the server and never exposed to the frontend.",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "100",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": "EAAG..."
+        },
+        {
+            "key": "field_insta_app_id",
+            "label": "Meta App ID (Optional)",
+            "name": "instagram_app_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Your Meta App ID from Meta Developers portal for token verification.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": ""
+        },
+        {
+            "key": "field_insta_app_secret",
+            "label": "Meta App Secret (Optional)",
+            "name": "instagram_app_secret",
+            "aria-label": "",
+            "type": "password",
+            "instructions": "Meta App Secret for server-side token validation and refresh. Stored strictly in WordPress database.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "placeholder": ""
+        },
+        {
+            "key": "field_insta_tab_sync",
+            "label": "Sync & Cache Settings",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_insta_cache_duration",
+            "label": "Cache Expiration Duration",
+            "name": "instagram_cache_duration",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Duration to cache posts in WordPress before requesting updates from Meta Graph API.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "1": "1 Hour",
+                "2": "2 Hours",
+                "4": "4 Hours (Recommended)",
+                "8": "8 Hours",
+                "12": "12 Hours",
+                "24": "24 Hours"
+            },
+            "default_value": "4",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 1
+        },
+        {
+            "key": "field_insta_posts_fetch_limit",
+            "label": "Maximum Posts to Synchronize",
+            "name": "instagram_posts_fetch_limit",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Maximum number of recent posts to fetch and cache (between 1 and 50).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 24,
+            "min": 1,
+            "max": 50,
+            "step": 1
+        },
+        {
+            "key": "field_insta_auto_sync",
+            "label": "Automatic Background Synchronization",
+            "name": "instagram_auto_sync",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Use WP-Cron to periodically fetch new posts automatically without affecting frontend visitor loading times.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "message": "Enable automatic background synchronization via WP-Cron",
+            "default_value": 1,
+            "ui": 1
+        },
+        {
+            "key": "field_insta_sync_frequency",
+            "label": "Sync Frequency (WP-Cron)",
+            "name": "instagram_sync_frequency",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "How often the background cron job should check for new Instagram posts.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_insta_auto_sync",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "hourly": "Hourly",
+                "twicedaily": "Twice Daily (Recommended)",
+                "daily": "Daily"
+            },
+            "default_value": "twicedaily",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 1
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "instagram-feed-settings"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Global settings and API credentials for Instagram Business/Professional Feed",
+    "show_in_rest": 0
+}

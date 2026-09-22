@@ -15,8 +15,10 @@
 }
 
 .sarathi-footer-wrapper {
-	width: min(100% - 48px, 1240px);
-	margin-inline: auto;
+	max-width: 1440px;
+	width: 100%;
+	padding: 0 24px;
+	margin: 0 auto;
 	box-sizing: border-box;
 }
 
@@ -28,6 +30,7 @@
 	display: grid;
 	gap: 2.25rem 1.75rem;
 	align-items: start;
+	justify-content: space-between;
 }
 
 /* 6 Columns Grid (Default Mockup) */
@@ -42,7 +45,7 @@
 
 /* 4 Columns Grid */
 .sarathi-footer-cols-4 {
-	grid-template-columns: 1.3fr repeat(2, 1fr) 1.4fr;
+	grid-template-columns: 1.5fr 1fr 1fr auto;
 }
 
 /* 3 Columns Grid */
@@ -318,13 +321,13 @@
 	.sarathi-footer-cols-5,
 	.sarathi-footer-cols-4,
 	.sarathi-footer-cols-3 {
-		grid-template-columns: 1fr;
-		gap: 1.75rem;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.75rem 1rem;
 	}
 
 	.sarathi-footer-col-brand,
 	.sarathi-footer-col-cta {
-		grid-column: span 1;
+		grid-column: span 2;
 	}
 
 	.sarathi-footer-cta-desc {

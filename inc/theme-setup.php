@@ -96,7 +96,7 @@ function custom_theme_enqueue_assets()
 		if ( $css_files ) {
 			foreach ( $css_files as $file ) {
 				$basename = basename( $file, '.css' );
-				wp_enqueue_style(
+				wp_register_style(
 					'custom-theme-' . $basename,
 					$theme_uri . '/assets/css/sections/' . basename( $file ),
 					array( 'custom-theme-main' ),
@@ -113,7 +113,7 @@ function custom_theme_enqueue_assets()
 		if ( $js_files ) {
 			foreach ( $js_files as $file ) {
 				$basename = basename( $file, '.js' );
-				wp_enqueue_script(
+				wp_register_script(
 					'custom-theme-' . $basename,
 					$theme_uri . '/assets/js/sections/' . basename( $file ),
 					array( 'custom-theme-main' ),
@@ -123,6 +123,11 @@ function custom_theme_enqueue_assets()
 			}
 		}
 	}
+
+	// Always enqueue global section styles/scripts
+	wp_enqueue_style( 'custom-theme-header' );
+	wp_enqueue_style( 'custom-theme-footer' );
+	wp_enqueue_script( 'custom-theme-header' );
 
 	// Sarathi AI Concierge Chatbot Assets
 	wp_enqueue_style(
@@ -153,6 +158,8 @@ function custom_theme_enqueue_assets()
 			'sarathi-chatbot-script',
 			'SARATHI_CHATBOT_SETTINGS',
 			array(
+				'themeUri'       => $theme_uri,
+				'siteUrl'        => home_url(),
 				'chatWebhookUrl' => 'https://n8n.srv1178467.hstgr.cloud/webhook/sal-ai-chat',
 				'leadWebhookUrl' => 'https://n8n.srv1178467.hstgr.cloud/webhook/sal-lead-cap',
 			)

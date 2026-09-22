@@ -6,36 +6,73 @@
 (function () {
   'use strict';
 
-  // Configuration
+  // Configuration - robust theme URI detection to guarantee identical asset loading on all subpages
+  const scriptTag = document.currentScript || document.querySelector('script[src*="sarathi-chatbot"]');
+  const detectedThemeUri = (scriptTag && scriptTag.src) ? scriptTag.src.replace(/\/assets\/js\/.*$/, '') : '';
+
+  const themeBase = (window.SARATHI_CHATBOT_SETTINGS && window.SARATHI_CHATBOT_SETTINGS.themeUri)
+    || window.SARATHI_THEME_URI
+    || detectedThemeUri
+    || '/wp-content/themes/custom-theme';
+
   const CONFIG = {
+    themeUri: themeBase,
+    avatarUrl: themeBase + '/assets/images/sarathi-avatar.png?v=6',
     apiEndpoint: (window.SARATHI_CHATBOT_SETTINGS && window.SARATHI_CHATBOT_SETTINGS.chatWebhookUrl) || window.SARATHI_CHATBOT_API || 'https://n8n.srv1178467.hstgr.cloud/webhook/sal-ai-chat',
     leadEndpoint: (window.SARATHI_CHATBOT_SETTINGS && window.SARATHI_CHATBOT_SETTINGS.leadWebhookUrl) || window.SARATHI_LEAD_API || 'https://n8n.srv1178467.hstgr.cloud/webhook/sal-lead-cap',
-    fullscreenUrl: window.SARATHI_FULLSCREEN_URL || '/chatbot-fullscreen.html',
     brandName: 'Sarathi AI Labs',
     brandTagline: 'Intelligent IT Solutions & Training',
     botName: 'Sarathi AI',
-    botIconUrl: (window.SARATHI_THEME_URI || '/wp-content/themes/custom-theme') + '/assets/images/sarathi-bot-transparent.png?v=3',
+    botIconUrl: themeBase + '/assets/images/sarathi-bot-transparent.png?v=5',
     storageKeyHistory: 'sarathi_ai_chat_history',
     storageKeyLead: 'sarathi_ai_lead_info',
     storageKeyPos: 'sarathi_ai_widget_pos',
     storageKeySession: 'sarathi_ai_conv_id',
-    storageKeyTheme: 'sarathi_ai_theme',
-    storageKeyAudio: 'sarathi_ai_audio_enabled'
+    storageKeyAudio: 'sarathi_ai_audio_enabled',
+    storageKeyOpen: 'sarathi_ai_widget_open'
+  };
+
+  // Resilient In-Memory + LocalStorage Fallback (Prevents crashes in Incognito/Blocked Storage)
+  const safeStorage = {
+    _mem: {},
+    getItem(key) {
+      try {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          const val = window.localStorage.getItem(key);
+          if (val !== null) return val;
+        }
+      } catch (e) {}
+      return Object.prototype.hasOwnProperty.call(this._mem, key) ? this._mem[key] : null;
+    },
+    setItem(key, value) {
+      const sVal = String(value);
+      this._mem[key] = sVal;
+      try {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          window.localStorage.setItem(key, sVal);
+        }
+      } catch (e) {}
+    },
+    removeItem(key) {
+      delete this._mem[key];
+      try {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          window.localStorage.removeItem(key);
+        }
+      } catch (e) {}
+    }
   };
 
   // State
   const state = {
-    isOpen: false,
-    leadCaptured: false,
-    theme: localStorage.getItem(CONFIG.storageKeyTheme) || 'light',
-    audioEnabled: localStorage.getItem(CONFIG.storageKeyAudio) !== 'false',
-    selectedInterest: '',
+    isOpen: safeStorage.getItem('sarathi_ai_widget_open') === 'true',
+    theme: 'light',
+    audioEnabled: safeStorage.getItem(CONFIG.storageKeyAudio) !== 'false',
     visitorId: getOrCreateVisitorId(),
     conversationId: getOrCreateConversationId(),
     leadInfo: getLeadInfo(),
     history: getChatHistory(),
-    isTyping: false,
-    speakingId: null
+    isTyping: false
   };
 
   // Web Audio Synthesizer for Subtle Haptic Feedback (Zero External Dependencies)
@@ -69,70 +106,31 @@
         osc.start();
         osc.stop(ctx.currentTime + 0.12);
       }
-    } catch (e) { }
-  }
-
-  // Text-To-Speech Speech Synthesis Engine
-  function speakMessage(text, msgId, onEnd) {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-
-    if (state.speakingId === msgId) {
-      state.speakingId = null;
-      if (onEnd) onEnd();
-      return;
-    }
-
-    // Strip markdown formatting for speech
-    const cleanText = text
-      .replace(/###?\s*/g, '')
-      .replace(/\*\*/g, '')
-      .replace(/```[\s\S]*?```/g, 'Code block omitted.')
-      .replace(/`([^`]+)`/g, '$1')
-      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-      .replace(/\|.*?\|/g, '')
-      .replace(/[-*]\s+/g, '');
-
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.rate = 1.05;
-    utterance.pitch = 1.0;
-
-    state.speakingId = msgId;
-
-    utterance.onend = () => {
-      state.speakingId = null;
-      if (onEnd) onEnd();
-    };
-    utterance.onerror = () => {
-      state.speakingId = null;
-      if (onEnd) onEnd();
-    };
-
-    window.speechSynthesis.speak(utterance);
+    } catch (e) {}
   }
 
   // Helper ID generators
   function getOrCreateVisitorId() {
-    let vid = localStorage.getItem('sarathi_ai_visitor_id');
+    let vid = safeStorage.getItem('sarathi_ai_visitor_id');
     if (!vid) {
       vid = 'vid_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
-      localStorage.setItem('sarathi_ai_visitor_id', vid);
+      safeStorage.setItem('sarathi_ai_visitor_id', vid);
     }
     return vid;
   }
 
   function getOrCreateConversationId() {
-    let cid = localStorage.getItem(CONFIG.storageKeySession);
+    let cid = safeStorage.getItem(CONFIG.storageKeySession);
     if (!cid) {
       cid = 'conv_' + Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
-      localStorage.setItem(CONFIG.storageKeySession, cid);
+      safeStorage.setItem(CONFIG.storageKeySession, cid);
     }
     return cid;
   }
 
   function getLeadInfo() {
     try {
-      return JSON.parse(localStorage.getItem(CONFIG.storageKeyLead) || '{}');
+      return JSON.parse(safeStorage.getItem(CONFIG.storageKeyLead) || '{}');
     } catch (e) {
       return {};
     }
@@ -140,7 +138,13 @@
 
   function getChatHistory() {
     try {
-      return JSON.parse(localStorage.getItem(CONFIG.storageKeyHistory) || '[]');
+      let history = JSON.parse(safeStorage.getItem(CONFIG.storageKeyHistory) || '[]');
+      // If history only contains legacy auto-seeded welcome message(s) without user interaction, treat as empty
+      if (history.length > 0 && !history.some(m => m.sender === 'user')) {
+        history = [];
+        safeStorage.removeItem(CONFIG.storageKeyHistory);
+      }
+      return history;
     } catch (e) {
       return [];
     }
@@ -148,25 +152,18 @@
 
   function saveChatHistory() {
     try {
-      localStorage.setItem(CONFIG.storageKeyHistory, JSON.stringify(state.history));
+      safeStorage.setItem(CONFIG.storageKeyHistory, JSON.stringify(state.history));
     } catch (e) {
       console.error('Failed to save chat history', e);
     }
   }
 
-  function getTimeGreeting() {
-    const hr = new Date().getHours();
-    if (hr < 12) return 'Good morning';
-    if (hr < 17) return 'Good afternoon';
-    return 'Good evening';
-  }
-
   // Safe DOM-based High-Performance Markdown & Feature Parser
   function renderMarkdown(text) {
     if (!text) return '';
-
-    // Normalize newlines
-    let raw = text.replace(/\r\n/g, '\n');
+    
+    // Normalize newlines and literal \n from backend JSON
+    let raw = text.replace(/\\n/g, '\n').replace(/\r\n/g, '\n');
 
     // Escape HTML first to prevent XSS
     let html = raw
@@ -174,11 +171,13 @@
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
 
-    // Code blocks with syntax copy button & terminal bar
+    // Protect code blocks first with unique placeholders so subsequent formatting doesn't alter code
+    const codeBlocks = [];
     html = html.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g, function (match, lang, code) {
       const displayLang = (lang || 'CODE').toUpperCase();
       const codeId = 'code_' + Math.random().toString(36).substring(2, 8);
-      return `
+      const placeholder = `%%%SARATHI_CODE_BLOCK_${codeBlocks.length}%%%`;
+      codeBlocks.push(`
         <div class="sarathi-code-container">
           <div class="sarathi-code-header">
             <div class="sarathi-code-dots">
@@ -197,11 +196,17 @@
           </div>
           <pre><code id="${codeId}">${code.trim()}</code></pre>
         </div>
-      `;
+      `);
+      return placeholder;
     });
 
-    // Inline code
-    html = html.replace(/`([^`]+)`/g, '<code class="sarathi-inline-code">$1</code>');
+    // Protect inline code with placeholders
+    const inlineCodes = [];
+    html = html.replace(/`([^`]+)`/g, function (match, code) {
+      const placeholder = `%%%SARATHI_INLINE_CODE_${inlineCodes.length}%%%`;
+      inlineCodes.push(`<code class="sarathi-inline-code">${code}</code>`);
+      return placeholder;
+    });
 
     // Headers with gradient underlines
     html = html.replace(/^### (.*$)/gim, '<h3 class="sarathi-md-h3">$1</h3>');
@@ -218,7 +223,7 @@
     html = html.replace(/((?:\|.+?\|\n?)+)/g, function (tableMatch) {
       const rows = tableMatch.trim().split('\n');
       if (rows.length < 2) return tableMatch;
-
+      
       let tableHtml = '<div class="sarathi-table-wrap"><table class="sarathi-table">';
       let isHeader = true;
 
@@ -243,72 +248,400 @@
       return tableHtml;
     });
 
-    // Callouts / Alerts (> [!NOTE], > [!TIP], > [!IMPORTANT], > [!WARNING])
+    // Sleek Callout boxes (> [!NOTE] etc.)
     html = html.replace(/^&gt;\s*\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*(.*)$/gim, function (match, type, content) {
       const typeLower = type.toLowerCase();
       const icons = {
         note: 'ℹ️',
         tip: '💡',
-        important: '⭐',
+        important: '⚡',
         warning: '⚠️',
-        caution: '🚨'
+        caution: '🛑'
       };
       return `<div class="sarathi-callout sarathi-callout-${typeLower}"><div class="sarathi-callout-icon">${icons[typeLower] || '💡'}</div><div class="sarathi-callout-body"><span class="sarathi-callout-title">${type}</span><p class="sarathi-callout-text">${content.trim()}</p></div></div>`;
     });
 
-    // Links [title](url)
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="sarathi-md-link" target="_blank" rel="noopener noreferrer">$1 <span class="sarathi-link-arrow">↗</span></a>');
+    // Helper: Dynamic Contextual Action Button Resolver (Prioritizes exact URL destination from AI Agent)
+    function resolveDynamicButtonConfig(rawUrl, linkTitle, fullContext) {
+      let href = (rawUrl || '').trim();
+      if (/^(javascript|data|vbscript):/i.test(href)) {
+        href = '#';
+      }
+      let isInternal = false;
+
+      // Handle relative paths immediately
+      if (href.startsWith('/') || href.startsWith('#') || href.startsWith('./') || href.startsWith('../')) {
+        isInternal = true;
+      } else {
+        // If domain was passed without protocol (e.g. 'sarathiailabs.com/about' or 'staging.sarathiailabs.com')
+        if (/^(?:https?:\/\/)/i.test(href) === false && /^(?:[a-zA-Z0-9-]+\.)+(?:com|local|org|net|cloud|io|app)/i.test(href)) {
+          href = 'https://' + href;
+        }
+
+        try {
+          const origin = (typeof window !== 'undefined' && window.location && window.location.origin) ? window.location.origin : 'https://sarathiailabs.com';
+          const currentHost = (typeof window !== 'undefined' && window.location && window.location.hostname) ? window.location.hostname.toLowerCase() : 'sarathiailabs.com';
+          const configuredSiteUrl = (window.SARATHI_CHATBOT_SETTINGS && window.SARATHI_CHATBOT_SETTINGS.siteUrl) || '';
+          let configuredHost = '';
+          if (configuredSiteUrl) {
+            try { configuredHost = new URL(configuredSiteUrl).hostname.toLowerCase(); } catch (e) {}
+          }
+
+          const parsed = new URL(href, origin);
+          const targetHost = parsed.hostname.toLowerCase();
+          if (
+            targetHost === currentHost ||
+            (configuredHost && targetHost === configuredHost) ||
+            targetHost.includes('sarathiailabs.com') ||
+            targetHost.includes('sarathiaiweb.local') ||
+            targetHost === 'localhost' ||
+            targetHost === '127.0.0.1'
+          ) {
+            isInternal = true;
+            // Always convert to root-relative path so the browser seamlessly stays in the current environment
+            href = parsed.pathname + parsed.search + parsed.hash;
+          }
+        } catch (e) {}
+      }
+
+      const normPath = href.toLowerCase();
+      const normTitle = (linkTitle || '').toLowerCase();
+      const normText = (fullContext || '').toLowerCase();
+
+      const isGenericTitle = (
+        !linkTitle ||
+        normTitle.includes('learn more') ||
+        normTitle.includes('click here') ||
+        normTitle === 'more info' ||
+        normTitle === 'read more' ||
+        normTitle === 'visit' ||
+        normTitle === 'link' ||
+        normTitle === 'website' ||
+        normTitle === 'page' ||
+        /^https?:\/\//i.test(normTitle) ||
+        /^(?:[a-zA-Z0-9-]+\.)+(?:com|local|org|net|cloud|io|app)/i.test(normTitle) ||
+        normTitle.includes('sarathiailabs.com') ||
+        normTitle.includes('sarathiai') ||
+        normTitle === (rawUrl || '').toLowerCase().trim() ||
+        normTitle === href.toLowerCase().trim() ||
+        /^\/?blog\/?$/i.test(normTitle) ||
+        /^\/?about\/?$/i.test(normTitle) ||
+        /^\/?contact\/?$/i.test(normTitle)
+      );
+
+      // --- PRIORITY 1: Match Exact URL Path Destination ---
+      // 1. About Page (/about, /about-us)
+      if (normPath.includes('/about') || normPath.includes('about-us') || normPath === 'about') {
+        return {
+          category: 'about',
+          href: isInternal ? (normPath.startsWith('/') ? href : '/about/') : href,
+          badge: 'About Sarathi AI',
+          title: isGenericTitle ? 'About Sarathi AI Labs' : linkTitle,
+          subtitle: 'Who we are, our mission & leadership',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`
+        };
+      }
+
+      // 2. Contact Page (/contact, /contact-us)
+      if (normPath.includes('/contact') || normPath.includes('contact-us') || normPath === 'contact') {
+        return {
+          category: 'contact',
+          href: isInternal ? (normPath.startsWith('/') ? href : '/contact/') : href,
+          badge: 'Direct Connect',
+          title: isGenericTitle ? 'Contact Page' : linkTitle,
+          subtitle: 'Call, email or visit our office',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`
+        };
+      }
+
+      // 3. Blog & Articles (/blog, /articles, /news)
+      if (normPath.includes('/blog') || normPath.includes('/article') || normPath.includes('/news') || normPath === 'blog') {
+        return {
+          category: 'blog',
+          href: isInternal ? (normPath.startsWith('/') ? href : '/blog/') : href,
+          badge: 'AI Insights & Blog',
+          title: isGenericTitle ? 'Explore Blog & Insights' : linkTitle,
+          subtitle: 'Read latest AI trends & engineering articles',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line></svg>`
+        };
+      }
+
+      // 4. Training & Courses (/training, /courses, /bootcamp)
+      if (normPath.includes('/training') || normPath.includes('/course') || normPath.includes('/bootcamp') || normPath === 'training') {
+        return {
+          category: 'training',
+          href: isInternal ? (normPath.startsWith('/') ? href : '/training/') : href,
+          badge: 'Professional Training',
+          title: isGenericTitle ? 'Explore Training & Courses' : linkTitle,
+          subtitle: 'Master Agentic AI & Full-Stack engineering',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>`
+        };
+      }
+
+      // 5. Solutions & Services (/solutions, /services)
+      if (normPath.includes('/solution') || normPath.includes('/service') || normPath.includes('/agentic') || normPath === 'solutions') {
+        return {
+          category: 'solutions',
+          href: isInternal ? (normPath.startsWith('/') ? href : '/solutions/') : href,
+          badge: 'AI & Cloud Solutions',
+          title: isGenericTitle ? 'Explore AI Solutions & Services' : linkTitle,
+          subtitle: 'Autonomous agents, custom RAG & cloud',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`
+        };
+      }
+
+      // 6. Careers & Jobs (/careers, /job)
+      if (normPath.includes('/career') || normPath.includes('/job') || normPath === 'careers') {
+        return {
+          category: 'careers',
+          href: isInternal ? (normPath.startsWith('/') ? href : '/careers/') : href,
+          badge: 'Join Sarathi AI',
+          title: isGenericTitle ? 'View Open Roles & Careers' : linkTitle,
+          subtitle: 'Grow with our innovative AI engineering team',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`
+        };
+      }
+
+      // 7. Consultation & Demo Booking (#consultation, /book-demo)
+      if (normPath.includes('consult') || normPath.includes('demo') || normPath.includes('schedule')) {
+        return {
+          category: 'consultation',
+          href: isInternal ? '#consultation' : href,
+          badge: 'Complimentary Consultation',
+          title: isGenericTitle ? 'Book an AI Architecture Call' : linkTitle,
+          subtitle: '30-min strategy & feasibility roadmap',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`
+        };
+      }
+
+      // --- PRIORITY 2: Match Link Title Intent ---
+      if (normTitle.includes('about')) {
+        return {
+          category: 'about',
+          href: isInternal ? (normPath.startsWith('/') ? href : '/about/') : href,
+          badge: 'About Sarathi AI',
+          title: isGenericTitle ? 'About Sarathi AI Labs' : linkTitle,
+          subtitle: 'Who we are, our mission & leadership',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`
+        };
+      }
+      if (normTitle.includes('contact') || normTitle.includes('reach')) {
+        return {
+          category: 'contact',
+          href: isInternal ? '/contact/' : href,
+          badge: 'Direct Connect',
+          title: isGenericTitle ? 'Contact Us Directly' : linkTitle,
+          subtitle: 'Call, email or visit our office',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`
+        };
+      }
+      if (normTitle.includes('blog') || normTitle.includes('article') || normTitle.includes('news')) {
+        return {
+          category: 'blog',
+          href: isInternal ? '/blog/' : href,
+          badge: 'AI Insights & Blog',
+          title: isGenericTitle ? 'Explore Blog & Insights' : linkTitle,
+          subtitle: 'Read latest AI trends & engineering articles',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line></svg>`
+        };
+      }
+      if (normTitle.includes('training') || normTitle.includes('course') || normTitle.includes('bootcamp')) {
+        return {
+          category: 'training',
+          href: isInternal ? '/training/' : href,
+          badge: 'Professional Training',
+          title: isGenericTitle ? 'Explore Training & Courses' : linkTitle,
+          subtitle: 'Master Agentic AI & Full-Stack engineering',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>`
+        };
+      }
+      if (normTitle.includes('solution') || normTitle.includes('service')) {
+        return {
+          category: 'solutions',
+          href: isInternal ? '/solutions/' : href,
+          badge: 'AI & Cloud Solutions',
+          title: isGenericTitle ? 'Explore AI Solutions & Services' : linkTitle,
+          subtitle: 'Autonomous agents, custom RAG & cloud',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`
+        };
+      }
+
+      // --- PRIORITY 3: Context Preceding Link ---
+      if (normText.includes('about page') || normText.includes('about us')) {
+        return {
+          category: 'about',
+          href: isInternal ? '/about/' : href,
+          badge: 'About Sarathi AI',
+          title: isGenericTitle ? 'About Sarathi AI Labs' : linkTitle,
+          subtitle: 'Who we are, our mission & leadership',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`
+        };
+      }
+      if (normText.includes('contact page') || normText.includes('reach us') || normText.includes('channels:')) {
+        return {
+          category: 'contact',
+          href: isInternal ? '/contact/' : href,
+          badge: 'Direct Connect',
+          title: isGenericTitle ? 'Contact Page' : linkTitle,
+          subtitle: 'Call, email or visit our office',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`
+        };
+      }
+      if (normText.includes('our blog') || normText.includes('latest articles')) {
+        return {
+          category: 'blog',
+          href: isInternal ? '/blog/' : href,
+          badge: 'AI Insights & Blog',
+          title: isGenericTitle ? 'Explore Blog & Insights' : linkTitle,
+          subtitle: 'Read latest AI trends & engineering articles',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line></svg>`
+        };
+      }
+
+      // --- PRIORITY 4: External or General Destination ---
+      if (!isInternal && href && href !== '#') {
+        let domain = '';
+        try { domain = new URL(href).hostname.replace(/^www\./i, ''); } catch (e) {}
+        return {
+          category: 'external',
+          href: href,
+          badge: domain.toUpperCase() || 'External Link',
+          title: isGenericTitle ? (domain || 'Visit Resource') : linkTitle,
+          subtitle: href,
+          isInternal: false,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`
+        };
+      }
+
+      // --- PRIORITY 5: Default Fallback ---
+      return {
+        category: 'about',
+        href: isInternal ? (normPath.startsWith('/') ? href : '/about/') : href,
+        badge: 'About Sarathi AI',
+        title: isGenericTitle ? 'About Sarathi AI Labs' : linkTitle,
+        subtitle: 'Who we are, our mission & leadership',
+        isInternal,
+        icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`
+      };
+    }
+
+    function createActionCardHtml(btn) {
+      return `\n<div class="sarathi-action-card-wrap"><a href="${btn.href}" class="sarathi-action-btn sarathi-action-${btn.category} ${btn.isInternal ? 'sarathi-internal-link' : ''}" target="${btn.isInternal ? '_self' : '_blank'}" rel="${btn.isInternal ? '' : 'noopener noreferrer'}"><div class="sarathi-action-main"><div class="sarathi-action-icon-box">${btn.icon}</div><div class="sarathi-action-info"><div class="sarathi-action-header-row"><span class="sarathi-action-badge">${btn.badge}</span></div><div class="sarathi-action-title">${btn.title}</div><div class="sarathi-action-subtitle">${btn.subtitle}</div></div></div><div class="sarathi-action-arrow-circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div></a></div>\n`;
+    }
+
+    // Helper: Autolink inline URLs, emails, and phone numbers inside text lines
+    function autolinkInline(str) {
+      if (!str) return '';
+
+      const protectedLinks = [];
+
+      // 1. Convert markdown inline links [title](url) to <a> tags with placeholders
+      str = str.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (match, title, url) {
+        const btn = resolveDynamicButtonConfig(url, title, raw);
+        const hasArrow = /[\u2197↗]|&nearr;/i.test(title);
+        const arrow = hasArrow ? '' : '<span class="sarathi-link-arrow">↗</span>';
+        const displayTitle = (btn.isInternal && /^https?:\/\//i.test(title)) ? btn.title : title;
+        const linkHtml = `<a href="${btn.href}" class="sarathi-md-link ${btn.isInternal ? 'sarathi-internal-link' : ''}" target="${btn.isInternal ? '_self' : '_blank'}" rel="${btn.isInternal ? '' : 'noopener noreferrer'}">${displayTitle}${arrow}</a>`;
+        const placeholder = `%%%SARATHI_INLINE_LINK_${protectedLinks.length}%%%`;
+        protectedLinks.push(linkHtml);
+        return placeholder;
+      });
+
+      // 2. Tokenize by HTML tags so we never touch URLs/emails/phones inside tag attributes (like href="...")
+      const parts = str.split(/(<[^>]+>)/g);
+      let processed = parts.map(part => {
+        if (part.startsWith('<') && part.endsWith('>')) {
+          return part; // Leave HTML tags completely untouched
+        }
+
+        let textPart = part;
+
+        // Autolink Raw URLs: http/https (excludes brackets and parentheses to prevent regex bleed)
+        textPart = textPart.replace(/(?:&lt;|<)?(https?:\/\/[^\s<>"'`()[\]]+)(?:&gt;|>)?/gi, function (match, url) {
+          const cleanUrl = url.replace(/[.,;:!?]+$/, '');
+          const btn = resolveDynamicButtonConfig(cleanUrl, '', raw);
+          const linkLabel = (btn && btn.title && btn.title !== cleanUrl) ? btn.title : cleanUrl;
+          return `<a href="${btn.href}" class="sarathi-md-link ${btn.isInternal ? 'sarathi-internal-link' : ''}" target="${btn.isInternal ? '_self' : '_blank'}" rel="${btn.isInternal ? '' : 'noopener noreferrer'}">${linkLabel}<span class="sarathi-link-arrow">↗</span></a>`;
+        });
+
+        // Autolink Email Addresses: e.g. support@sarathiailabs.com
+        textPart = textPart.replace(/\b([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\b/gi, function (match, email) {
+          return `<a href="mailto:${email}" class="sarathi-md-link sarathi-email-link">${email}</a>`;
+        });
+
+        // Autolink Phone Numbers: e.g. Phone: +911234567458 or +911234567458
+        textPart = textPart.replace(/(Phone:\s*)?(\+?\d{1,4}[- ]?\d{7,12}\b)/gi, function (match, prefix, digits) {
+          const rawDigits = (digits || '').trim();
+          const cleanDigits = rawDigits.replace(/[\s-]/g, '');
+          // Validate minimum 10 digits
+          if (cleanDigits.replace(/\D/g, '').length < 10) return match;
+          const telHref = cleanDigits.startsWith('+') ? cleanDigits : ('+' + cleanDigits);
+          return `${prefix || ''}<a href="tel:${telHref}" class="sarathi-md-link sarathi-phone-link">${rawDigits}</a>`;
+        });
+
+        return textPart;
+      }).join('');
+
+      // 3. Restore protected inline links
+      protectedLinks.forEach((linkHtml, idx) => {
+        processed = processed.replace(`%%%SARATHI_INLINE_LINK_${idx}%%%`, linkHtml);
+      });
+
+      return processed;
+    }
 
     // Standard Blockquote
     html = html.replace(/^&gt;\s*(.*$)/gim, '<blockquote class="sarathi-blockquote"><span class="quote-glyph">“</span><p>$1</p></blockquote>');
 
-    // Line-by-line Smart List, Step Numbers & Feature Card Formatter
+    // Helper: join consecutive lines within a paragraph block cleanly
+    function joinParagraphLines(linesArr) {
+      if (linesArr.length === 0) return '';
+      if (linesArr.length === 1) return autolinkInline(linesArr[0]);
+
+      let result = '';
+      for (let i = 0; i < linesArr.length; i++) {
+        const cur = linesArr[i].trim();
+        if (i === 0) {
+          result = autolinkInline(cur);
+          continue;
+        }
+        const prev = linesArr[i - 1].trim();
+
+        // Check if current line is a key-value pair (e.g. Email:, Phone:, *Email:*, <em>Phone:</em>, etc.)
+        const isKeyValueLine = /^(?:<[^>]+>)*\s*(?:Email|Phone|Address|Hours|Mobile|Tel|Location|Website|Office|Contact)\s*(?:<[^>]+>)*\s*:/i.test(cur);
+        const isPrevUnfinished = !/[.?!:]$/.test(prev);
+        const isCurContinuation = !isKeyValueLine && (isPrevUnfinished || /^[a-z0-9,;)\]]|^\[/i.test(cur));
+
+        if (isCurContinuation) {
+          result += ' ' + autolinkInline(cur);
+        } else {
+          result += '<br>' + autolinkInline(cur);
+        }
+      }
+      return result;
+    }
+
+    // Line-by-line Clean Minimalist Markdown Formatter
     const lines = html.split('\n');
     let out = [];
-    let featureBuffer = [];
-    let stepBuffer = [];
     let listBuffer = [];
-
-    function flushFeatures() {
-      if (featureBuffer.length === 0) return;
-      let fHtml = '<div class="sarathi-feature-list">';
-      featureBuffer.forEach((f, fIdx) => {
-        const delay = (fIdx * 0.04).toFixed(2);
-        fHtml += `
-          <div class="sarathi-feature-card" style="animation-delay: ${delay}s;">
-            <div class="sarathi-feature-icon-box">${f.icon}</div>
-            <div class="sarathi-feature-body">
-              <span class="sarathi-feature-title">${f.title}</span>
-              ${f.desc ? `<span class="sarathi-feature-desc">${f.desc}</span>` : ''}
-            </div>
-          </div>
-        `;
-      });
-      fHtml += '</div>';
-      out.push(fHtml);
-      featureBuffer = [];
-    }
-
-    function flushSteps() {
-      if (stepBuffer.length === 0) return;
-      let sHtml = '<div class="sarathi-step-list">';
-      stepBuffer.forEach((s, sIdx) => {
-        const delay = (sIdx * 0.05).toFixed(2);
-        const formattedNum = String(s.num).padStart(2, '0');
-        sHtml += `
-          <div class="sarathi-step-card" style="animation-delay: ${delay}s;">
-            <div class="sarathi-step-num-badge">${formattedNum}</div>
-            <div class="sarathi-step-body">
-              <span class="sarathi-step-title">${s.title}</span>
-              ${s.desc ? `<span class="sarathi-step-desc">${s.desc}</span>` : ''}
-            </div>
-          </div>
-        `;
-      });
-      sHtml += '</div>';
-      out.push(sHtml);
-      stepBuffer = [];
-    }
+    let listActionButtons = [];
+    let pBuffer = [];
 
     function flushList() {
       if (listBuffer.length === 0) return;
@@ -319,285 +652,378 @@
       lHtml += '</ul>';
       out.push(lHtml);
       listBuffer = [];
+
+      if (listActionButtons.length > 0) {
+        listActionButtons.forEach(btn => {
+          out.push(createActionCardHtml(btn));
+        });
+        listActionButtons = [];
+      }
     }
 
-    function flushAll() {
-      flushFeatures();
-      flushSteps();
-      flushList();
-    }
+    function flushParagraph() {
+      if (pBuffer.length === 0) return;
 
-    // Emoji pattern regex supporting modern unicode emojis
-    const emojiRegex = /^([\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F1E0}-\u{1F1FF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA70}-\u{1FAFF}])\s*/u;
+      // Extract any web destination links to render as Action Cards directly after the sentence
+      const actionButtons = [];
+      const seenActionKeys = new Set();
+
+      pBuffer.forEach(line => {
+        // 1. Markdown links: [Title](url)
+        const mdLinkMatches = [...line.matchAll(/\[([^\]]+)\]\(([^)\s]+)\)/g)];
+        mdLinkMatches.forEach(m => {
+          const title = m[1];
+          const url = m[2];
+          if (url && !url.startsWith('mailto:') && !url.startsWith('tel:')) {
+            const btn = resolveDynamicButtonConfig(url, title, raw);
+            const key = (btn.category + ':' + (btn.href || '').replace(/\/+$/, '')).toLowerCase();
+            if (btn && btn.href && !seenActionKeys.has(key)) {
+              seenActionKeys.add(key);
+              actionButtons.push(btn);
+            }
+          }
+        });
+
+        // 2. Any raw URLs: http/https anywhere in the line outside markdown links
+        const lineWithoutMd = line.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, ' ');
+        const rawUrlMatches = [...lineWithoutMd.matchAll(/(?:&lt;|<)?(https?:\/\/[^\s<>"'`()[\]]+)(?:&gt;|>)?/gi)];
+        rawUrlMatches.forEach(m => {
+          const rawUrl = m[1].replace(/[.,;:!?]+$/, '');
+          if (rawUrl && !rawUrl.startsWith('mailto:') && !rawUrl.startsWith('tel:')) {
+            const btn = resolveDynamicButtonConfig(rawUrl, '', raw);
+            const key = (btn.category + ':' + (btn.href || '').replace(/\/+$/, '')).toLowerCase();
+            if (btn && btn.href && !seenActionKeys.has(key)) {
+              seenActionKeys.add(key);
+              actionButtons.push(btn);
+            }
+          }
+        });
+      });
+
+      // Filter and clean lines for paragraph output
+      let linesToJoin = [];
+      pBuffer.forEach(line => {
+        let cleaned = line.trim();
+
+        if (actionButtons.length > 0) {
+          // If line is solely a markdown link, bracketed URL, or raw URL, drop it completely (rendered by action card below)
+          const isSoleLink = /^\s*\[?\s*(?:https?:\/\/[^\s\])]+|\[[^\]]+\]\([^)\s]+\))\s*\]?\s*$/i.test(cleaned);
+          if (isSoleLink) return;
+
+          // If line is just stray brackets or parentheses e.g. '[', ']', '[]', '()'
+          if (/^\s*[\[\]()]+\s*$/.test(cleaned)) return;
+
+          // Clean trailing raw URLs or markdown links at the end of an intro line e.g. 'blog page: [http...](...)' or 'blog page: http...'
+          cleaned = cleaned.replace(/(?::\s*|\s+)?\[https?:\/\/[^\]]+\]\([^)\s]+\)\s*$/gi, ':');
+          cleaned = cleaned.replace(/(?::\s*|\s+)?https?:\/\/[^\s<>"'`()[\]]+\s*$/gi, ':');
+          cleaned = cleaned.replace(/:\s*\[\s*$/g, ':'); // Clean dangling ': ['
+          cleaned = cleaned.replace(/\s*\[\s*$/g, '');   // Clean dangling '['
+        }
+
+        if (cleaned && !/^\s*[\[\]()]+\s*$/.test(cleaned)) {
+          linesToJoin.push(cleaned);
+        }
+      });
+
+      const joined = joinParagraphLines(linesToJoin);
+      if (joined) {
+        const textOnly = joined.replace(/<br>/gi, ' ').replace(/<[^>]+>/g, '').trim();
+        const isClosingQuestion = (textOnly.endsWith('?') && (textOnly.startsWith('What') || textOnly.startsWith('How') || textOnly.startsWith('Would you') || textOnly.startsWith('Which') || textOnly.startsWith('Feel free') || textOnly.startsWith('Can I') || textOnly.startsWith('Shall we') || textOnly.startsWith('Is there')));
+        if (isClosingQuestion) {
+          out.push(`<p class="sarathi-md-question">${joined}</p>`);
+        } else {
+          out.push(`<p class="sarathi-md-p">${joined}</p>`);
+        }
+      }
+
+      // Display the Action Card directly AFTER the link sentence!
+      actionButtons.forEach(btn => {
+        out.push(createActionCardHtml(btn));
+      });
+
+      pBuffer = [];
+    }
 
     lines.forEach((line) => {
       const trimmed = line.trim();
       if (!trimmed) {
-        flushAll();
+        flushList();
+        flushParagraph();
         return;
       }
 
-      // If it's already an HTML block tag (table, code, header, blockquote, callout)
-      if (trimmed.startsWith('<div class="sarathi-code') || trimmed.startsWith('<div class="sarathi-table') || trimmed.startsWith('<div class="sarathi-callout') || trimmed.startsWith('<h') || trimmed.startsWith('<blockquote')) {
-        flushAll();
+      // If it's a code block placeholder or block HTML tag (table, header, blockquote)
+      if (trimmed.startsWith('%%%SARATHI_CODE_BLOCK_') || trimmed.startsWith('<div class="sarathi-code') || trimmed.startsWith('<div class="sarathi-table') || trimmed.startsWith('<h') || trimmed.startsWith('<blockquote')) {
+        flushList();
+        flushParagraph();
         out.push(trimmed);
         return;
       }
 
-      // Check for Numbered Steps: "1. **Title**: Description" or "1. Step description"
-      const numberStepMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
-      if (numberStepMatch) {
-        flushFeatures();
-        flushList();
-        const stepNum = numberStepMatch[1];
-        const stepContent = numberStepMatch[2];
-        const strongMatch = stepContent.match(/^(?:<strong>([^<]+)<\/strong>|\*\*([^*]+)\*\*)\s*(?:[–—:-]\s*|\s*:\s*|\s*-\s*)(.*)$/);
-
-        if (strongMatch) {
-          stepBuffer.push({
-            num: stepNum,
-            title: strongMatch[1] || strongMatch[2],
-            desc: strongMatch[3]
-          });
-        } else {
-          stepBuffer.push({
-            num: stepNum,
-            title: stepContent,
-            desc: ''
-          });
-        }
-        return;
-      }
-
-      // Check for Emoji or bullet feature lines
-      const emojiMatch = trimmed.match(emojiRegex);
-      const bulletMatch = trimmed.match(/^[-*•]\s+/);
-
-      let isFeatureItem = false;
-      let itemIcon = '✦';
-      let itemTitle = '';
-      let itemDesc = '';
-
-      if (emojiMatch) {
-        itemIcon = emojiMatch[1];
-        const rest = trimmed.substring(emojiMatch[0].length).trim();
-        const strongMatch = rest.match(/^(?:<strong>([^<]+)<\/strong>|\*\*([^*]+)\*\*)\s*(?:[–—:-]\s*|\s*:\s*|\s*-\s*)(.*)$/);
-        const plainMatch = rest.match(/^([A-Za-z0-9\s&/]{2,40})\s*(?:[–—:-]\s*|\s*:\s*|\s*-\s*)(.*)$/);
-
-        if (strongMatch) {
-          itemTitle = strongMatch[1] || strongMatch[2];
-          itemDesc = strongMatch[3];
-          isFeatureItem = true;
-        } else if (plainMatch) {
-          itemTitle = plainMatch[1];
-          itemDesc = plainMatch[2];
-          isFeatureItem = true;
-        } else {
-          itemTitle = rest;
-          itemDesc = '';
-          isFeatureItem = true;
-        }
-      } else if (bulletMatch) {
-        const rest = trimmed.substring(bulletMatch[0].length).trim();
-        const bulletEmoji = rest.match(emojiRegex);
-        if (bulletEmoji) {
-          itemIcon = bulletEmoji[1];
-          const postEmoji = rest.substring(bulletEmoji[0].length).trim();
-          const strongMatch = postEmoji.match(/^(?:<strong>([^<]+)<\/strong>|\*\*([^*]+)\*\*)\s*(?:[–—:-]\s*|\s*:\s*|\s*-\s*)(.*)$/);
-          if (strongMatch) {
-            itemTitle = strongMatch[1] || strongMatch[2];
-            itemDesc = strongMatch[3];
-            isFeatureItem = true;
-          }
-        } else {
-          const strongMatch = rest.match(/^(?:<strong>([^<]+)<\/strong>|\*\*([^*]+)\*\*)\s*(?:[–—:-]\s*|\s*:\s*|\s*-\s*)(.*)$/);
-          if (strongMatch) {
-            itemIcon = '🔹';
-            itemTitle = strongMatch[1] || strongMatch[2];
-            itemDesc = strongMatch[3];
-            isFeatureItem = true;
-          }
-        }
-      }
-
-      if (isFeatureItem) {
-        flushSteps();
-        flushList();
-        featureBuffer.push({ icon: itemIcon, title: itemTitle, desc: itemDesc });
-        return;
-      }
-
-      // Check for regular bullet list
+      // Bullet list items
+      const bulletMatch = trimmed.match(/^[-*•]\s+(.*)$/);
       if (bulletMatch) {
-        flushFeatures();
-        flushSteps();
-        listBuffer.push(trimmed.substring(bulletMatch[0].length).trim());
+        flushParagraph();
+        const itemText = bulletMatch[1];
+        const mdLinkMatches = [...itemText.matchAll(/\[([^\]]+)\]\(([^)]+)\)/g)];
+        mdLinkMatches.forEach(m => {
+          const url = m[2];
+          if (url && !url.startsWith('mailto:') && !url.startsWith('tel:')) {
+            const btn = resolveDynamicButtonConfig(url, m[1], raw);
+            const key = (btn.category + ':' + (btn.href || '').replace(/\/+$/, '')).toLowerCase();
+            const exists = listActionButtons.some(b => (b.category + ':' + (b.href || '').replace(/\/+$/, '')).toLowerCase() === key);
+            if (btn && btn.href && !exists) listActionButtons.push(btn);
+          }
+        });
+        listBuffer.push(autolinkInline(itemText));
         return;
       }
 
-      flushAll();
-
-      // Check if it's a closing prompt or question (e.g. "What area would you like to explore first?")
-      const isClosingQuestion = (trimmed.endsWith('?') && (trimmed.startsWith('What') || trimmed.startsWith('How') || trimmed.startsWith('Would you') || trimmed.startsWith('Which') || trimmed.startsWith('Feel free') || trimmed.startsWith('Can I') || trimmed.startsWith('Shall we')));
-      if (isClosingQuestion) {
-        out.push(`<div class="sarathi-md-prompt"><span class="prompt-spark">💡</span><span>${trimmed}</span></div>`);
-      } else {
-        out.push(`<p class="sarathi-md-p">${trimmed}</p>`);
+      // Numbered list items
+      const numberMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
+      if (numberMatch) {
+        flushParagraph();
+        listBuffer.push(`<strong>${numberMatch[1]}.</strong> ${autolinkInline(numberMatch[2])}`);
+        return;
       }
+
+      flushList();
+      pBuffer.push(trimmed);
     });
 
-    flushAll();
+    flushList();
+    flushParagraph();
 
-    return out.join('');
+    let finalHtml = out.join('');
+
+    // Restore protected code blocks and inline code
+    codeBlocks.forEach((cb, i) => {
+      finalHtml = finalHtml.replace(`%%%SARATHI_CODE_BLOCK_${i}%%%`, cb);
+    });
+    inlineCodes.forEach((ic, i) => {
+      finalHtml = finalHtml.replace(`%%%SARATHI_INLINE_CODE_${i}%%%`, ic);
+    });
+
+    return finalHtml;
   }
 
-  // Intelligent Sarathi AI Knowledge Engine
+  // Intelligent Sarathi AI Knowledge Engine (Simple, Crisp & Actionable)
   function generateFallbackResponse(query) {
     const q = query.toLowerCase().trim();
 
-    if (q.includes('agentic') || q.includes('autonomous') || q.includes('llm') || q.includes('custom solution') || q.includes('rag') || q.includes('swarm')) {
+    // Affirmative responses (Yes / Sure)
+    if (q === 'yes, sure!' || q === 'yes' || q === 'sure' || q.includes('yes,') || q.includes('sure!') || q.includes('schedule') || q.includes('sign me up') || q.includes('claim') || q.includes('yes, let\'s build') || q.includes('book ai consultation')) {
       return {
-        category: 'Autonomous Agentic Systems',
-        text: `### 🤖 Sarathi Agentic AI & Custom Autonomous Systems
-
-At **Sarathi AI Labs**, we engineer multi-agent swarms and production-grade RAG architectures that execute complex enterprise workflows autonomously:
-
-- **Multi-Agent Orchestration**: Goal-directed autonomous workflows engineered with LangGraph, CrewAI, AutoGen, and Temporal.
-- **Hybrid Enterprise RAG**: Dual dense + sparse vector search with re-ranking (Qdrant/Pinecone) for zero-hallucination domain knowledge retrieval.
-- **Autonomous Tool Calling**: Deterministic API integrations, self-healing database queries, and CRM/ERP orchestrations.
-
-| Capability Matrix | Enterprise Impact | Core Tech Stack |
-| :--- | :--- | :--- |
-| **Multi-Agent Swarms** | 10x Operational Speed | LangGraph, Python, Temporal |
-| **Hybrid Neural RAG** | 99.7% Retrieval Precision | Qdrant, Pinecone, Cohere |
-| **Self-Healing Automation** | Zero Human Intervention | Playwright, n8n, FastAPI |
-
-\`\`\`python
-# Sarathi Agentic Multi-Agent Workflow Blueprint
-from langchain_core.agents import AgentExecutor
-from sarathi_ai.core import MultiAgentOrchestrator
-
-orchestrator = MultiAgentOrchestrator(
-    agents=["researcher", "qa_architect", "solution_builder"],
-    rag_backend="qdrant_hybrid",
-    telemetry=True
-)
-execution_result = orchestrator.solve_goal("Automate regression audit pipeline")
-\`\`\`
-
-Would you like to schedule an **Agentic AI Architecture Consultation** with our principal architects?`,
-        sources: [
-          { title: 'Sarathi Agentic AI Blueprint', url: '#agentic-ai' },
-          { title: 'Schedule Architecture Session', url: '#contact' }
-        ],
-        chips: ['Book Architecture Call', 'Full-Stack Web Systems', 'Test Automation QA', 'Talk to Human']
+        category: 'Contact',
+        text: `Awesome! Please share your preferred email or phone number, or tell us about your project or training goals below 😊`,
+        chips: ['Agentic AI Solutions', 'Web & Cloud Development', 'Professional Training', 'AI Test Automation']
       };
     }
 
-    if (q.includes('web') || q.includes('fullstack') || q.includes('full stack') || q.includes('frontend') || q.includes('backend') || q.includes('saas') || q.includes('cloud')) {
+    // Negative responses (No / Thanks)
+    if (q === 'no, thanks.' || q === 'no' || q.includes('no, thanks') || q.includes('no thanks') || q === 'not now') {
       return {
-        category: 'Full-Stack & Cloud Architecture',
-        text: `### 💻 Full-Stack Web Development & Cloud Systems
-
-We engineer enterprise-grade web applications with uncompromising performance, reliability, and security:
-
-1. **Modern Frontend & Jamstack**: Next.js 15 (App Router), React Server Components, High-Performance UI, WordPress Headless.
-2. **Cloud Microservices & APIs**: High-throughput distributed backends in Python (FastAPI), Node.js, Go, and PHP.
-3. **Cloud Infrastructure & Scale**: Automated CI/CD pipelines, Docker/Kubernetes containerization, AWS/GCP, and PostgreSQL/Redis caching.
-
-> All digital products built by Sarathi AI Labs achieve 95+ Google Lighthouse scores, robust OWASP Top 10 security compliance, and automated quality gates.`,
-        sources: [
-          { title: 'Enterprise Web Engineering Portfolio', url: '#web-dev' },
-          { title: 'Request Technical Proposal', url: '#contact' }
-        ],
-        chips: ['Request a Proposal', 'Agentic AI Solutions', 'QA Test Automation', 'Contact Tech Team']
+        category: 'Assistance',
+        text: `No problem at all! Feel free to ask anything about our solutions, technology stack, or courses whenever you're ready 😊`,
+        chips: ['Agentic AI Solutions', 'Web & Cloud Development', 'Professional Training', 'AI Test Automation']
       };
     }
 
-    if (q.includes('test') || q.includes('automation') || q.includes('qa') || q.includes('selenium') || q.includes('playwright') || q.includes('cypress')) {
+    // 1. Agentic AI Solutions
+    if (q.includes('agentic') || q.includes('autonomous') || q.includes('rag') || q.includes('swarm') || q.includes('llm') || q === 'agentic ai solutions') {
       return {
-        category: 'Enterprise Quality Engineering',
-        text: `### ⚡ Enterprise Test Automation & Continuous Quality Gates
-
-Eliminate regression escapes and accelerate your delivery cadence with our end-to-end automated QA frameworks:
-
-- **End-to-End Test Automation**: Robust cross-browser test suites using Playwright, Cypress, and Selenium WebDriver.
-- **High-Throughput API & Load Testing**: k6 distributed load simulation, Postman/Newman automated contract verification.
-- **CI/CD Quality Gates**: Automated parallel test pipelines in GitHub Actions, GitLab CI, and Jenkins.
-- **AI-Powered Visual Regression**: Automated visual diff detection across all screen resolutions and devices.
-
-*Typical Outcome: 70%+ reduction in regression turnaround time with 99.8% test repeatability.*`,
-        sources: [
-          { title: 'QA Automation Framework Architecture', url: '#test-automation' },
-          { title: 'Schedule Quality Process Audit', url: '#contact' }
-        ],
-        chips: ['Request QA Audit', 'Training Bootcamps', 'Agentic AI Solutions', 'Contact Us']
+        category: 'Agentic AI Solutions',
+        text: `At **Sarathi AI Labs**, we architect autonomous AI agent systems and enterprise intelligence solutions:\n\n- **Autonomous Multi-Agent Swarms**: Goal-oriented AI agents orchestrating end-to-end business operations using LangGraph, CrewAI & AutoGen.\n- **Enterprise RAG Knowledge Systems**: Connect private databases and document repositories with hybrid vector search and zero hallucinations.\n- **Custom Tool-Calling & Automation**: Autonomous API execution across CRM, ERP, finance, and internal databases.\n\nWould you like to schedule a free **AI Architecture Consultation** or see a live agent demonstration?`,
+        chips: ['Book AI Consultation', 'See Tech Stack', 'Get Custom Quote']
       };
     }
 
-    if (q.includes('training') || q.includes('course') || q.includes('bootcamp') || q.includes('learn') || q.includes('curriculum') || q.includes('cohort')) {
+    // 2. Web & Cloud Development
+    if (q.includes('web') || q.includes('cloud') || q.includes('fullstack') || q.includes('full stack') || q.includes('frontend') || q.includes('backend') || q.includes('api') || q === 'web & cloud development') {
       return {
-        category: 'Professional Engineering Training',
-        text: `### 🎓 Industry-Ready Bootcamps & Corporate Engineering Training
-
-Accelerate your engineering teams or master high-demand modern technologies with our intensive practitioner-led programs:
-
-| Program Cohort | Duration | Core Engineering Focus |
-| :--- | :--- | :--- |
-| **Agentic AI & LLM Engineering** | 8 Weeks | LangChain, LangGraph, Hybrid RAG, Autonomous Agents |
-| **Full-Stack Web Mastery** | 12 Weeks | Next.js, Cloud APIs, Microservices, Distributed Systems |
-| **Enterprise Test Automation** | 6 Weeks | Playwright, CI/CD Architecture, Framework Design |
-
-- **100% Real-World Enterprise Projects**: Build, test, and deploy production architectures.
-- **1-on-1 Mentor Guidance**: Direct reviews from Principal Engineers at Sarathi AI Labs.`,
-        sources: [
-          { title: 'View Course Catalog & Cohort Dates', url: '#training' },
-          { title: 'Enroll for Upcoming Cohort', url: '#contact' }
-        ],
-        chips: ['Enroll in Next Cohort', 'Corporate Training Inquiry', 'Agentic AI Blueprint', 'Contact Tech Team']
+        category: 'Web & Cloud Development',
+        text: `We engineer fast, scalable web platforms and cloud-native architectures built for high performance:\n\n- **Modern Full-Stack Applications**: High-throughput web applications using Next.js, React, Node.js, Python FastAPI, and headless architectures.\n- **Cloud Infrastructure & Microservices**: Resilient cloud architecture on AWS and GCP with automated Docker & Kubernetes orchestration.\n- **High-Performance APIs & Integrations**: Secure REST/GraphQL gateways, database optimization (PostgreSQL/Redis), and enterprise security.\n\nAre you planning a new web application, modernizing an existing portal, or scaling cloud infrastructure?`,
+        chips: ['Build New Web App', 'Get Custom Quote', 'Talk to Tech Lead']
       };
     }
 
-    if (q.includes('contact') || q.includes('talk') || q.includes('human') || q.includes('phone') || q.includes('email') || q.includes('hire') || q.includes('quote')) {
+    // 3. Professional Training
+    if (q.includes('training') || q.includes('course') || q.includes('bootcamp') || q.includes('learn') || q.includes('program') || q.includes('curriculum') || q.includes('syllabus') || q === 'professional training') {
       return {
-        category: 'Connect with Solutions Team',
-        text: `### 💬 Connect with the Sarathi AI Labs Team
-
-We look forward to collaborating with you on your next mission-critical initiative:
-
-- **Email**: \`contact@sarathiai.com\`
-- **Response SLA**: Within 2 business hours
-- **Office Hours**: Monday – Friday, 9:00 AM – 6:00 PM IST
-- **Complimentary Session**: 30-minute system architecture and AI feasibility review.
-
-Please drop your contact details in the composer or use our direct scheduling link below!`,
-        sources: [
-          { title: 'Direct Architecture Booking Link', url: '#contact' }
-        ],
-        chips: ['Book Free Consultation', 'Agentic AI Solutions', 'Training Bootcamps']
+        category: 'Professional Training',
+        text: `Our industry-grade training programs prepare engineers with hands-on production skills:\n\n- **Agentic AI & LLM Engineering (8 Weeks)**: Multi-agent systems, LangChain, RAG architecture, tool use, and enterprise deployments.\n- **Full-Stack Web Mastery (12 Weeks)**: Next.js, modern backend APIs, cloud deployment, and system architecture.\n- **Enterprise Test Automation (6 Weeks)**: Playwright, Cypress, CI/CD automated test gates, and framework design.\n\nAll programs include **live real-world projects**, **1-on-1 mentor guidance**, and **industry certification**.\n\nWould you like to download the syllabus or schedule a free counseling session?`,
+        chips: ['View Syllabus', 'Schedule Free Counseling', 'Talk to Advisor']
       };
     }
 
-    // Default Intelligence Response
+    // 4. AI Test Automation
+    if (q.includes('test') || q.includes('automation') || q.includes('qa') || q.includes('playwright') || q.includes('selenium') || q === 'ai test automation') {
+      return {
+        category: 'AI Test Automation',
+        text: `We deliver intelligent test automation frameworks and AI-assisted quality engineering to guarantee zero-bug releases:\n\n- **End-to-End Test Automation**: Robust Playwright and Cypress test suites running across desktop and mobile browsers.\n- **AI-Powered Visual & Regression Testing**: Intelligent visual change detection and self-healing test locators.\n- **CI/CD Quality Gates**: Automated continuous testing integrated with GitHub Actions, GitLab CI, and Docker pipelines.\n- **API & Load Performance**: Comprehensive Postman/Newman and k6 load simulation suites.\n\nWould you like a free **QA Framework Audit** for your application or to discuss custom test automation?`,
+        chips: ['Get Free QA Audit', 'Tools We Support', 'Talk to QA Lead']
+      };
+    }
+
+    // 5. Blog & Insights
+    if (q.includes('blog') || q.includes('article') || q.includes('news') || q.includes('insight') || q.includes('read') || q.includes('publication')) {
+      return {
+        category: 'AI Insights & Blog',
+        text: `You can find **Sarathi AI Labs'** latest engineering articles, tutorials, and architectural insights directly on our blog:\n\n[Explore Blog & Insights](/blog/)\n\nWe regularly publish deep-dives into autonomous agents, enterprise RAG architectures, and modern cloud engineering.`,
+        chips: ['Agentic AI Solutions', 'Web & Cloud Development', 'Professional Training']
+      };
+    }
+
+    // Contact / Human Advisor
+    if (q.includes('advisor') || q.includes('contact') || q.includes('talk') || q.includes('human') || q.includes('phone') || q.includes('email') || q.includes('call')) {
+      return {
+        category: 'Contact',
+        text: `Our technical advisory team is ready to assist you. You can reach us directly at **contact@sarathiai.com** or book a consultation.\n\nWould you like us to schedule a call with a specialist?`,
+        chips: ['Yes, sure!', 'Send Email', 'No, thanks.']
+      };
+    }
+
+    // What services do you offer?
+    if (q.includes('what services') || q.includes('services do you offer') || q.includes('services and solutions')) {
+      return {
+        category: 'Our Services',
+        text: `At **Sarathi AI Labs**, we provide cutting-edge technology and talent solutions:\n\n1. 🤖 **Agentic AI Solutions**: Autonomous multi-agent swarms (LangGraph/CrewAI), custom RAG enterprise knowledge hubs, and intelligent tool-calling.\n2. 💻 **Web & Cloud Development**: High-performance full-stack web applications, cloud microservices on AWS/GCP, and secure REST/GraphQL APIs.\n3. 🎓 **Professional Training**: Industry-ready bootcamps in Agentic AI, Full-Stack Engineering, and Test Automation.\n4. ⚡ **AI Test Automation**: Robust Playwright/Cypress end-to-end automation, CI/CD quality gates, and visual testing.\n\nWhich service would you like to explore further?`
+      };
+    }
+
+    // How can AI help my business?
+    if (q.includes('how can ai help') || q.includes('ai help my business') || q.includes('help my business')) {
+      return {
+        category: 'Business Impact',
+        text: `AI empowers your business to achieve unprecedented operational velocity and cost efficiency:\n\n- ⚡ **10x Operational Speed**: Autonomous agents execute repetitive cross-platform workflows, customer support, and data extraction 24/7.\n- 🧠 **Instant Private Intelligence**: Enterprise RAG turns internal documents, SOPs, and databases into an interactive AI expert with zero hallucinations.\n- 📉 **Reduced Operational Costs**: Automate triage, CRM data entry, and QA testing cycles while maintaining 99.9% accuracy.\n\nWould you like a free consultation to identify the high-ROI AI opportunities for your business?`
+      };
+    }
+
+    // Do you provide custom solutions?
+    if (q.includes('custom solutions') || q.includes('custom solution') || q.includes('bespoke')) {
+      return {
+        category: 'Custom Solutions',
+        text: `Yes, absolutely! Every enterprise has unique infrastructure and requirements. We build **100% custom, tailor-made solutions**:\n\n- Custom AI agent swarms integrated directly with your private APIs, ERP, and databases.\n- Tailored web platforms engineered from ground up using your chosen tech stack (Next.js, Python, Node.js, Go).\n- Dedicated on-premise or private cloud LLM deployments for strict data privacy and compliance.\n\nTell us about your project or use case, and our engineering team will propose a custom architectural roadmap.`
+      };
+    }
+
+    // How can I get started?
+    if (q.includes('get started') || q.includes('how can i start') || q.includes('how to start')) {
+      return {
+        category: 'Getting Started',
+        text: `Getting started with **Sarathi AI Labs** is simple and frictionless:\n\n1. 💬 **Share Your Goal**: Tell us about your project, software needs, or team training goals right here in the chat.\n2. 📅 **Discovery Session**: We'll schedule a complimentary 30-minute technical architecture or counseling call.\n3. 🚀 **Prototype & Delivery**: We deliver a crisp milestone roadmap, working POC, and production-ready implementation.\n\nWould you like to request a quote or connect with our lead architect?`
+      };
+    }
+
+    // Pricing / Quote
+    if (q.includes('pricing') || q.includes('cost') || q.includes('quote') || q.includes('quate') || q.includes('quotation') || q.includes('fee') || q.includes('rate') || q.includes('budget') || q.includes('estimate') || q === 'get a quote' || q === 'get a quate') {
+      return {
+        category: 'Get a Quote',
+        text: `We would love to discuss your project and provide a tailored scope and quote! 💼\n\nPlease share:\n- A brief summary of your project or requirements\n- Your target timeline or budget (optional)\n- Your preferred contact email or phone number\n\nOur solutions team will analyze your needs and get back to you with a comprehensive proposal within 24 hours.`,
+        chips: [
+          'Request a custom project estimate',
+          'What is your typical project timeline?',
+          'Book a 30-minute scope consultation'
+        ]
+      };
+    }
+
+    // Default friendly greeting
     return {
-      category: 'Sarathi Neural Concierge',
-      text: `Hello! I am the **Sarathi Neural Concierge**. How can we help accelerate your technology roadmap today?
-
-- **🤖 Agentic AI & Custom Solutions** (Multi-agent workflows, Hybrid RAG, Autonomous LLMs)
-- **💻 Full-Stack & Cloud Architecture** (Next.js, High-performance Web Systems, APIs)
-- **⚡ Enterprise Test Automation** (Playwright, CI/CD Quality Gates, Load Testing)
-- **🎓 Industry-Ready Professional Courses** (Hands-on corporate & developer programs)
-
-Select a topic above or ask any technical question!`,
-      sources: [
-        { title: 'Explore Sarathi AI Labs Platform', url: '/' }
-      ],
-      chips: ['Agentic AI Solutions', 'Web Development', 'Test Automation', 'Professional Courses', 'Contact Tech Team']
+      category: 'Sarathi Concierge',
+      text: `Hi there! I can empower you with **Agentic AI Solutions**, **Web & Cloud Development**, **Professional Training**, or **AI Test Automation**.\n\nWhich area would you like to explore?`,
+      chips: ['Agentic AI Solutions', 'Web & Cloud Development', 'AI Test Automation']
     };
+  }
+
+  // Dynamic Contextual Recommended Questions Generator
+  function getRecommendedQuestions(userQuery = '', aiResponseText = '') {
+    const q = (userQuery + ' ' + aiResponseText).toLowerCase();
+
+    const recommendationPools = {
+      quote: [
+        'Request a custom project estimate',
+        'What is your typical project timeline?',
+        'Book a 30-minute scope consultation',
+        'What details do you need for a proposal?',
+        'Talk to a solutions architect'
+      ],
+      agentic: [
+        'How do multi-agent swarms communicate?',
+        'Can we connect private enterprise databases?',
+        'What LLM models and frameworks do you use?',
+        'How does custom tool-calling work?',
+        'Book a free AI architecture consultation'
+      ],
+      web: [
+        'What frontend & backend frameworks do you use?',
+        'Can you help migrate our infrastructure to AWS/GCP?',
+        'How do you optimize API latency & caching?',
+        'What is your typical web project timeline?',
+        'Request a custom project estimate'
+      ],
+      training: [
+        'Can I see the full syllabus & curriculum?',
+        'Are training sessions live with mentors?',
+        'Do you provide hands-on project portfolio reviews?',
+        'What are the prerequisites to enroll?',
+        'Schedule a free 1-on-1 counseling call'
+      ],
+      test: [
+        'Do you support Playwright and GitHub Actions CI/CD?',
+        'Can you automate our existing manual test cases?',
+        'How do AI self-healing test locators work?',
+        'Do you perform load and API performance testing?',
+        'Request a free QA framework audit'
+      ],
+      contact: [
+        'How soon can we schedule a technical consultation?',
+        'Can we set up a Google Meet or Zoom call?',
+        'What is your team contact email and phone?',
+        'Talk to a solutions architect'
+      ],
+      general: [
+        'Tell me about Agentic AI Solutions',
+        'What Web & Cloud Development do you offer?',
+        'How does your Test Automation work?',
+        'Can you provide a custom project quote?',
+        'Can I speak with a technical advisor?'
+      ]
+    };
+
+    let pool = recommendationPools.general;
+    if (q.includes('quote') || q.includes('quate') || q.includes('quotation') || q.includes('pricing') || q.includes('price') || q.includes('cost') || q.includes('budget') || q.includes('estimate') || q.includes('proposal')) {
+      pool = recommendationPools.quote;
+    } else if (q.includes('agentic') || q.includes('autonomous') || q.includes('rag') || q.includes('swarm') || q.includes('llm') || q.includes('agent')) {
+      pool = recommendationPools.agentic;
+    } else if (q.includes('web') || q.includes('cloud') || q.includes('fullstack') || q.includes('frontend') || q.includes('backend') || q.includes('api') || q.includes('devops') || q.includes('next.js') || q.includes('react')) {
+      pool = recommendationPools.web;
+    } else if (q.includes('training') || q.includes('course') || q.includes('bootcamp') || q.includes('learn') || q.includes('syllabus') || q.includes('enroll') || q.includes('curriculum')) {
+      pool = recommendationPools.training;
+    } else if (q.includes('test') || q.includes('automation') || q.includes('qa') || q.includes('playwright') || q.includes('selenium') || q.includes('bug') || q.includes('cypress') || q.includes('quality')) {
+      pool = recommendationPools.test;
+    } else if (q.includes('contact') || q.includes('talk') || q.includes('call') || q.includes('email') || q.includes('phone') || q.includes('advisor') || q.includes('meet') || q.includes('human') || q.includes('hire')) {
+      pool = recommendationPools.contact;
+    }
+
+    // Filter out options that closely match the query to avoid redundant recommendations
+    const cleanUserQuery = userQuery.toLowerCase().trim();
+    const filtered = pool.filter(opt => opt.toLowerCase().trim() !== cleanUserQuery);
+    const poolToUse = filtered.length >= 2 ? filtered : pool;
+
+    // Shuffle and return 2-3 distinct recommendations
+    const shuffled = [...poolToUse].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 3);
+  }
+
+  // Helper to determine if lead details (Name, and at least one of Email or Phone) are complete
+  function isLeadComplete(info) {
+    return Boolean(info && info.name && (info.email || info.phone));
   }
 
   // Build Floating UI DOM with Scoped High-Tech Design
   function createWidgetDOM() {
+    if (document.getElementById('sarathi-ai-root')) return;
     const root = document.createElement('div');
     root.id = 'sarathi-ai-root';
     root.setAttribute('data-theme', state.theme);
@@ -606,7 +1032,7 @@ Select a topic above or ask any technical question!`,
       <!-- Launcher Mascot with Hello! Bubble -->
       <div class="sarathi-launcher-container" id="sarathi-launcher-wrap">
         <button class="sarathi-launcher-btn" id="sarathi-launcher-btn" aria-label="Open Sarathi AI Chatbot">
-          <img src="${CONFIG.botIconUrl}" alt="Sarathi AI" class="sarathi-launcher-mascot-img" />
+          <img src="${CONFIG.botIconUrl}" alt="Sarathi AI" class="sarathi-launcher-mascot-img" onerror="if(this.src.indexOf('/wp-content/')===-1){this.src='/wp-content/themes/custom-theme/assets/images/sarathi-bot-transparent.png?v=5';}else{this.onerror=null; this.src='data:image/svg+xml;utf8,<svg viewBox=\\'0 0 100 100\\' fill=\\'none\\' xmlns=\\'http://www.w3.org/2000/svg\\'><circle cx=\\'50\\' cy=\\'50\\' r=\\'46\\' fill=\\'%232563EB\\'/><circle cx=\\'50\\' cy=\\'22\\' r=\\'5\\' fill=\\'%2338BDF8\\'/><rect x=\\'47.5\\' y=\\'26\\' width=\\'5\\' height=\\'6\\' rx=\\'2.5\\' fill=\\'%23FFFFFF\\'/><rect x=\\'23\\' y=\\'32\\' width=\\'54\\' height=\\'46\\' rx=\\'18\\' fill=\\'%23FFFFFF\\'/><rect x=\\'29\\' y=\\'38\\' width=\\'42\\' height=\\'34\\' rx=\\'12\\' fill=\\'%230F172A\\'/><circle cx=\\'41.5\\' cy=\\'52\\' r=\\'4.5\\' fill=\\'%2338BDF8\\'/><circle cx=\\'58.5\\' cy=\\'52\\' r=\\'4.5\\' fill=\\'%2338BDF8\\'/><path d=\\'M 44.5 59.5 Q 50 64 55.5 59.5\\' stroke=\\'%2338BDF8\\' stroke-width=\\'2.5\\' stroke-linecap=\\'round\\' fill=\\'none\\'/></svg>';}" />
           <span class="sarathi-launcher-icon-close">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <line x1="18" y1="6" x2="6" y2="18"/>
@@ -619,56 +1045,83 @@ Select a topic above or ask any technical question!`,
       <!-- Chat Modal Window -->
       <div class="sarathi-chat-window" id="sarathi-chat-window" data-theme="${state.theme}" role="dialog" aria-modal="true">
         
-        <!-- Header (Clean & Minimalist) -->
+        <!-- Header (Vibrant Blue Gradient with Curved Wave Divider matching Reference UI) -->
         <div class="sarathi-chat-header" id="sarathi-header">
-          <div class="sarathi-chat-header-info">
-            <div class="sarathi-avatar-wrap">
-              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="17" r="5" fill="#38BDF8"/>
-                <rect x="47.5" y="21" width="5" height="7" rx="2.5" fill="#FFFFFF"/>
-                <rect x="18" y="44" width="7" height="18" rx="3.5" fill="#FFFFFF"/>
-                <rect x="75" y="44" width="7" height="18" rx="3.5" fill="#FFFFFF"/>
-                <rect x="23" y="27" width="54" height="49" rx="19" fill="#FFFFFF"/>
-                <rect x="29" y="33" width="42" height="37" rx="13" fill="#0F172A"/>
-                <circle cx="41.5" cy="49" r="4.5" fill="#38BDF8"/>
-                <circle cx="58.5" cy="49" r="4.5" fill="#38BDF8"/>
-                <path d="M 44.5 56.5 Q 50 62 55.5 56.5" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-              </svg>
-              <div class="online-indicator"></div>
-            </div>
-            <div class="sarathi-chat-header-text">
-              <h3>Sarathi AI</h3>
-              <p class="sarathi-chat-header-subtitle">
-                <span class="sarathi-live-dot"></span> Online
-              </p>
+          <div class="sarathi-chat-header-main">
+            <!-- Header Info: Avatar + Title & Status on left, Actions on right -->
+            <div class="sarathi-chat-header-top">
+              <div class="sarathi-chat-header-info">
+                <div class="sarathi-avatar-wrap">
+                  <div class="sarathi-avatar-inner">
+                    <img src="${CONFIG.avatarUrl}" alt="Sarathi AI" class="sarathi-header-avatar-img" onerror="this.onerror=null; this.src='${CONFIG.botIconUrl}';" />
+                  </div>
+                </div>
+                <div class="sarathi-chat-header-title-wrap">
+                  <h3 class="sarathi-chat-header-name">Chat with Sarathi</h3>
+                  <div class="sarathi-chat-header-status-row">
+                    <span class="sarathi-live-dot"></span>
+                    <span class="sarathi-status-label">Online</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="sarathi-chat-header-actions">
+                <!-- Fullscreen Toggle Button -->
+                <button class="sarathi-icon-btn sarathi-btn-fullscreen" id="sarathi-btn-fullscreen" title="Full Screen" aria-label="Toggle Fullscreen">
+                  <svg class="sarathi-icon-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                  </svg>
+                  <svg class="sarathi-icon-compress" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                    <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+                  </svg>
+                </button>
+
+                <!-- Options Menu Button (3 Dots) -->
+                <div class="sarathi-dropdown-wrap">
+                  <button class="sarathi-icon-btn sarathi-btn-settings" id="sarathi-btn-settings" title="Options" aria-label="Chat Options">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <circle cx="12" cy="5" r="2"/>
+                      <circle cx="12" cy="12" r="2"/>
+                      <circle cx="12" cy="19" r="2"/>
+                    </svg>
+                  </button>
+                  <div class="sarathi-settings-dropdown" id="sarathi-settings-menu">
+                    <button type="button" class="sarathi-menu-item" id="sarathi-menu-fullscreen">
+                      <span class="sarathi-menu-icon">⛶</span>
+                      <span id="sarathi-menu-fullscreen-label">Full Screen Mode</span>
+                    </button>
+                    <button type="button" class="sarathi-menu-item" id="sarathi-menu-audio">
+                      <span class="sarathi-menu-icon" id="sarathi-menu-audio-icon">${state.audioEnabled ? '🔊' : '🔇'}</span>
+                      <span id="sarathi-menu-audio-label">Sound Feedback</span>
+                    </button>
+                    <div class="sarathi-menu-divider"></div>
+                    <button type="button" class="sarathi-menu-item sarathi-menu-item-danger" id="sarathi-menu-reset">
+                      <span class="sarathi-menu-icon">🔄</span>
+                      <span>Clear Conversation</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Minimize Chevron Button -->
+                <button class="sarathi-icon-btn sarathi-btn-minimize" id="sarathi-btn-minimize" title="Minimize" aria-label="Minimize Chat">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
-          
-          <div class="sarathi-chat-header-actions">
-            <button class="sarathi-icon-btn" id="sarathi-btn-theme" title="Toggle Theme" aria-label="Toggle Theme">
-              ${state.theme === 'dark' ?
-        `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>` :
-        `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`}
-            </button>
-            <button class="sarathi-icon-btn" id="sarathi-btn-reset" title="Reset Chat" aria-label="Reset Conversation">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                <path d="M3 3v5h5"/>
-              </svg>
-            </button>
-            <button class="sarathi-icon-btn" id="sarathi-btn-fullscreen" title="Fullscreen" aria-label="Fullscreen">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                <polyline points="15 3 21 3 21 9"/>
-                <line x1="10" y1="14" x2="21" y2="3"/>
-              </svg>
-            </button>
-            <button class="sarathi-icon-btn sarathi-btn-close" id="sarathi-btn-close" title="Close" aria-label="Close Chat">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            </button>
+
+          <!-- Bottom Dynamic S-Wave Ribbon Divider matching User Reference -->
+          <div class="sarathi-header-wave" aria-hidden="true">
+            <svg viewBox="0 0 600 48" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Sky Blue / Cyan Accent Ribbon Band -->
+              <path d="M0,14 C140,44 220,42 340,18 C430,0 520,4 600,34 L600,48 L0,48 Z" fill="#38BDF8" opacity="0.95"/>
+              <!-- Crisp White Contour Separator Line -->
+              <path d="M0,12 C140,42 220,40 340,16 C430,-2 520,2 600,32" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Bottom Pure White Body Fill -->
+              <path d="M0,22 C140,52 220,50 340,26 C430,8 520,12 600,42 L600,48 L0,48 Z" fill="#FFFFFF"/>
+            </svg>
           </div>
         </div>
 
@@ -676,7 +1129,7 @@ Select a topic above or ask any technical question!`,
         <div class="sarathi-chat-body" id="sarathi-body">
           
           <!-- Screen 1: Mandatory Gatekeeper Screen -->
-          <div class="sarathi-gate-view" id="sarathi-gate-view" style="${state.leadInfo && state.leadInfo.name && state.leadInfo.contact ? 'display: none;' : 'display: flex;'}">
+          <div class="sarathi-gate-view" id="sarathi-gate-view" style="${isLeadComplete(state.leadInfo) ? 'display: none;' : 'display: flex;'}">
             
             <div class="sarathi-gate-greeting-icon">👋</div>
 
@@ -687,15 +1140,22 @@ Select a topic above or ask any technical question!`,
             
             <div class="sarathi-gate-form">
               <div class="sarathi-gate-input-group">
-                <input type="text" id="sarathi-gate-name" class="sarathi-gate-input" placeholder="Your Name" required autocomplete="name">
+                <input type="text" id="sarathi-gate-name" class="sarathi-gate-input" placeholder="Your Name" autocomplete="name">
               </div>
 
               <div class="sarathi-gate-input-group">
-                <input type="text" id="sarathi-gate-contact" class="sarathi-gate-input" placeholder="Work Email or Phone" required autocomplete="email">
+                <input type="email" id="sarathi-gate-email" class="sarathi-gate-input" placeholder="Work Email" autocomplete="email">
+              </div>
+
+              <div class="sarathi-gate-input-group">
+                <div class="sarathi-gate-phone-wrap">
+                  <span class="sarathi-phone-prefix">+91</span>
+                  <input type="tel" id="sarathi-gate-phone" class="sarathi-gate-input sarathi-gate-phone-input" placeholder="Phone Number" autocomplete="tel" maxlength="10" inputmode="numeric">
+                </div>
               </div>
 
               <div class="sarathi-gate-error" id="sarathi-gate-error">
-                <span>Please fill in both fields to continue.</span>
+                <span>Please fill in your details to continue.</span>
               </div>
 
               <button class="sarathi-gate-btn" id="sarathi-gate-submit">
@@ -708,112 +1168,284 @@ Select a topic above or ask any technical question!`,
             </div>
           </div>
 
-          <!-- Screen 2: Clean Minimalist Welcome Hub -->
-          <div class="sarathi-welcome-screen" id="sarathi-welcome-screen" style="${state.leadInfo && state.leadInfo.name && state.leadInfo.contact && state.history.length === 0 ? 'display: flex;' : 'display: none;'}">
+          <!-- Screen 2: Clean Minimalist Welcome Hub matching Reference UI -->
+          <div class="sarathi-welcome-screen" id="sarathi-welcome-screen" style="${isLeadComplete(state.leadInfo) && (!state.history || !state.history.some(m => m.sender === 'user')) ? 'display: flex;' : 'display: none;'}">
 
-            <div class="sarathi-hub-header">
-              <h2 id="sarathi-hub-title">Hi ${state.leadInfo && state.leadInfo.name ? `<span class="sarathi-gradient-name">${state.leadInfo.name.split(' ')[0]}</span>` : 'there'} 👋</h2>
-              <p>How can I empower you or your business today?</p>
+            <!-- Chatbot Greeting Bubble -->
+            <div class="sarathi-welcome-bubble">
+              <div class="sarathi-welcome-msg-text">
+                <p id="sarathi-welcome-text"><span class="sarathi-welcome-greeting">Hi ${state.leadInfo && state.leadInfo.name ? `<strong class="sarathi-user-firstname">${state.leadInfo.name.split(' ')[0]}</strong>` : 'there'} 👋</span><span class="sarathi-welcome-question">How can we empower you with intelligent technology today?</span></p>
+                <div class="sarathi-welcome-action-wrap">
+                  <a href="/about" target="_self" class="sarathi-learn-more-btn sarathi-internal-link" id="sarathi-learn-more-btn" title="Learn more about Sarathi AI Labs">
+                    <span class="sarathi-btn-spark">✦</span>
+                    <span class="sarathi-learn-more-text">Learn more about Sarathi AI Labs</span>
+                    <span class="sarathi-learn-more-arrow">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
+                    </span>
+                  </a>
+                </div>
+              </div>
             </div>
 
-            <!-- Clean Topic Cards Grid -->
+
+
+            <!-- Clean Topic Bento Cards Grid (2x2) -->
             <div class="sarathi-topic-grid">
               
-              <div class="sarathi-topic-card" data-topic="Agentic AI & Custom Solutions" style="--card-delay: 0.04s;">
-                <div class="sarathi-topic-icon-badge badge-blue">🤖</div>
+              <div class="sarathi-topic-card" data-topic="Agentic AI Solutions" style="--card-delay: 0.04s;">
+                <div class="sarathi-topic-icon-badge badge-blue">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4" y="8" width="16" height="12" rx="4"></rect>
+                    <circle cx="9" cy="13" r="1.5" fill="#0284C7"></circle>
+                    <circle cx="15" cy="13" r="1.5" fill="#0284C7"></circle>
+                    <path d="M9 17h6"></path>
+                    <line x1="12" y1="4" x2="12" y2="8"></line>
+                    <circle cx="12" cy="3.5" r="1" fill="#0284C7"></circle>
+                    <line x1="1.5" y1="14" x2="4" y2="14"></line>
+                    <line x1="20" y1="14" x2="22.5" y2="14"></line>
+                  </svg>
+                </div>
                 <div class="sarathi-topic-info">
                   <h4>Agentic AI Solutions</h4>
-                  <p>Autonomous AI agents & custom RAG systems</p>
+                  <p>Autonomous AI agents & enterprise RAG</p>
                 </div>
                 <span class="sarathi-topic-arrow">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
                   </svg>
                 </span>
               </div>
 
-              <div class="sarathi-topic-card" data-topic="Web Development" style="--card-delay: 0.08s;">
-                <div class="sarathi-topic-icon-badge badge-green">💻</div>
+              <div class="sarathi-topic-card" data-topic="Web & Cloud Development" style="--card-delay: 0.08s;">
+                <div class="sarathi-topic-icon-badge badge-green">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                    <line x1="2" y1="20" x2="22" y2="20"></line>
+                  </svg>
+                </div>
                 <div class="sarathi-topic-info">
-                  <h4>Web Development & Cloud</h4>
-                  <p>Modern full-stack web apps & cloud APIs</p>
+                  <h4>Web & Cloud Development</h4>
+                  <p>Modern web apps & cloud solutions</p>
                 </div>
                 <span class="sarathi-topic-arrow">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
                   </svg>
                 </span>
               </div>
 
-              <div class="sarathi-topic-card" data-topic="Test Automation" style="--card-delay: 0.12s;">
-                <div class="sarathi-topic-icon-badge badge-amber">⚡</div>
+              <div class="sarathi-topic-card" data-topic="Professional Training" style="--card-delay: 0.12s;">
+                <div class="sarathi-topic-icon-badge badge-purple">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9333EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                    <path d="M6 12v5c0 3 4 5 6 5s6-2 6-5v-5"></path>
+                  </svg>
+                </div>
                 <div class="sarathi-topic-info">
-                  <h4>Test Automation & QA</h4>
-                  <p>Playwright, CI/CD quality engineering</p>
+                  <h4>Professional Training</h4>
+                  <p>AI & technology training for teams and individuals</p>
                 </div>
                 <span class="sarathi-topic-arrow">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
                   </svg>
                 </span>
               </div>
 
-              <div class="sarathi-topic-card" data-topic="Professional Courses" style="--card-delay: 0.16s;">
-                <div class="sarathi-topic-icon-badge badge-purple">🎓</div>
+              <div class="sarathi-topic-card" data-topic="Get a Quote" style="--card-delay: 0.16s;">
+                <div class="sarathi-topic-icon-badge badge-orange">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    <line x1="8" y1="11" x2="8.01" y2="11" stroke-width="2.5"></line>
+                    <line x1="12" y1="11" x2="12.01" y2="11" stroke-width="2.5"></line>
+                    <line x1="16" y1="11" x2="16.01" y2="11" stroke-width="2.5"></line>
+                  </svg>
+                </div>
                 <div class="sarathi-topic-info">
-                  <h4>Professional Courses</h4>
-                  <p>Industry-ready engineering & tech courses</p>
+                  <h4>Get a Quote</h4>
+                  <p>Discuss your project with our experts</p>
                 </div>
                 <span class="sarathi-topic-arrow">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
                   </svg>
                 </span>
               </div>
 
+            </div>
+
+            <!-- Popular Questions Section matching Reference UI -->
+            <div class="sarathi-popular-section">
+              <div class="sarathi-popular-header">
+                <h4 class="sarathi-popular-title">Popular questions</h4>
+                <button type="button" class="sarathi-popular-see-all">See all &gt;</button>
+              </div>
+
+              <div class="sarathi-popular-grid">
+                <button type="button" class="sarathi-popular-q-btn" data-question="What services do you offer?">
+                  <div class="sarathi-pop-q-icon pop-icon-blue">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                      <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                  </div>
+                  <span>What services do you offer?</span>
+                </button>
+
+                <button type="button" class="sarathi-popular-q-btn" data-question="How can AI help my business?">
+                  <div class="sarathi-pop-q-icon pop-icon-blue">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  </div>
+                  <span>How can AI help my business?</span>
+                </button>
+
+                <button type="button" class="sarathi-popular-q-btn" data-question="Do you provide custom solutions?">
+                  <div class="sarathi-pop-q-icon pop-icon-green">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                  </div>
+                  <span>Do you provide custom solutions?</span>
+                </button>
+
+                <button type="button" class="sarathi-popular-q-btn" data-question="How can I get started?">
+                  <div class="sarathi-pop-q-icon pop-icon-orange">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                  </div>
+                  <span>How can I get started?</span>
+                </button>
+              </div>
             </div>
 
           </div>
 
           <!-- Screen 3: Messages Stream Container -->
-          <div class="sarathi-chat-messages" id="sarathi-messages-list" style="${state.leadInfo && state.leadInfo.name && state.leadInfo.contact && state.history.length > 0 ? 'display: flex;' : 'display: none;'}">
+          <div class="sarathi-chat-messages" id="sarathi-messages-list" style="${isLeadComplete(state.leadInfo) && state.history && state.history.some(m => m.sender === 'user') ? 'display: flex;' : 'display: none;'}">
             <!-- Messages injected dynamically -->
           </div>
 
-          <!-- Dynamic Streaming / Typing Indicator -->
+          <!-- Dynamic Streaming / Advanced AI Thinking Indicator -->
           <div id="sarathi-typing-wrap" class="sarathi-typing-wrapper" style="display: none;">
-            <div class="sarathi-typing-bubble">
-              <div class="sarathi-typing-avatar-mini">
-                <svg viewBox="0 0 100 100" fill="none">
-                  <circle cx="50" cy="17" r="5" fill="#38BDF8"/>
-                  <rect x="47.5" y="21" width="5" height="7" rx="2.5" fill="#FFFFFF"/>
-                  <rect x="23" y="27" width="54" height="49" rx="19" fill="#FFFFFF"/>
-                  <rect x="29" y="33" width="42" height="37" rx="13" fill="#0F172A"/>
-                  <circle cx="41.5" cy="49" r="4.5" fill="#38BDF8"/>
-                  <circle cx="58.5" cy="49" r="4.5" fill="#38BDF8"/>
-                </svg>
+            <div class="sarathi-thinking-card">
+              <!-- Top Row: Avatar with glowing ring, title, live stopwatch, and active stage text -->
+              <div class="sarathi-thinking-header">
+                <div class="sarathi-thinking-avatar-box">
+                  <div class="sarathi-thinking-avatar-ring"></div>
+                  <div class="sarathi-thinking-avatar-inner">
+                    <img src="${CONFIG.avatarUrl}" alt="Sarathi AI" class="sarathi-thinking-avatar-img" />
+                  </div>
+                </div>
+                <div class="sarathi-thinking-meta">
+                  <div class="sarathi-thinking-title-row">
+                    <span class="sarathi-thinking-sparkle">✦</span>
+                    <span class="sarathi-thinking-title">Sarathi AI is thinking</span>
+                    <span class="sarathi-thinking-timer-pill" id="sarathi-thinking-timer">0.0s</span>
+                  </div>
+                  <div class="sarathi-thinking-status-row">
+                    <span class="sarathi-thinking-status-dot"></span>
+                    <span class="sarathi-thinking-step-text" id="sarathi-thinking-step-text">Analyzing query and context...</span>
+                  </div>
+                </div>
               </div>
-              <div class="sarathi-typing-dots">
-                <span></span>
-                <span></span>
-                <span></span>
+
+              <!-- Pipeline: Real-time Multi-Stage Progress Tracker -->
+              <div class="sarathi-thinking-pipeline">
+                <div class="sarathi-thinking-stage active" id="sarathi-stage-1">
+                  <span class="stage-icon">🧠</span>
+                  <span class="stage-label">Intent</span>
+                </div>
+                <div class="sarathi-thinking-connector" id="sarathi-connector-1"></div>
+                <div class="sarathi-thinking-stage" id="sarathi-stage-2">
+                  <span class="stage-icon">🔍</span>
+                  <span class="stage-label">Knowledge</span>
+                </div>
+                <div class="sarathi-thinking-connector" id="sarathi-connector-2"></div>
+                <div class="sarathi-thinking-stage" id="sarathi-stage-3">
+                  <span class="stage-icon">⚡</span>
+                  <span class="stage-label">Reasoning</span>
+                </div>
+                <div class="sarathi-thinking-connector" id="sarathi-connector-3"></div>
+                <div class="sarathi-thinking-stage" id="sarathi-stage-4">
+                  <span class="stage-icon">✨</span>
+                  <span class="stage-label">Synthesis</span>
+                </div>
               </div>
-              <span class="sarathi-typing-text">Synthesizing intelligent response...</span>
+
+              <!-- Smooth Neural Shimmer Track -->
+              <div class="sarathi-thinking-neural-track">
+                <div class="sarathi-thinking-neural-pulse"></div>
+              </div>
             </div>
           </div>
 
         </div>
 
-        <!-- Composer / Input Container -->
-        <div class="sarathi-composer-container" id="sarathi-composer-container" style="${state.leadInfo && state.leadInfo.name && state.leadInfo.contact ? 'display: flex;' : 'display: none;'}">
-          <div class="sarathi-composer-bar">
-            <textarea id="sarathi-input" class="sarathi-textarea" placeholder="Ask anything about our solutions..." rows="1"></textarea>
-            <button class="sarathi-send-btn" id="sarathi-btn-send" aria-label="Send Message" disabled>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
+        <!-- Composer / Input Container matching Reference UI -->
+        <div class="sarathi-composer-container" id="sarathi-composer-container" style="${isLeadComplete(state.leadInfo) ? 'display: flex;' : 'display: none;'}">
+          <div class="sarathi-composer-box">
+            <textarea id="sarathi-input" class="sarathi-textarea" placeholder="Enter your message..." rows="1"></textarea>
+            
+            <div class="sarathi-composer-actions">
+              <div class="sarathi-composer-tools">
+                <!-- Emoji Selector Wrap -->
+                <div class="sarathi-emoji-picker-wrap">
+                  <button type="button" class="sarathi-tool-btn" id="sarathi-btn-emoji" title="Insert Emoji" aria-label="Emoji">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                      <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                      <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                    </svg>
+                  </button>
+                  <div class="sarathi-emoji-popup" id="sarathi-emoji-popup">
+                    <div class="sarathi-emoji-grid">
+                      <button type="button" class="sarathi-emoji-item" data-emoji="😊">😊</button>
+                      <button type="button" class="sarathi-emoji-item" data-emoji="👋">👋</button>
+                      <button type="button" class="sarathi-emoji-item" data-emoji="🤖">🤖</button>
+                      <button type="button" class="sarathi-emoji-item" data-emoji="🚀">🚀</button>
+                      <button type="button" class="sarathi-emoji-item" data-emoji="⚡">⚡</button>
+                      <button type="button" class="sarathi-emoji-item" data-emoji="💡">💡</button>
+                      <button type="button" class="sarathi-emoji-item" data-emoji="👍">👍</button>
+                      <button type="button" class="sarathi-emoji-item" data-emoji="❤️">❤️</button>
+                      <button type="button" class="sarathi-emoji-item" data-emoji="💻">💻</button>
+                      <button type="button" class="sarathi-emoji-item" data-emoji="💼">💼</button>
+                      <button type="button" class="sarathi-emoji-item" data-emoji="🔥">🔥</button>
+                      <button type="button" class="sarathi-emoji-item" data-emoji="🎯">🎯</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Attachment Button -->
+                <button type="button" class="sarathi-tool-btn" id="sarathi-btn-attach" title="Attach Document or Inquire" aria-label="Attachments">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                  </svg>
+                </button>
+                <input type="file" id="sarathi-file-input" style="display: none;" accept="image/*,.pdf,.doc,.docx,.txt">
+              </div>
+
+              <!-- Send Button (Prominent Navy Circle matching Reference UI) -->
+              <button class="sarathi-send-btn" id="sarathi-btn-send" title="Send Message" aria-label="Send message">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+              </button>
+            </div>
           </div>
           <div class="sarathi-footer-notice">
             <span class="footer-badge">✦ Enterprise RAG</span>
@@ -851,51 +1483,185 @@ Select a topic above or ask any technical question!`,
     const chatWindow = document.getElementById('sarathi-chat-window');
     const header = document.getElementById('sarathi-header');
     const btnClose = document.getElementById('sarathi-btn-close');
+    const btnMinimize = document.getElementById('sarathi-btn-minimize');
     const btnFullscreen = document.getElementById('sarathi-btn-fullscreen');
-    const btnReset = document.getElementById('sarathi-btn-reset');
+    const btnSettings = document.getElementById('sarathi-btn-settings');
+    const settingsMenu = document.getElementById('sarathi-settings-menu');
+    const menuFullscreen = document.getElementById('sarathi-menu-fullscreen');
+    const menuFullscreenLabel = document.getElementById('sarathi-menu-fullscreen-label');
+    const menuAudio = document.getElementById('sarathi-menu-audio');
+    const menuReset = document.getElementById('sarathi-menu-reset');
     const welcomeScreen = document.getElementById('sarathi-welcome-screen');
     const messagesList = document.getElementById('sarathi-messages-list');
     const typingWrap = document.getElementById('sarathi-typing-wrap');
     const textarea = document.getElementById('sarathi-input');
     const btnSend = document.getElementById('sarathi-btn-send');
+    const btnEmoji = document.getElementById('sarathi-btn-emoji');
+    const emojiPopup = document.getElementById('sarathi-emoji-popup');
+    const btnAttach = document.getElementById('sarathi-btn-attach');
+    const fileInput = document.getElementById('sarathi-file-input');
     const gateView = document.getElementById('sarathi-gate-view');
     const gateName = document.getElementById('sarathi-gate-name');
-    const gateContact = document.getElementById('sarathi-gate-contact');
+    const gateEmail = document.getElementById('sarathi-gate-email');
+    const gatePhone = document.getElementById('sarathi-gate-phone');
     const gateError = document.getElementById('sarathi-gate-error');
     const gateSubmit = document.getElementById('sarathi-gate-submit');
     const composerContainer = document.getElementById('sarathi-composer-container');
-    const btnTheme = document.getElementById('sarathi-btn-theme');
+    let currentEditingMsgId = null;
 
-    function applyTheme(newTheme) {
-      state.theme = newTheme;
-      const rootEl = document.getElementById('sarathi-ai-root');
-      if (rootEl) rootEl.setAttribute('data-theme', newTheme);
-      if (chatWindow) chatWindow.setAttribute('data-theme', newTheme);
-      localStorage.setItem(CONFIG.storageKeyTheme, newTheme);
+    // In-Page Fullscreen Toggle
+    function toggleFullscreen(force) {
+      if (!chatWindow) return;
+      const isFull = typeof force === 'boolean' ? force : !chatWindow.classList.contains('sarathi-fullscreen-mode');
+      const iconExpand = chatWindow.querySelector('.sarathi-icon-expand');
+      const iconCompress = chatWindow.querySelector('.sarathi-icon-compress');
 
-      if (btnTheme) {
-        btnTheme.innerHTML = newTheme === 'dark' ?
-          `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>` :
-          `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+      if (isFull) {
+        chatWindow.classList.add('sarathi-fullscreen-mode');
+        document.body.classList.add('sarathi-fullscreen-active');
+        if (iconExpand) iconExpand.style.display = 'none';
+        if (iconCompress) iconCompress.style.display = 'block';
+        if (menuFullscreenLabel) menuFullscreenLabel.textContent = 'Exit Full Screen';
+        if (btnFullscreen) btnFullscreen.setAttribute('title', 'Exit Full Screen');
+        showToast('Full screen mode active ⛶');
+      } else {
+        chatWindow.classList.remove('sarathi-fullscreen-mode');
+        document.body.classList.remove('sarathi-fullscreen-active');
+        if (iconExpand) iconExpand.style.display = 'block';
+        if (iconCompress) iconCompress.style.display = 'none';
+        if (menuFullscreenLabel) menuFullscreenLabel.textContent = 'Full Screen Mode';
+        if (btnFullscreen) btnFullscreen.setAttribute('title', 'Full Screen');
+
+        // Restore position
+        const savedPos = safeStorage.getItem(CONFIG.storageKeyPos);
+        if (savedPos) {
+          try {
+            const p = JSON.parse(savedPos);
+            if (typeof p.right === 'number') chatWindow.style.right = p.right + 'px';
+            if (typeof p.bottom === 'number') chatWindow.style.bottom = p.bottom + 'px';
+          } catch (e) {}
+        }
       }
+      scrollToLatestExchange(false);
     }
 
-    if (btnTheme) {
-      btnTheme.addEventListener('click', () => {
-        applyTheme(state.theme === 'dark' ? 'light' : 'dark');
+    if (btnFullscreen) {
+      btnFullscreen.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleFullscreen();
+      });
+      btnFullscreen.addEventListener('pointerdown', (e) => e.stopPropagation());
+    }
+
+    // Settings Dropdown Toggle
+    if (btnSettings && settingsMenu) {
+      btnSettings.addEventListener('click', (e) => {
+        e.stopPropagation();
+        settingsMenu.classList.toggle('active');
+      });
+      btnSettings.addEventListener('pointerdown', (e) => e.stopPropagation());
+      document.addEventListener('click', (e) => {
+        if (!btnSettings.contains(e.target) && !settingsMenu.contains(e.target)) {
+          settingsMenu.classList.remove('active');
+        }
+      });
+    }
+
+    if (menuFullscreen) {
+      menuFullscreen.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (settingsMenu) settingsMenu.classList.remove('active');
+        toggleFullscreen();
+      });
+    }
+
+    if (menuAudio) {
+      menuAudio.addEventListener('click', (e) => {
+        e.stopPropagation();
+        state.audioEnabled = !state.audioEnabled;
+        safeStorage.setItem(CONFIG.storageKeyAudio, state.audioEnabled);
+        const audioIcon = document.getElementById('sarathi-menu-audio-icon');
+        if (audioIcon) audioIcon.textContent = state.audioEnabled ? '🔊' : '🔇';
+        showToast(state.audioEnabled ? 'Sound feedback on 🔊' : 'Sound feedback muted 🔇');
+        if (settingsMenu) settingsMenu.classList.remove('active');
+      });
+    }
+
+    // Clear Conversation Action
+    if (menuReset) {
+      menuReset.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (settingsMenu) settingsMenu.classList.remove('active');
+        currentEditingMsgId = null;
+        state.history = [];
+        saveChatHistory();
+        renderChatHistory();
+        showToast('Conversation cleared ✨');
+      });
+    }
+
+    // Keyboard ESC exits full screen mode
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && chatWindow && chatWindow.classList.contains('sarathi-fullscreen-mode')) {
+        toggleFullscreen(false);
+      }
+    });
+
+    // Emoji Picker Toggle & Selection
+    if (btnEmoji && emojiPopup) {
+      btnEmoji.addEventListener('click', (e) => {
+        e.stopPropagation();
+        emojiPopup.classList.toggle('active');
+      });
+      document.addEventListener('click', (e) => {
+        if (!btnEmoji.contains(e.target) && !emojiPopup.contains(e.target)) {
+          emojiPopup.classList.remove('active');
+        }
+      });
+      emojiPopup.querySelectorAll('.sarathi-emoji-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const emoji = item.getAttribute('data-emoji');
+          if (textarea && emoji) {
+            textarea.value += emoji;
+            textarea.focus();
+            textarea.dispatchEvent(new Event('input'));
+          }
+          emojiPopup.classList.remove('active');
+        });
+      });
+    }
+
+    // Attachment Button & File Upload
+    if (btnAttach && fileInput) {
+      btnAttach.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fileInput.click();
+      });
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files && fileInput.files[0]) {
+          const file = fileInput.files[0];
+          showToast(`Attached: ${file.name} 📎`);
+          if (textarea) {
+            textarea.value += (textarea.value ? ' ' : '') + `[Attached: ${file.name}] `;
+            textarea.focus();
+            textarea.dispatchEvent(new Event('input'));
+          }
+        }
       });
     }
 
     function checkGateState() {
-      const isLeadComplete = Boolean(state.leadInfo && state.leadInfo.name && state.leadInfo.contact);
-      if (isLeadComplete) {
+      const isComplete = isLeadComplete(state.leadInfo);
+      if (isComplete) {
         if (gateView) gateView.style.display = 'none';
         if (composerContainer) composerContainer.style.display = 'flex';
-
-        const hubTitle = document.getElementById('sarathi-hub-title');
-        if (hubTitle && state.leadInfo.name) {
+        
+        const welcomeText = document.getElementById('sarathi-welcome-text');
+        if (welcomeText && state.leadInfo.name) {
           const firstName = state.leadInfo.name.split(' ')[0];
-          hubTitle.innerHTML = `Hi <span class="sarathi-gradient-name">${firstName}</span> 👋`;
+          welcomeText.innerHTML = `<span class="sarathi-welcome-greeting">Hi <strong class="sarathi-user-firstname">${firstName}</strong> 👋</span><span class="sarathi-welcome-question">How can we empower you with intelligent technology today?</span>`;
         }
 
         renderChatHistory();
@@ -910,35 +1676,75 @@ Select a topic above or ask any technical question!`,
 
     function handleGateSubmission() {
       const name = gateName ? gateName.value.trim() : '';
-      const contact = gateContact ? gateContact.value.trim() : '';
+      const email = gateEmail ? gateEmail.value.trim() : '';
+      const rawPhone = gatePhone ? gatePhone.value.trim() : '';
 
-      if (!name || !contact) {
+      // Normalize phone: strip any non-digit characters and handle pasted country codes
+      let phoneClean = rawPhone.replace(/\D/g, '');
+      if (phoneClean.startsWith('91') && phoneClean.length === 12) {
+        phoneClean = phoneClean.slice(2);
+      } else if (phoneClean.startsWith('0') && phoneClean.length === 11) {
+        phoneClean = phoneClean.slice(1);
+      }
+      phoneClean = phoneClean.slice(0, 10);
+
+      function showGateError(msg, focusElem) {
         if (gateError) {
+          gateError.innerHTML = `<span>${msg}</span>`;
           gateError.style.display = 'flex';
           gateError.classList.add('shake');
           setTimeout(() => gateError.classList.remove('shake'), 500);
         }
+        if (focusElem) focusElem.focus();
+      }
+
+      // 1. Name is always mandatory
+      if (!name) {
+        showGateError('Please enter your name.', gateName);
+        return;
+      }
+
+      // 2. Either Email OR Phone Number (or both) must be provided
+      if (!email && !phoneClean) {
+        showGateError('Please provide either your email or phone number.', gateEmail || gatePhone);
+        return;
+      }
+
+      // 3. If Email is provided, validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (email && !emailRegex.test(email)) {
+        showGateError('Please enter a valid email address.', gateEmail);
+        return;
+      }
+
+      // 4. If Phone is provided, validate that it is exactly 10 digits
+      if ((rawPhone || phoneClean) && phoneClean.length !== 10) {
+        showGateError('Please enter a valid 10-digit phone number.', gatePhone);
         return;
       }
 
       if (gateError) gateError.style.display = 'none';
 
-      state.leadInfo = {
-        name,
-        contact,
-        phone: contact,
-        interest: state.selectedInterest || '',
-        timestamp: new Date().toISOString()
+      // Save lead info: phone is stored clean WITHOUT +91
+      const contactVal = (email && phoneClean) ? `${email} | ${phoneClean}` : (email || phoneClean);
+      state.leadInfo = { 
+        name, 
+        email: email || '',
+        phone: phoneClean || '',
+        contact: contactVal,
+        interest: 'General Inquiry',
+        timestamp: new Date().toISOString() 
       };
-      localStorage.setItem(CONFIG.storageKeyLead, JSON.stringify(state.leadInfo));
+      safeStorage.setItem(CONFIG.storageKeyLead, JSON.stringify(state.leadInfo));
 
-      // Post lead to webhook
+      // Post lead to webhook without +91
       if (CONFIG.leadEndpoint) {
         const leadPayload = {
           name: name,
-          phone: contact,
-          contact: contact,
-          interest: state.selectedInterest || '',
+          email: email || '',
+          phone: phoneClean || '',
+          contact: contactVal,
+          interest: 'General Inquiry',
           visitor_id: state.visitorId,
           conversation_id: state.conversationId,
           page_url: window.location.href,
@@ -946,43 +1752,57 @@ Select a topic above or ask any technical question!`,
           timestamp: new Date().toISOString()
         };
 
+        const leadController = new AbortController();
+        const leadTimeout = setTimeout(() => leadController.abort(), 12000);
         fetch(CONFIG.leadEndpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(leadPayload)
+          body: JSON.stringify(leadPayload),
+          signal: leadController.signal
         }).catch(err => {
           console.warn('[Sarathi AI] Lead capture webhook error:', err);
+        }).finally(() => {
+          clearTimeout(leadTimeout);
         });
       }
 
       checkGateState();
       playHapticTone('receive');
-
-      if (state.selectedInterest && state.history.length === 0) {
-        setTimeout(() => {
-          handleSendMessage(`Hello! I'm interested in ${state.selectedInterest}. Can you share more details and solutions?`);
-        }, 300);
-      }
     }
 
     if (gateSubmit) {
       gateSubmit.addEventListener('click', handleGateSubmission);
     }
 
-    if (gateName && gateContact) {
-      [gateName, gateContact].forEach(input => {
-        input.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            handleGateSubmission();
-          }
-        });
+    // Phone input restriction: allow only digits, strip pasted country code, max 10 digits
+    if (gatePhone) {
+      gatePhone.addEventListener('input', (e) => {
+        let val = e.target.value.replace(/\D/g, '');
+        if (val.startsWith('91') && val.length > 10) {
+          val = val.slice(2);
+        } else if (val.startsWith('0') && val.length > 10) {
+          val = val.slice(1);
+        }
+        e.target.value = val.slice(0, 10);
       });
     }
+
+    [gateName, gateEmail, gatePhone].filter(Boolean).forEach(input => {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleGateSubmission();
+        }
+      });
+    });
 
     // Toggle Chat Window
     function toggleChat(force) {
       state.isOpen = typeof force === 'boolean' ? force : !state.isOpen;
+      try {
+        safeStorage.setItem(CONFIG.storageKeyOpen, state.isOpen ? 'true' : 'false');
+      } catch (e) {}
+
       if (state.isOpen) {
         chatWindow.classList.add('open');
         if (launcherWrap) launcherWrap.classList.add('chat-open');
@@ -994,7 +1814,7 @@ Select a topic above or ask any technical question!`,
         chatWindow.classList.remove('open');
         if (launcherWrap) launcherWrap.classList.remove('chat-open');
         if (launcherBtn) launcherBtn.classList.remove('open');
-        if (launcherPill && (!state.leadInfo || !state.leadInfo.name)) {
+        if (launcherPill && !isLeadComplete(state.leadInfo)) {
           launcherPill.style.display = 'flex';
         }
       }
@@ -1003,21 +1823,23 @@ Select a topic above or ask any technical question!`,
     // Draggable Launcher Button & Header
     makeDraggable(
       launcherWrap,
-      function (r, b) {
+      function(r, b) {
         chatWindow.style.right = r + 'px';
         chatWindow.style.bottom = b + 'px';
-        localStorage.setItem(CONFIG.storageKeyPos, JSON.stringify({ right: r, bottom: b }));
+        safeStorage.setItem(CONFIG.storageKeyPos, JSON.stringify({ right: r, bottom: b }));
       },
       null,
-      null
+      function() {
+        toggleChat(true);
+      }
     );
 
     makeDraggable(
       chatWindow,
-      function (r, b) {
+      function(r, b) {
         launcherWrap.style.right = r + 'px';
         launcherWrap.style.bottom = b + 'px';
-        localStorage.setItem(CONFIG.storageKeyPos, JSON.stringify({ right: r, bottom: b }));
+        safeStorage.setItem(CONFIG.storageKeyPos, JSON.stringify({ right: r, bottom: b }));
       },
       header
     );
@@ -1029,12 +1851,23 @@ Select a topic above or ask any technical question!`,
         toggleChat();
       });
     }
-
+    
     if (launcherPill) {
       launcherPill.addEventListener('click', (e) => {
         e.stopPropagation();
         toggleChat(true);
       });
+    }
+
+    // Minimize Button (Button for minimizing the widget)
+    if (btnMinimize) {
+      const handleMinimize = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleChat(false);
+      };
+      btnMinimize.addEventListener('click', handleMinimize);
+      btnMinimize.addEventListener('pointerdown', (e) => e.stopPropagation());
     }
 
     if (btnClose) {
@@ -1047,128 +1880,207 @@ Select a topic above or ask any technical question!`,
       btnClose.addEventListener('pointerdown', (e) => e.stopPropagation());
     }
 
-    if (btnFullscreen) {
-      const handleFullscreen = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        window.open(CONFIG.fullscreenUrl, '_blank');
-      };
-      btnFullscreen.addEventListener('click', handleFullscreen);
-      btnFullscreen.addEventListener('pointerdown', (e) => e.stopPropagation());
-    }
+    // Auto-minimize only in mobile view (<= 768px) when any redirect link/button is clicked
+    if (chatWindow) {
+      chatWindow.addEventListener('click', (e) => {
+        // Only apply in mobile view, never in laptop/desktop view
+        if (window.innerWidth > 768) return;
 
-    if (btnReset) {
-      const handleReset = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (confirm('Reset conversation history and start fresh?')) {
-          state.history = [];
-          saveChatHistory();
-          checkGateState();
-          showToast('Chat history cleared');
+        const link = e.target.closest('a');
+        if (!link) return;
+
+        const href = link.getAttribute('href');
+        if (href && href !== '#' && !href.startsWith('javascript:') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+          toggleChat(false);
         }
-      };
-      btnReset.addEventListener('click', handleReset);
-      btnReset.addEventListener('pointerdown', (e) => e.stopPropagation());
+      });
     }
 
     // Topic Card Click Handlers
     document.querySelectorAll('.sarathi-topic-card').forEach(card => {
       card.addEventListener('click', (e) => {
         const topic = card.getAttribute('data-topic');
-        let prompt = '';
-
         if (topic) {
-          if (topic.includes('Agentic AI')) {
-            prompt = 'Tell me about Sarathi Agentic AI and Custom Solutions';
-          } else if (topic.includes('Web Development')) {
-            prompt = 'What Web Development & Cloud services do you provide?';
-          } else if (topic.includes('Test Automation')) {
-            prompt = 'How does Sarathi AI help with Test Automation and QA frameworks?';
-          } else if (topic.includes('Professional Courses') || topic.includes('Training') || topic.includes('Courses') || topic.includes('Bootcamp')) {
-            prompt = 'What Professional Courses and Training programs do you offer?';
-          } else {
-            prompt = `Tell me more about ${topic}`;
-          }
-        }
-
-        if (prompt) {
-          handleSendMessage(prompt);
+          handleSendMessage(topic);
         }
       });
     });
+
+    // Popular Question Buttons Click Handlers
+    document.querySelectorAll('.sarathi-popular-q-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const q = btn.getAttribute('data-question') || btn.querySelector('span').textContent.trim();
+        if (q) {
+          handleSendMessage(q);
+        }
+      });
+    });
+
+    // See All Popular Questions Handler
+    const btnSeeAll = document.querySelector('.sarathi-popular-see-all');
+    if (btnSeeAll) {
+      btnSeeAll.addEventListener('click', () => {
+        handleSendMessage('What services and solutions do you provide?');
+      });
+    }
+
+    function submitUserMessage() {
+      if (state.isTyping) {
+        showToast('Please wait for Sarathi to finish responding');
+        return;
+      }
+      const val = textarea.value.trim();
+      if (val) {
+        handleSendMessage(val);
+        textarea.value = '';
+        textarea.style.height = 'auto';
+      } else {
+        textarea.focus();
+      }
+    }
 
     // Textarea Auto-expand & Send Handling
     textarea.addEventListener('input', () => {
       textarea.style.height = 'auto';
       textarea.style.height = Math.min(textarea.scrollHeight, 90) + 'px';
-      btnSend.disabled = !textarea.value.trim();
     });
 
     textarea.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        if (textarea.value.trim()) {
-          handleSendMessage(textarea.value.trim());
-          textarea.value = '';
-          textarea.style.height = 'auto';
-          btnSend.disabled = true;
+        submitUserMessage();
+      }
+    });
+
+    btnSend.addEventListener('click', submitUserMessage);
+
+    // Helper to check if chat conversation has started
+    function hasChatStarted() {
+      return Boolean(state.history && state.history.length > 0 && state.history.some(m => m.sender === 'user'));
+    }
+
+    // Dynamic AI Thinking Engine with Live Stopwatch & Multi-Stage Reasoning
+    let thinkingInterval = null;
+    let thinkingStartTime = 0;
+
+    function startThinkingEngine() {
+      const timerEl = document.getElementById('sarathi-thinking-timer');
+      const stepTextEl = document.getElementById('sarathi-thinking-step-text');
+      const stage1 = document.getElementById('sarathi-stage-1');
+      const stage2 = document.getElementById('sarathi-stage-2');
+      const stage3 = document.getElementById('sarathi-stage-3');
+      const stage4 = document.getElementById('sarathi-stage-4');
+      const conn1 = document.getElementById('sarathi-connector-1');
+      const conn2 = document.getElementById('sarathi-connector-2');
+      const conn3 = document.getElementById('sarathi-connector-3');
+
+      if (thinkingInterval) {
+        clearInterval(thinkingInterval);
+        thinkingInterval = null;
+      }
+
+      thinkingStartTime = Date.now();
+
+      const updateThinkingUI = () => {
+        const elapsedMs = Date.now() - thinkingStartTime;
+        const elapsedSec = (elapsedMs / 1000).toFixed(1);
+        if (timerEl) timerEl.textContent = `${elapsedSec}s`;
+
+        if (elapsedMs < 1200) {
+          if (stepTextEl) stepTextEl.textContent = 'Analyzing question and intent...';
+          if (stage1) stage1.className = 'sarathi-thinking-stage active';
+          if (stage2) stage2.className = 'sarathi-thinking-stage';
+          if (stage3) stage3.className = 'sarathi-thinking-stage';
+          if (stage4) stage4.className = 'sarathi-thinking-stage';
+          if (conn1) conn1.className = 'sarathi-thinking-connector';
+          if (conn2) conn2.className = 'sarathi-thinking-connector';
+          if (conn3) conn3.className = 'sarathi-thinking-connector';
+        } else if (elapsedMs < 2800) {
+          if (stepTextEl) stepTextEl.textContent = 'Accessing Sarathi AI knowledge base...';
+          if (stage1) stage1.className = 'sarathi-thinking-stage completed';
+          if (stage2) stage2.className = 'sarathi-thinking-stage active';
+          if (stage3) stage3.className = 'sarathi-thinking-stage';
+          if (stage4) stage4.className = 'sarathi-thinking-stage';
+          if (conn1) conn1.className = 'sarathi-thinking-connector filled';
+          if (conn2) conn2.className = 'sarathi-thinking-connector';
+          if (conn3) conn3.className = 'sarathi-thinking-connector';
+        } else if (elapsedMs < 4500) {
+          if (stepTextEl) stepTextEl.textContent = 'Synthesizing neural reasoning & insights...';
+          if (stage1) stage1.className = 'sarathi-thinking-stage completed';
+          if (stage2) stage2.className = 'sarathi-thinking-stage completed';
+          if (stage3) stage3.className = 'sarathi-thinking-stage active';
+          if (stage4) stage4.className = 'sarathi-thinking-stage';
+          if (conn1) conn1.className = 'sarathi-thinking-connector filled';
+          if (conn2) conn2.className = 'sarathi-thinking-connector filled';
+          if (conn3) conn3.className = 'sarathi-thinking-connector';
+        } else {
+          if (stepTextEl) stepTextEl.textContent = 'Formulating tailored, precise response...';
+          if (stage1) stage1.className = 'sarathi-thinking-stage completed';
+          if (stage2) stage2.className = 'sarathi-thinking-stage completed';
+          if (stage3) stage3.className = 'sarathi-thinking-stage completed';
+          if (stage4) stage4.className = 'sarathi-thinking-stage active';
+          if (conn1) conn1.className = 'sarathi-thinking-connector filled';
+          if (conn2) conn2.className = 'sarathi-thinking-connector filled';
+          if (conn3) conn3.className = 'sarathi-thinking-connector filled';
         }
-      }
-    });
-
-    btnSend.addEventListener('click', () => {
-      if (textarea.value.trim()) {
-        handleSendMessage(textarea.value.trim());
-        textarea.value = '';
-        textarea.style.height = 'auto';
-        btnSend.disabled = true;
-      }
-    });
-
-    // Handle Sending Message
-    async function handleSendMessage(userText) {
-      if (!userText || state.isTyping) return;
-
-      const userMsg = {
-        id: 'msg_' + Date.now(),
-        sender: 'user',
-        text: userText,
-        time: formatTime(new Date())
       };
 
-      state.history.push(userMsg);
-      saveChatHistory();
-      renderChatHistory();
-      scrollToLatestExchange(true);
-      playHapticTone('send');
+      updateThinkingUI();
+      thinkingInterval = setInterval(updateThinkingUI, 90);
+    }
 
-      // Show typing indicator
+    function stopThinkingEngine() {
+      if (thinkingInterval) {
+        clearInterval(thinkingInterval);
+        thinkingInterval = null;
+      }
+    }
+
+    // Helper to send query to AI and stream response into history
+    async function dispatchBotResponse(userText) {
+      // Show advanced thinking indicator
       state.isTyping = true;
-      typingWrap.style.display = 'block';
+      if (typingWrap) typingWrap.style.display = 'block';
+      startThinkingEngine();
       scrollToLatestExchange(true);
 
-      // Send to Webhook or Intelligent Engine
+      // Send directly to n8n AI Agent Webhook
       try {
         let aiResult = null;
+
         if (CONFIG.apiEndpoint) {
           const payload = {
-            message: userText,
+            message: userText.trim(),
+            query: userText.trim(),
+            chatInput: userText.trim(),
+            prompt: userText.trim(),
+            input: userText.trim(),
             visitor_id: state.visitorId,
             conversation_id: state.conversationId,
+            sessionId: state.conversationId,
             name: (state.leadInfo && state.leadInfo.name) || '',
-            phone: (state.leadInfo && (state.leadInfo.phone || state.leadInfo.contact)) || '',
-            contact: (state.leadInfo && (state.leadInfo.phone || state.leadInfo.contact)) || '',
+            email: (state.leadInfo && state.leadInfo.email) || '',
+            phone: (state.leadInfo && state.leadInfo.phone) || '',
+            contact: (state.leadInfo && state.leadInfo.contact) || (state.leadInfo && (state.leadInfo.phone || state.leadInfo.email)) || '',
             page_url: window.location.href,
             page_title: document.title,
             timestamp: new Date().toISOString()
           };
 
-          const response = await fetch(CONFIG.apiEndpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 25000);
+          let response;
+
+          try {
+            response = await fetch(CONFIG.apiEndpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+              signal: controller.signal
+            });
+          } finally {
+            clearTimeout(timeoutId);
+          }
 
           if (response.ok) {
             const contentType = response.headers.get('content-type') || '';
@@ -1180,35 +2092,45 @@ Select a topic above or ask any technical question!`,
               try {
                 data = JSON.parse(rawText);
               } catch {
-                data = { text: rawText };
+                data = { answer: rawText };
               }
             }
 
-            const item = Array.isArray(data) ? data[0] : data;
             let textContent = '';
-            if (typeof item === 'string') {
-              textContent = item;
-            } else if (item && typeof item === 'object') {
-              textContent = item.output || item.response || item.answer || item.text || item.message || item.content || '';
-              if (!textContent && Object.keys(item).length > 0) {
-                textContent = JSON.stringify(item);
+            if (typeof data === 'string') {
+              textContent = data;
+            } else if (data && typeof data === 'object') {
+              const item = Array.isArray(data) ? data[0] : data;
+              if (typeof item === 'string') {
+                textContent = item;
+              } else if (item && typeof item === 'object') {
+                textContent = item.answer || item.output || item.response || item.text || item.message || item.content || (item.data && (item.data.answer || item.data.text || item.data.output)) || '';
               }
             }
 
-            if (textContent) {
+            if (textContent && textContent.trim()) {
+              const followUpChips = (data && data.chips && data.chips.length > 0)
+                ? data.chips
+                : getRecommendedQuestions(userText, textContent);
+
               aiResult = {
-                category: (item && item.category) || 'AI Response',
-                text: textContent,
-                sources: (item && item.sources) || [],
-                chips: (item && item.chips) || []
+                category: 'Sarathi AI Agent',
+                text: textContent.trim(),
+                sources: (data && data.sources) || [],
+                chips: followUpChips
               };
             }
           }
         }
 
         if (!aiResult) {
-          await new Promise(r => setTimeout(r, 600));
+          await new Promise(r => setTimeout(r, 500));
           aiResult = generateFallbackResponse(userText);
+        }
+
+        // Ensure contextual recommended questions are provided for subsequent exchanges
+        if (!aiResult.chips || aiResult.chips.length === 0) {
+          aiResult.chips = getRecommendedQuestions(userText, aiResult.text || '');
         }
 
         const botMsg = {
@@ -1235,24 +2157,79 @@ Select a topic above or ask any technical question!`,
           category: fallback.category || 'AI Response',
           text: fallback.text,
           sources: fallback.sources,
-          chips: fallback.chips,
+          chips: getRecommendedQuestions(userText, fallback.text || ''),
           time: formatTime(new Date()),
           feedback: null
         });
         saveChatHistory();
         playHapticTone('receive');
       } finally {
+        stopThinkingEngine();
         state.isTyping = false;
-        typingWrap.style.display = 'none';
+        if (typingWrap) typingWrap.style.display = 'none';
         renderChatHistory();
         scrollToLatestExchange(true);
       }
     }
 
-    // Render Conversation Stream
+    // Handle Sending Message
+    async function handleSendMessage(userText) {
+      if (!userText || state.isTyping) return;
+
+      // If user is initiating chat for the first time, prepend the welcome greeting
+      if (!hasChatStarted()) {
+        const firstName = (state.leadInfo && state.leadInfo.name) ? state.leadInfo.name.split(' ')[0] : 'there';
+        state.history.push({
+          id: 'msg_welcome_' + Date.now(),
+          sender: 'assistant',
+          text: `Hi ${firstName} 👋\nHow can we empower you with intelligent technology today?`,
+          time: formatTime(new Date())
+        });
+      }
+
+      const userMsg = {
+        id: 'msg_' + Date.now(),
+        sender: 'user',
+        text: userText,
+        time: formatTime(new Date())
+      };
+
+      state.history.push(userMsg);
+      saveChatHistory();
+      renderChatHistory();
+      scrollToLatestExchange(true);
+      playHapticTone('send');
+
+      await dispatchBotResponse(userText);
+    }
+
+    // Handle Editing Previous User Message
+    async function handleEditMessage(msgId, newText) {
+      if (!newText || state.isTyping) return;
+
+      const msgIndex = state.history.findIndex(m => m.id === msgId);
+      if (msgIndex === -1) return;
+
+      // Update the user message and mark as edited
+      state.history[msgIndex].text = newText;
+      state.history[msgIndex].edited = true;
+      state.history[msgIndex].time = formatTime(new Date());
+
+      // Replace old response and subsequent messages after this point
+      state.history = state.history.slice(0, msgIndex + 1);
+      saveChatHistory();
+      renderChatHistory();
+      scrollToLatestExchange(true);
+      playHapticTone('send');
+
+      // Regenerate the response for the corrected message
+      await dispatchBotResponse(newText);
+    }
+
+    // Render Conversation Stream (Matching Reference UI + Inline Editing)
     function renderChatHistory() {
-      const isLeadComplete = Boolean(state.leadInfo && state.leadInfo.name && state.leadInfo.contact);
-      if (!isLeadComplete) {
+      const isComplete = isLeadComplete(state.leadInfo);
+      if (!isComplete) {
         if (gateView) gateView.style.display = 'flex';
         if (welcomeScreen) welcomeScreen.style.display = 'none';
         if (messagesList) messagesList.style.display = 'none';
@@ -1263,287 +2240,252 @@ Select a topic above or ask any technical question!`,
       if (gateView) gateView.style.display = 'none';
       if (composerContainer) composerContainer.style.display = 'flex';
 
-      if (state.history.length === 0) {
-        welcomeScreen.style.display = 'flex';
-        messagesList.style.display = 'none';
+      // Keep cards & popular questions visible until the user starts chatting
+      if (!hasChatStarted()) {
+        if (welcomeScreen) welcomeScreen.style.display = 'flex';
+        if (messagesList) {
+          messagesList.style.display = 'none';
+          messagesList.innerHTML = '';
+        }
         return;
       }
 
-      welcomeScreen.style.display = 'none';
-      if (gateView) gateView.style.display = 'none';
-      messagesList.style.display = 'flex';
-      messagesList.innerHTML = '';
+      // User has started chatting: switch from welcome cards to conversation stream
+      if (welcomeScreen) welcomeScreen.style.display = 'none';
+      if (messagesList) {
+        messagesList.style.display = 'flex';
+        messagesList.innerHTML = '';
+      }
+
+      // Identify the index of the latest assistant message
+      const lastBotIndex = state.history.map(m => m.sender).lastIndexOf('assistant');
 
       state.history.forEach((msg, idx) => {
         const isBot = msg.sender === 'assistant';
+        const isLatestBot = isBot && (idx === lastBotIndex);
         const msgEl = document.createElement('div');
         msgEl.className = `sarathi-message ${isBot ? 'assistant' : 'user'}`;
         msgEl.id = msg.id;
 
-        let sourcesHtml = '';
-        if (msg.sources && msg.sources.length > 0) {
-          sourcesHtml = `<div class="sarathi-sources-list">`;
-          msg.sources.forEach(src => {
-            sourcesHtml += `
-              <a class="sarathi-source-card" href="${src.url}" target="_blank">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-                </svg>
-                <span>${src.title}</span>
-              </a>
-            `;
-          });
-          sourcesHtml += `</div>`;
-        }
-
-        let chipsHtml = '';
-        if (isBot && idx === state.history.length - 1 && msg.chips && msg.chips.length > 0) {
-          chipsHtml = `<div class="sarathi-chips-row">`;
-          msg.chips.forEach(chip => {
-            chipsHtml += `
-              <button class="sarathi-chip-btn">
-                <span class="chip-spark">✦</span>
-                <span class="chip-label">${chip}</span>
-                <span class="chip-arrow">→</span>
-              </button>
-            `;
-          });
-          chipsHtml += `</div>`;
-        }
-
-        let actionsToolbarHtml = '';
         if (isBot) {
-          actionsToolbarHtml = `
-            <div class="sarathi-msg-actions-bar">
-              <button class="sarathi-action-mini-btn btn-copy-msg" data-msg-id="${msg.id}" title="Copy response">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-                <span>Copy</span>
-              </button>
-              <button class="sarathi-action-mini-btn btn-speak-msg" data-msg-id="${msg.id}" title="Read aloud">
-                <span class="sarathi-sound-wave" style="display: none;">
-                  <span></span><span></span><span></span>
-                </span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                </svg>
-                <span>Listen</span>
-              </button>
-              <div class="sarathi-feedback-group">
-                <button class="sarathi-feedback-btn ${msg.feedback === 'up' ? 'active' : ''}" data-action="up" data-msg-id="${msg.id}" title="Helpful response">👍</button>
-                <button class="sarathi-feedback-btn ${msg.feedback === 'down' ? 'active' : ''}" data-action="down" data-msg-id="${msg.id}" title="Not helpful">👎</button>
+          let chipsHtml = '';
+          if (isLatestBot && !state.isTyping) {
+            let chipsToShow = (msg.chips && Array.isArray(msg.chips) && msg.chips.length > 0) ? msg.chips.slice(0, 3) : [];
+            if (chipsToShow.length === 0) {
+              const lastUserMsg = [...state.history].reverse().find(m => m.sender === 'user');
+              const lastUserText = lastUserMsg ? lastUserMsg.text : '';
+              chipsToShow = getRecommendedQuestions(lastUserText, msg.text).slice(0, 3);
+              msg.chips = chipsToShow;
+              saveChatHistory();
+            }
+
+            if (chipsToShow && chipsToShow.length > 0) {
+              chipsHtml = `
+                <div class="sarathi-recommended-chips-wrap">
+                  <div class="sarathi-recommended-chips-title">
+                    <span class="sarathi-rec-spark">💡</span>
+                    <span>Suggested follow-ups:</span>
+                  </div>
+                  <div class="sarathi-recommended-chips-list">
+                    ${chipsToShow.map(chip => `
+                      <button type="button" class="sarathi-recommend-chip-btn" data-question="${escapeHtml(chip)}" title="Ask: ${escapeHtml(chip)}">
+                        <span class="sarathi-rec-chip-icon">✦</span>
+                        <span class="sarathi-rec-chip-text">${escapeHtml(chip)}</span>
+                        <span class="sarathi-rec-chip-arrow">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                          </svg>
+                        </span>
+                      </button>
+                    `).join('')}
+                  </div>
+                </div>
+              `;
+            }
+          }
+
+          msgEl.innerHTML = `
+            <div class="sarathi-msg-bubble sarathi-bot-bubble">
+              <div class="sarathi-markdown">${renderMarkdown(msg.text)}</div>
+            </div>
+            ${chipsHtml}
+          `;
+
+          // Interactive click listeners for recommended question chips
+          msgEl.querySelectorAll('.sarathi-recommend-chip-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (state.isTyping) return;
+              const q = btn.getAttribute('data-question') || (btn.querySelector('.sarathi-rec-chip-text') && btn.querySelector('.sarathi-rec-chip-text').textContent.trim()) || btn.textContent.trim();
+              if (q) {
+                handleSendMessage(q);
+              }
+            });
+          });
+        } else if (msg.id === currentEditingMsgId) {
+          msgEl.innerHTML = `
+            <div class="sarathi-user-bubble-wrapper is-editing">
+              <div class="sarathi-inline-edit-box">
+                <textarea class="sarathi-inline-edit-input" rows="1">${escapeHtml(msg.text)}</textarea>
+                <div class="sarathi-inline-edit-actions">
+                  <button type="button" class="sarathi-btn-cancel-edit">Cancel</button>
+                  <button type="button" class="sarathi-btn-save-edit">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>Update</span>
+                  </button>
+                </div>
               </div>
             </div>
           `;
         } else {
-          actionsToolbarHtml = `
-            <div class="sarathi-user-actions-bar">
-              <button class="sarathi-user-mini-btn btn-edit-msg" data-msg-id="${msg.id}" title="Edit question">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          msgEl.innerHTML = `
+            <div class="sarathi-user-bubble-wrapper">
+              <button type="button" class="sarathi-edit-msg-btn" data-msg-id="${msg.id}" title="Edit message" aria-label="Edit message">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                   <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                 </svg>
-                <span>Edit</span>
               </button>
-              <button class="sarathi-user-mini-btn btn-copy-msg" data-msg-id="${msg.id}" title="Copy question">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-              </button>
+              <div class="sarathi-msg-bubble sarathi-user-bubble">
+                <span class="sarathi-user-text">${escapeHtml(msg.text)}</span>
+                ${msg.edited ? '<span class="sarathi-edited-badge" title="Edited message">(edited)</span>' : ''}
+              </div>
             </div>
           `;
         }
 
-        const firstName = (state.leadInfo && state.leadInfo.name) ? state.leadInfo.name.split(' ')[0] : 'You';
+        messagesList.appendChild(msgEl);
 
-        msgEl.innerHTML = `
-          ${isBot ? `
-            <div class="sarathi-msg-avatar">
-              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="17" r="5" fill="#38BDF8"/>
-                <rect x="47.5" y="21" width="5" height="7" rx="2.5" fill="#FFFFFF"/>
-                <rect x="18" y="44" width="7" height="18" rx="3.5" fill="#FFFFFF"/>
-                <rect x="75" y="44" width="7" height="18" rx="3.5" fill="#FFFFFF"/>
-                <rect x="23" y="27" width="54" height="49" rx="19" fill="#FFFFFF"/>
-                <rect x="29" y="33" width="42" height="37" rx="13" fill="#0F172A"/>
-                <circle cx="41.5" cy="49" r="4.5" fill="#38BDF8"/>
-                <circle cx="58.5" cy="49" r="4.5" fill="#38BDF8"/>
-                <path d="M 44.5 56.5 Q 50 62 55.5 56.5" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-              </svg>
-            </div>
-          ` : `
-            <div class="sarathi-user-avatar">
-              <span>${firstName.charAt(0).toUpperCase()}</span>
-            </div>
-          `}
-          <div class="sarathi-msg-content">
-            <div class="sarathi-msg-header-pill">
-              <span class="sarathi-msg-sender-name">${isBot ? '✦ Sarathi Neural AI' : firstName}</span>
-              <span class="sarathi-msg-header-time">${msg.time}</span>
-            </div>
+        // Bind interactive events for user message editing
+        if (!isBot) {
+          if (msg.id === currentEditingMsgId) {
+            const textareaEl = msgEl.querySelector('.sarathi-inline-edit-input');
+            const cancelBtn = msgEl.querySelector('.sarathi-btn-cancel-edit');
+            const saveBtn = msgEl.querySelector('.sarathi-btn-save-edit');
 
-            <div class="sarathi-msg-bubble">
-              ${isBot && msg.category ? `<div class="sarathi-msg-category-tag"><span class="tag-spark">✦</span> ${msg.category}</div>` : ''}
-              <div class="sarathi-markdown">${isBot ? renderMarkdown(msg.text) : escapeHtml(msg.text)}</div>
-              ${sourcesHtml}
-            </div>
+            if (textareaEl) {
+              const autoResize = () => {
+                textareaEl.style.height = 'auto';
+                textareaEl.style.height = Math.min(textareaEl.scrollHeight, 160) + 'px';
+              };
+              setTimeout(() => {
+                autoResize();
+                textareaEl.focus();
+                textareaEl.setSelectionRange(textareaEl.value.length, textareaEl.value.length);
+              }, 40);
 
-            <div class="sarathi-msg-time-row">
-              <span class="sarathi-msg-footer-label">${isBot ? 'Verified Response' : 'Sent'}</span>
-              ${actionsToolbarHtml}
-            </div>
-            ${chipsHtml}
-          </div>
-        `;
+              textareaEl.addEventListener('input', autoResize);
 
-        // Listeners for Code Copy Buttons
-        msgEl.querySelectorAll('.sarathi-code-copy-btn').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const codeId = btn.getAttribute('data-code-id');
-            const codeEl = document.getElementById(codeId);
-            if (codeEl) {
-              navigator.clipboard.writeText(codeEl.textContent).then(() => {
-                btn.classList.add('copied');
-                btn.querySelector('span').textContent = 'Copied!';
-                showToast('Code copied to clipboard ✨');
-                setTimeout(() => {
-                  btn.classList.remove('copied');
-                  btn.querySelector('span').textContent = 'Copy';
-                }, 2000);
+              const cancel = () => {
+                currentEditingMsgId = null;
+                renderChatHistory();
+              };
+
+              const save = () => {
+                const updatedText = textareaEl.value.trim();
+                if (!updatedText) {
+                  textareaEl.focus();
+                  return;
+                }
+                currentEditingMsgId = null;
+                if (updatedText === msg.text) {
+                  renderChatHistory();
+                  return;
+                }
+                handleEditMessage(msg.id, updatedText);
+              };
+
+              if (cancelBtn) cancelBtn.addEventListener('click', cancel);
+              if (saveBtn) saveBtn.addEventListener('click', save);
+
+              textareaEl.addEventListener('keydown', (ke) => {
+                if (ke.key === 'Enter' && !ke.shiftKey) {
+                  ke.preventDefault();
+                  save();
+                } else if (ke.key === 'Escape') {
+                  ke.preventDefault();
+                  cancel();
+                }
               });
             }
-          });
-        });
-
-        // Listeners for Message Copy Button (User or Bot)
-        msgEl.querySelectorAll('.btn-copy-msg').forEach(btn => {
-          btn.addEventListener('click', () => {
-            navigator.clipboard.writeText(msg.text).then(() => {
-              btn.classList.add('copied');
-              const span = btn.querySelector('span');
-              const orig = span ? span.textContent : 'Copy';
-              if (span) span.textContent = 'Copied!';
-              showToast('Copied to clipboard ✨');
-              setTimeout(() => {
-                btn.classList.remove('copied');
-                if (span) span.textContent = orig;
-              }, 2000);
-            });
-          });
-        });
-
-        // Listeners for Edit / Re-ask Button on User questions
-        msgEl.querySelectorAll('.btn-edit-msg').forEach(btn => {
-          btn.addEventListener('click', () => {
-            if (textarea) {
-              textarea.value = msg.text;
-              textarea.focus();
-              textarea.style.height = 'auto';
-              textarea.style.height = Math.min(textarea.scrollHeight, 90) + 'px';
-              if (btnSend) btnSend.disabled = false;
-              showToast('Question loaded into composer ✍️');
+          } else {
+            const editBtn = msgEl.querySelector('.sarathi-edit-msg-btn');
+            if (editBtn) {
+              editBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (state.isTyping) {
+                  showToast('Please wait for the current response to finish');
+                  return;
+                }
+                currentEditingMsgId = msg.id;
+                renderChatHistory();
+              });
             }
-          });
-        });
-
-        // Listeners for TTS Listen Button
-        msgEl.querySelectorAll('.btn-speak-msg').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const isSpeaking = state.speakingId === msg.id;
-            const soundWave = btn.querySelector('.sarathi-sound-wave');
-            const iconSvg = btn.querySelector('svg');
-            const labelSpan = btn.querySelector('span:not(.sarathi-sound-wave)');
-
-            speakMessage(msg.text, msg.id, () => {
-              btn.classList.remove('speaking');
-              if (soundWave) soundWave.style.display = 'none';
-              if (iconSvg) iconSvg.style.display = 'inline-block';
-              if (labelSpan) labelSpan.textContent = 'Listen';
-            });
-
-            if (!isSpeaking) {
-              btn.classList.add('speaking');
-              if (soundWave) soundWave.style.display = 'inline-flex';
-              if (iconSvg) iconSvg.style.display = 'none';
-              if (labelSpan) labelSpan.textContent = 'Pause';
-            } else {
-              btn.classList.remove('speaking');
-              if (soundWave) soundWave.style.display = 'none';
-              if (iconSvg) iconSvg.style.display = 'inline-block';
-              if (labelSpan) labelSpan.textContent = 'Listen';
-            }
-          });
-        });
-
-        // Feedback Buttons (Thumbs Up / Down)
-        msgEl.querySelectorAll('.sarathi-feedback-btn').forEach(fBtn => {
-          fBtn.addEventListener('click', () => {
-            const action = fBtn.getAttribute('data-action');
-            msg.feedback = msg.feedback === action ? null : action;
-            saveChatHistory();
-            renderChatHistory();
-            if (msg.feedback) {
-              showToast(msg.feedback === 'up' ? 'Glad this helped! 🌟' : 'Thanks! We will improve our answers.');
-            }
-          });
-        });
-
-        // Flow Chips Listeners
-        msgEl.querySelectorAll('.sarathi-chip-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const label = btn.querySelector('.chip-label') ? btn.querySelector('.chip-label').textContent : btn.textContent;
-            handleSendMessage(label.trim());
-          });
-        });
-
-        messagesList.appendChild(msgEl);
+          }
+        }
       });
 
-      scrollToLatestExchange(false);
+      scrollToLatestExchange(true);
     }
 
-    function scrollToLatestExchange(smooth = false) {
+    function scrollToLatestExchange(smooth = true) {
       const body = document.getElementById('sarathi-body');
-      if (!body) return;
+      const messagesList = document.getElementById('sarathi-messages-list');
+      const typingWrap = document.getElementById('sarathi-typing-wrap');
 
-      setTimeout(() => {
-        const userMessages = document.querySelectorAll('.sarathi-message.user');
-        if (userMessages.length === 0) {
-          body.scrollTop = 0;
-          return;
+      const performScroll = () => {
+        // Target element to ensure visibility
+        let targetEl = null;
+        if (typingWrap && typingWrap.style.display !== 'none') {
+          targetEl = typingWrap;
+        } else if (messagesList && messagesList.lastElementChild) {
+          targetEl = messagesList.lastElementChild;
         }
 
-        // For the first user message or initial exchange, keep scroll firmly at 0px
-        if (userMessages.length === 1 || state.history.length <= 2) {
-          body.scrollTop = 0;
-          return;
-        }
-
-        // For subsequent questions, place the question 16px below the header
-        const lastUserMsg = userMessages[userMessages.length - 1];
-        let topOffset = 0;
-        let curr = lastUserMsg;
-        while (curr && curr !== body) {
-          topOffset += curr.offsetTop;
-          curr = curr.offsetParent;
-        }
-
-        const targetTop = Math.max(0, topOffset - 16);
-        if (smooth) {
+        // Scroll both body and messagesList container
+        if (body) {
+          const maxScroll = Math.max(body.scrollHeight, body.offsetHeight, 999999);
           body.scrollTo({
-            top: targetTop,
-            behavior: 'smooth'
+            top: maxScroll,
+            behavior: smooth ? 'smooth' : 'auto'
           });
-        } else {
-          body.scrollTop = targetTop;
+          body.scrollTop = maxScroll;
         }
-      }, 30);
+
+        if (messagesList && messagesList.scrollHeight > messagesList.clientHeight) {
+          const maxScroll = Math.max(messagesList.scrollHeight, messagesList.offsetHeight, 999999);
+          messagesList.scrollTo({
+            top: maxScroll,
+            behavior: smooth ? 'smooth' : 'auto'
+          });
+          messagesList.scrollTop = maxScroll;
+        }
+
+        // Use scrollIntoView on target element for guaranteed visibility
+        if (targetEl) {
+          try {
+            targetEl.scrollIntoView({
+              behavior: smooth ? 'smooth' : 'auto',
+              block: 'end',
+              inline: 'nearest'
+            });
+          } catch (err) {
+            targetEl.scrollIntoView(false);
+          }
+        }
+      };
+
+      // Perform immediately and repeatedly across layout phases
+      performScroll();
+      requestAnimationFrame(performScroll);
+      setTimeout(performScroll, 50);
+      setTimeout(performScroll, 150);
+      setTimeout(performScroll, 300);
+      setTimeout(performScroll, 500);
     }
 
     function formatTime(date) {
@@ -1559,6 +2501,7 @@ Select a topic above or ask any technical question!`,
     // Cross-Tab Synchronization
     window.addEventListener('storage', (e) => {
       if (e.key === CONFIG.storageKeyHistory) {
+        if (state.isTyping || currentEditingMsgId) return;
         state.history = getChatHistory();
         renderChatHistory();
         scrollToLatestExchange(false);
@@ -1570,13 +2513,90 @@ Select a topic above or ask any technical question!`,
     });
 
     window.addEventListener('focus', () => {
-      state.history = getChatHistory();
-      renderChatHistory();
+      if (state.isTyping || currentEditingMsgId) return;
+      const latestHistory = getChatHistory();
+      if (JSON.stringify(latestHistory) !== JSON.stringify(state.history)) {
+        state.history = latestHistory;
+        renderChatHistory();
+      }
     });
 
+    // Helper for clipboard copy with fallback
+    function copyTextToClipboard(text, onSuccess) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
+          fallbackCopyText(text, onSuccess);
+        });
+      } else {
+        fallbackCopyText(text, onSuccess);
+      }
+    }
+
+    function fallbackCopyText(text, onSuccess) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        ta.style.left = '-9999px';
+        ta.setAttribute('readonly', '');
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        const successful = document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (successful && onSuccess) onSuccess();
+      } catch (e) {}
+    }
+
+    // Ensure clicking any internal link in the chat window marks the widget to remain open across page navigation
+    if (chatWindow) {
+      chatWindow.addEventListener('click', (e) => {
+        // Code Block Copy Button Handler
+        const copyBtn = e.target.closest('.sarathi-code-copy-btn');
+        if (copyBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          const codeId = copyBtn.getAttribute('data-code-id');
+          const codeEl = codeId ? document.getElementById(codeId) : copyBtn.closest('.sarathi-code-container')?.querySelector('code');
+          if (codeEl) {
+            const textToCopy = codeEl.textContent || '';
+            copyTextToClipboard(textToCopy, () => {
+              const label = copyBtn.querySelector('span');
+              if (label) label.textContent = 'Copied! ✓';
+              copyBtn.classList.add('copied');
+              showToast('Code copied to clipboard! 📋');
+              setTimeout(() => {
+                if (label) label.textContent = 'Copy';
+                copyBtn.classList.remove('copied');
+              }, 2000);
+            });
+          }
+          return;
+        }
+
+        const link = e.target.closest('a[href]');
+        if (link) {
+          const target = link.getAttribute('target');
+          if (!target || target === '_self') {
+            try {
+              safeStorage.setItem(CONFIG.storageKeyOpen, 'true');
+            } catch (err) {}
+          }
+        }
+      });
+    }
+
     // Render Initial State
-    if (state.history.length > 0) {
-      renderChatHistory();
+    renderChatHistory();
+
+    // Auto-restore chat open state across pages if previously open (desktop only; keep minimized on mobile so page is visible)
+    if (state.isOpen) {
+      if (window.innerWidth > 768) {
+        toggleChat(true);
+      } else {
+        toggleChat(false);
+      }
     }
   }
 
@@ -1592,6 +2612,8 @@ Select a topic above or ask any technical question!`,
     dragHandle.addEventListener('pointerdown', onStart);
 
     function onStart(e) {
+      if (window.innerWidth <= 768) return; // Disable dragging on mobile devices
+      if (element.classList.contains('sarathi-fullscreen-mode')) return; // Disable dragging in fullscreen
       if (e.target.closest('.sarathi-icon-btn') || e.target.closest('.sarathi-chat-header-actions')) {
         return;
       }
@@ -1607,7 +2629,7 @@ Select a topic above or ask any technical question!`,
 
       try {
         dragHandle.setPointerCapture(e.pointerId);
-      } catch (err) { }
+      } catch (err) {}
 
       dragHandle.addEventListener('pointermove', onMove);
       dragHandle.addEventListener('pointerup', onEnd);
@@ -1654,7 +2676,7 @@ Select a topic above or ask any technical question!`,
 
       try {
         dragHandle.releasePointerCapture(e.pointerId);
-      } catch (err) { }
+      } catch (err) {}
 
       dragHandle.removeEventListener('pointermove', onMove);
       dragHandle.removeEventListener('pointerup', onEnd);

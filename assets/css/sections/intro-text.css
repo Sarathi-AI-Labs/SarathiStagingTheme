@@ -4,7 +4,7 @@
 
 .sarathi-intro-text {
 	width: 100%;
-	padding: 60px 20px;
+	padding: 40px 20px;
 	background-color: var(--bg-white);
 	font-family: var(--font-body);
 	color: var(--text-main);
@@ -111,7 +111,7 @@
 /* Responsive - Tablet */
 @media (max-width: 1024px) {
 	.sarathi-intro-text {
-		padding: 50px 20px;
+		padding: 30px 20px;
 	}
 	
 	.sarathi-intro-text-heading {
@@ -130,7 +130,7 @@
 /* Responsive - Mobile */
 @media (max-width: 768px) {
 	.sarathi-intro-text {
-		padding: 40px 16px;
+		padding: 25px 16px;
 	}
 	
 	.sarathi-intro-text-heading {
@@ -149,7 +149,7 @@
 /* Responsive - Small Mobile */
 @media (max-width: 480px) {
 	.sarathi-intro-text {
-		padding: 30px 16px;
+		padding: 20px 16px;
 	}
 	
 	.sarathi-intro-text-heading {

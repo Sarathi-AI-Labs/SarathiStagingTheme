@@ -115,7 +115,7 @@ $available_menu_cols = array(
 		'menu'      => get_field( 'footer_menu_col_1', 'option' ),
 		'fallbacks' => array(
 			array( 'title' => 'About Us', 'url' => '/about' ),
-			array( 'title' => 'Careers', 'url' => '/careers' ),
+			array( 'title' => 'Careers', 'url' => '/jobs' ),
 			array( 'title' => 'Blog', 'url' => '/blog' ),
 			array( 'title' => 'Case Studies', 'url' => '/case-studies' ),
 			array( 'title' => 'Contact', 'url' => '/contact' ),

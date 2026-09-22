@@ -347,11 +347,13 @@
     align-items: center;
     gap: 16px;
     margin-top: 32px;
+    flex-wrap: wrap;
 }
 
 .sarathi-cf7-submit-btn-wrapper {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
 }
 
 .sarathi-cf7-submit-btn-wrapper i {
@@ -361,6 +363,8 @@
     transform: translateY(-50%);
     color: var(--bg-white);
     pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 2;
 }
 
 .sarathi-form-box .wpcf7-submit {
@@ -487,20 +491,41 @@
     outline-offset: 2px;
 }
 
-.sarathi-form-box .wpcf7-response-output {
+/* --------------------------------------------------------------------------
+   7. CONTACT FORM 7 RESPONSE OUTPUT & ALERTS
+   -------------------------------------------------------------------------- */
+.sarathi-form-box .wpcf7-response-output,
+.wpcf7 .wpcf7-response-output {
 	background-color: #fef2f2;
 	border: 1px solid #fca5a5;
-	border-radius: var(--border-radius-md);
+	border-radius: var(--border-radius-md, 8px);
 	padding: 16px;
 	color: #991b1b;
 	font-size: 14px;
+	line-height: 1.5;
 	margin: 24px 0 0 0 !important;
+	box-sizing: border-box;
+	cursor: pointer;
+	transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.sarathi-form-box .wpcf7-form.sent .wpcf7-response-output {
-    background-color: #f0fdf4;
-    border-color: #bbf7d0;
-    color: #15803d;
+.sarathi-form-box .wpcf7-form.sent .wpcf7-response-output,
+.wpcf7 form.sent .wpcf7-response-output {
+	background-color: #f0fdf4;
+	border-color: #bbf7d0;
+	color: #15803d;
+}
+
+/* Smooth fade out when dismissed by timer or user interaction */
+.wpcf7 .wpcf7-response-output.sarathi-msg-fade-out {
+	opacity: 0 !important;
+	transform: translateY(-8px) !important;
+	pointer-events: none !important;
+}
+
+/* Hidden state after fade transition */
+.wpcf7 .wpcf7-response-output.sarathi-msg-hidden {
+	display: none !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -712,10 +737,44 @@
 	}
 }
 
-/* Full Width Submit Button Wrapper */
+/* Full Width Submit Button Wrapper (Book a Consultation form) */
 .sarathi-cf7-submit-btn-wrapper.sarathi-full-width {
     width: 100%;
+    display: block;
+    position: relative;
 }
 .sarathi-cf7-submit-btn-wrapper.sarathi-full-width .wpcf7-submit {
     width: 100%;
+    display: block;
+}
+
+/* Position spinner centered on the right inside the button, exactly where the arrow was */
+.sarathi-cf7-submit-btn-wrapper.sarathi-full-width .wpcf7-spinner,
+.sarathi-form-box .sarathi-cf7-submit-btn-wrapper.sarathi-full-width .wpcf7-spinner {
+    position: absolute !important;
+    right: 22px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 !important;
+    z-index: 5;
+    background-color: rgba(255, 255, 255, 0.3) !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.sarathi-cf7-submit-btn-wrapper.sarathi-full-width .wpcf7-spinner::before,
+.sarathi-form-box .sarathi-cf7-submit-btn-wrapper.sarathi-full-width .wpcf7-spinner::before {
+    background-color: #ffffff !important;
+    top: 3px !important;
+    left: 3px !important;
+    width: 5px !important;
+    height: 5px !important;
+    transform-origin: 7px 7px !important;
+}
+
+/* Hide arrow icon while submitting */
+.wpcf7 form.submitting .sarathi-cf7-submit-btn-wrapper.sarathi-full-width i,
+.sarathi-form-box form.submitting .sarathi-cf7-submit-btn-wrapper.sarathi-full-width i {
+    opacity: 0 !important;
+    transform: translateY(-50%) scale(0.5) !important;
 }

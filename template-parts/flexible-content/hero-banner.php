@@ -23,6 +23,12 @@ $hero_version = custom_theme_get_sub_field('hero_version');
 if (empty($hero_version)) {
 	$hero_version = custom_theme_get_sub_field('hero_variant', 'default');
 }
+
+// On archive pages and blog home, default hero layout to inner_page matching inner pages (does not affect normal pages)
+if ( ( is_archive() || is_home() ) && ( 'default' === $hero_version || empty( $hero_version ) ) ) {
+	$hero_version = 'inner_page';
+}
+
 $section_class .= ' layout-' . esc_attr($hero_version);
 
 // =========================================================================
@@ -118,6 +124,9 @@ elseif ('inner_page' === $hero_version):
 	$heading = !empty($headings['heading']) ? $headings['heading'] : '';
 	$subheading = !empty($headings['subheading']) ? $headings['subheading'] : '';
 	$description = custom_theme_get_sub_field('hero_description');
+	if (empty($description) && !empty($subheading)) {
+		$description = $subheading;
+	}
 
 	$side_position = custom_theme_get_sub_field('side_content_position');
 	$side_type = custom_theme_get_sub_field('side_content_type');
@@ -132,7 +141,7 @@ elseif ('inner_page' === $hero_version):
 	?>
 	<section class="sarathi-hero-banner sarathi-inner-page-banner<?php echo esc_attr($section_class); ?>"
 		id="<?php echo esc_attr($section_id); ?>" aria-label="Page Banner" <?php echo $section_style; ?>>
-		<div class="container sarathi-section-container">
+		<div class="container">
 			<div class="<?php echo esc_attr($container_class); ?>">
 
 				<div class="sarathi-inner-banner-text-content">
@@ -155,12 +164,16 @@ elseif ('inner_page' === $hero_version):
 
 				<?php if ('image' === $side_type && !empty($side_image)): ?>
 					<div class="sarathi-inner-banner-side-content type-image">
-						<img src="<?php echo esc_url($side_image['url']); ?>"
-							alt="<?php echo esc_attr($side_image['alt']); ?>" class="sarathi-inner-side-img">
+						<img src="<?php echo esc_url($side_image['url']); ?>" alt="<?php echo esc_attr($side_image['alt']); ?>"
+							class="sarathi-inner-side-img">
 					</div>
 				<?php elseif ('text' === $side_type && !empty($side_text)): ?>
 					<div class="sarathi-inner-banner-side-content type-text">
 						<?php echo wp_kses_post($side_text); ?>
+					</div>
+				<?php elseif ( has_action( 'sarathi_inner_hero_side_content' ) ): ?>
+					<div class="sarathi-inner-banner-side-content type-custom">
+						<?php do_action( 'sarathi_inner_hero_side_content' ); ?>
 					</div>
 				<?php endif; ?>
 
@@ -286,8 +299,8 @@ else:
 	?>
 
 	<!-- ===================== HERO BANNER SECTION (FLOATING LOGO VERSION) ===================== -->
-	<section class="sarathi-hero-banner<?php echo esc_attr($section_class); ?>"
-		id="<?php echo esc_attr($section_id); ?>" aria-label="Hero Banner" <?php echo $section_style; ?>>
+	<section class="sarathi-hero-banner<?php echo esc_attr($section_class); ?>" id="<?php echo esc_attr($section_id); ?>"
+		aria-label="Hero Banner" <?php echo $section_style; ?>>
 
 		<!-- Background Layer: Radial Glow & Floating Logo Watermark -->
 		<div class="sarathi-hero-background" aria-hidden="true">
@@ -336,7 +349,7 @@ else:
 		</div>
 
 		<!-- Main Content Layer -->
-		<div class="container sarathi-hero-container sarathi-section-container">
+		<div class="container sarathi-hero-container">
 			<div class="sarathi-hero-content">
 
 				<?php if (!empty($eyebrow)): ?>
@@ -349,7 +362,7 @@ else:
 					</h1>
 				<?php endif; ?>
 
-				<?php if (!empty($subheading) && stripos($heading, $subheading) === false && stripos($subheading, 'Through Intelligent') === false): ?>
+				<?php if (!empty($subheading) && stripos($heading, $subheading) === false && stripos($subheading, 'Through Intelligence') === false): ?>
 					<h2 class="sarathi-hero-subheading"><?php echo esc_html($subheading); ?></h2>
 				<?php endif; ?>
 

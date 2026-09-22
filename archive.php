@@ -6,6 +6,10 @@
  * @package Custom_Theme
  */
 
+// Ensure cards-grid assets are loaded since the archive grid is hardcoded
+wp_enqueue_style( 'custom-theme-cards-grid' );
+wp_enqueue_script( 'custom-theme-cards-grid' );
+
 get_header();
 
 $current_cat_id = is_category() ? get_queried_object_id() : 0;
@@ -41,7 +45,8 @@ $search_query   = get_search_query();
 
 				<!-- Right Column: Search Input & Category Filter Bar -->
 				<div class="sarathi-blog-hero__right">
-					<form role="search" method="get" class="sarathi-blog-filter-form" action="<?php echo esc_url( home_url( '/blog/' ) ); ?>">
+					<form role="search" method="get" class="sarathi-blog-filter-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+						<input type="hidden" name="post_type" value="post" />
 						
 						<!-- Search Input -->
 						<div class="sarathi-blog-search-wrap">

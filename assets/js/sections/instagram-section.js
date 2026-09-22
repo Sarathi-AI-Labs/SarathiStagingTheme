@@ -4,18 +4,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const items = document.querySelectorAll('.sbi_item');
         if (items.length > 0) {
             clearInterval(checkFeed);
-            
+
             items.forEach(item => {
                 // Check if it already has our fake overlay
                 if (!item.querySelector('.sarathi-insta-hover-overlay')) {
                     // Create overlay
                     const overlayDiv = document.createElement('div');
                     overlayDiv.className = 'sarathi-insta-hover-overlay';
-                    
+
                     // Generate randomish numbers for likes/comments to look realistic
                     const likes = Math.floor(Math.random() * 250) + 50;
                     const comments = Math.floor(Math.random() * 25) + 3;
-                    
+
                     overlayDiv.innerHTML = `
                         <div class="sarathi-insta-hover-content">
                             <span class="sarathi-insta-stat">
@@ -28,19 +28,25 @@ document.addEventListener('DOMContentLoaded', () => {
                             </span>
                         </div>
                     `;
-                    
+
+                    const badgeDiv = document.createElement('div');
+                    badgeDiv.className = 'sarathi-insta-badge';
+                    badgeDiv.innerHTML = `<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`;
+
                     // We must append it to the photo wrap so it sits over the image
                     const photoWrap = item.querySelector('.sbi_photo_wrap') || item.querySelector('.sbi_photo');
                     if (photoWrap) {
                         photoWrap.appendChild(overlayDiv);
+                        photoWrap.appendChild(badgeDiv);
                     } else {
                         item.appendChild(overlayDiv);
+                        item.appendChild(badgeDiv);
                     }
                 }
             });
         }
     }, 500);
-    
+
     // Stop checking after 10 seconds just in case
     setTimeout(() => {
         clearInterval(checkFeed);

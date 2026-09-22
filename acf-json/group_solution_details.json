@@ -1,0 +1,462 @@
+{
+    "key": "group_solution_details",
+    "title": "Solution Details & Content",
+    "fields": [
+        {
+            "key": "field_sol_tab_general",
+            "label": "Card & Hero",
+            "name": "tab_general",
+            "type": "tab",
+            "placement": "top"
+        },
+        {
+            "key": "field_sol_short_desc",
+            "label": "Short Description",
+            "name": "short_description",
+            "type": "textarea",
+            "instructions": "Brief summary displayed on Solution card grid and Single Solution hero subtitle.",
+            "required": 0,
+            "rows": 3,
+            "new_lines": ""
+        },
+        {
+            "key": "field_sol_card_icon",
+            "label": "Card Icon / Badge",
+            "name": "card_icon",
+            "type": "image",
+            "instructions": "Icon displayed in the badge on the solution card.",
+            "required": 0,
+            "return_format": "array",
+            "preview_size": "thumbnail",
+            "wrapper": { "width": "50" }
+        },
+        {
+            "key": "field_sol_pills",
+            "label": "Solution Category Pills",
+            "name": "solution_pills",
+            "type": "repeater",
+            "instructions": "Attribute pills displayed in the Single Solution hero (e.g. Quality Engineering, AI & Automation, All Industries).",
+            "required": 0,
+            "layout": "table",
+            "button_label": "Add Pill",
+            "wrapper": { "width": "50" },
+            "sub_fields": [
+                {
+                    "key": "field_sol_pill_text",
+                    "label": "Label",
+                    "name": "pill_text",
+                    "type": "text",
+                    "placeholder": "Quality Engineering"
+                },
+                {
+                    "key": "field_sol_pill_icon",
+                    "label": "Icon",
+                    "name": "pill_icon",
+                    "type": "image",
+                    "return_format": "array",
+                    "preview_size": "thumbnail"
+                }
+            ]
+        },
+        {
+            "key": "field_sol_tab_overview",
+            "label": "1. Overview",
+            "name": "tab_overview",
+            "type": "tab",
+            "placement": "top"
+        },
+        {
+            "key": "field_sol_ov_title",
+            "label": "Section Title",
+            "name": "overview_title",
+            "type": "text",
+            "default_value": "Overview"
+        },
+        {
+            "key": "field_sol_ov_content",
+            "label": "Overview Content",
+            "name": "overview_content",
+            "type": "wysiwyg",
+            "instructions": "Main overview paragraph introducing the solution.",
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 0
+        },
+        {
+            "key": "field_sol_tab_challenge",
+            "label": "2. The Challenge",
+            "name": "tab_challenge",
+            "type": "tab",
+            "placement": "top"
+        },
+        {
+            "key": "field_sol_ch_title",
+            "label": "Section Title",
+            "name": "challenge_title",
+            "type": "text",
+            "default_value": "The Challenge"
+        },
+        {
+            "key": "field_sol_ch_desc",
+            "label": "Description",
+            "name": "challenge_desc",
+            "type": "textarea",
+            "rows": 2,
+            "instructions": "Introductory sentence for the challenge cards."
+        },
+        {
+            "key": "field_sol_ch_cards",
+            "label": "Challenge Cards",
+            "name": "challenge_cards",
+            "type": "repeater",
+            "layout": "block",
+            "button_label": "Add Challenge Card",
+            "sub_fields": [
+                {
+                    "key": "field_sol_ch_card_title",
+                    "label": "Card Title",
+                    "name": "card_title",
+                    "type": "text",
+                    "required": 1,
+                    "wrapper": { "width": "50" }
+                },
+                {
+                    "key": "field_sol_ch_card_icon",
+                    "label": "Icon",
+                    "name": "card_icon",
+                    "type": "image",
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "wrapper": { "width": "50" }
+                }
+            ]
+        },
+        {
+            "key": "field_sol_tab_solution",
+            "label": "3. Our Solution",
+            "name": "tab_solution",
+            "type": "tab",
+            "placement": "top"
+        },
+        {
+            "key": "field_sol_so_title",
+            "label": "Section Title",
+            "name": "solution_section_title",
+            "type": "text",
+            "default_value": "Our Solution"
+        },
+        {
+            "key": "field_sol_so_content",
+            "label": "Solution Content",
+            "name": "solution_section_content",
+            "type": "wysiwyg",
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 0
+        },
+        {
+            "key": "field_sol_so_image",
+            "label": "Solution Section Image (Optional)",
+            "name": "solution_section_image",
+            "type": "image",
+            "return_format": "array",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_sol_tab_action",
+            "label": "4. Solution in Action",
+            "name": "tab_action",
+            "type": "tab",
+            "placement": "top"
+        },
+        {
+            "key": "field_sol_ac_title",
+            "label": "Section Title",
+            "name": "action_title",
+            "type": "text",
+            "default_value": "Solution in Action"
+        },
+        {
+            "key": "field_sol_ac_desc",
+            "label": "Description",
+            "name": "action_desc",
+            "type": "textarea",
+            "rows": 2
+        },
+        {
+            "key": "field_sol_ac_cards",
+            "label": "Action / Screenshot Cards",
+            "name": "action_cards",
+            "type": "repeater",
+            "layout": "block",
+            "button_label": "Add Action Card",
+            "sub_fields": [
+                {
+                    "key": "field_sol_ac_c_title",
+                    "label": "Title",
+                    "name": "card_title",
+                    "type": "text",
+                    "required": 1,
+                    "wrapper": { "width": "50" }
+                },
+                {
+                    "key": "field_sol_ac_c_img",
+                    "label": "Image / Screenshot",
+                    "name": "card_image",
+                    "type": "image",
+                    "return_format": "array",
+                    "preview_size": "medium",
+                    "wrapper": { "width": "50" }
+                },
+                {
+                    "key": "field_sol_ac_c_desc",
+                    "label": "Description",
+                    "name": "card_desc",
+                    "type": "textarea",
+                    "rows": 2
+                }
+            ]
+        },
+        {
+            "key": "field_sol_tab_capabilities",
+            "label": "5. Key Capabilities",
+            "name": "tab_capabilities",
+            "type": "tab",
+            "placement": "top"
+        },
+        {
+            "key": "field_sol_cap_title",
+            "label": "Section Title",
+            "name": "capabilities_title",
+            "type": "text",
+            "default_value": "Key Capabilities & Benefits"
+        },
+        {
+            "key": "field_sol_cap_desc",
+            "label": "Description (Optional)",
+            "name": "capabilities_desc",
+            "type": "textarea",
+            "rows": 2
+        },
+        {
+            "key": "field_sol_cap_cards",
+            "label": "Capability Cards",
+            "name": "capabilities_cards",
+            "type": "repeater",
+            "layout": "block",
+            "button_label": "Add Capability Card",
+            "sub_fields": [
+                {
+                    "key": "field_sol_cap_c_title",
+                    "label": "Title",
+                    "name": "card_title",
+                    "type": "text",
+                    "required": 1,
+                    "wrapper": { "width": "50" }
+                },
+                {
+                    "key": "field_sol_cap_c_icon",
+                    "label": "Icon",
+                    "name": "card_icon",
+                    "type": "image",
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "wrapper": { "width": "50" }
+                },
+                {
+                    "key": "field_sol_cap_c_desc",
+                    "label": "Description",
+                    "name": "card_desc",
+                    "type": "textarea",
+                    "rows": 2
+                }
+            ]
+        },
+        {
+            "key": "field_sol_tab_process",
+            "label": "6. How It Works",
+            "name": "tab_process",
+            "type": "tab",
+            "placement": "top"
+        },
+        {
+            "key": "field_sol_pr_title",
+            "label": "Section Title",
+            "name": "process_title",
+            "type": "text",
+            "default_value": "How It Works"
+        },
+        {
+            "key": "field_sol_pr_desc",
+            "label": "Description",
+            "name": "process_desc",
+            "type": "textarea",
+            "rows": 2,
+            "default_value": "A simple, structured process to help you achieve continuous quality."
+        },
+        {
+            "key": "field_sol_pr_steps",
+            "label": "Process Steps",
+            "name": "process_steps",
+            "type": "repeater",
+            "layout": "block",
+            "button_label": "Add Step",
+            "sub_fields": [
+                {
+                    "key": "field_sol_pr_s_title",
+                    "label": "Step Title",
+                    "name": "step_title",
+                    "type": "text",
+                    "required": 1,
+                    "wrapper": { "width": "50" }
+                },
+                {
+                    "key": "field_sol_pr_s_icon",
+                    "label": "Icon",
+                    "name": "step_icon",
+                    "type": "image",
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "wrapper": { "width": "50" }
+                },
+                {
+                    "key": "field_sol_pr_s_desc",
+                    "label": "Description",
+                    "name": "step_desc",
+                    "type": "textarea",
+                    "rows": 2
+                }
+            ]
+        },
+        {
+            "key": "field_sol_tab_cta",
+            "label": "7. Final CTA",
+            "name": "tab_cta",
+            "type": "tab",
+            "placement": "top"
+        },
+        {
+            "key": "field_sol_cta_eyebrow",
+            "label": "CTA Eyebrow",
+            "name": "cta_eyebrow",
+            "type": "text",
+            "default_value": "READY TO GET STARTED?",
+            "wrapper": { "width": "50" }
+        },
+        {
+            "key": "field_sol_cta_title",
+            "label": "CTA Title",
+            "name": "cta_title",
+            "type": "text",
+            "wrapper": { "width": "50" }
+        },
+        {
+            "key": "field_sol_cta_desc",
+            "label": "CTA Description",
+            "name": "cta_desc",
+            "type": "textarea",
+            "rows": 2
+        },
+        {
+            "key": "field_sol_cta_btn_text",
+            "label": "Button Text",
+            "name": "cta_button_text",
+            "type": "text",
+            "default_value": "Talk to Our Experts",
+            "wrapper": { "width": "50" }
+        },
+        {
+            "key": "field_sol_cta_btn_url",
+            "label": "Button URL",
+            "name": "cta_button_url",
+            "type": "text",
+            "default_value": "/contact/",
+            "wrapper": { "width": "50" }
+        },
+        {
+            "key": "field_sol_tab_sidebar",
+            "label": "8. Sidebar Consultation",
+            "name": "tab_sidebar",
+            "type": "tab",
+            "placement": "top"
+        },
+        {
+            "key": "field_sol_sidebar_title",
+            "label": "Sidebar Card Title",
+            "name": "sidebar_expert_title",
+            "type": "text",
+            "default_value": "Talk to Our Experts"
+        },
+        {
+            "key": "field_sol_sidebar_desc",
+            "label": "Sidebar Card Description",
+            "name": "sidebar_expert_desc",
+            "type": "textarea",
+            "default_value": "Let's explore how our AI-powered solution can help your team.",
+            "rows": 2
+        },
+        {
+            "key": "field_sol_sidebar_btn_text",
+            "label": "Sidebar Button Text",
+            "name": "sidebar_expert_button_text",
+            "type": "text",
+            "default_value": "Get in Touch &rarr;",
+            "wrapper": { "width": "50" }
+        },
+        {
+            "key": "field_sol_sidebar_btn_url",
+            "label": "Sidebar Button URL",
+            "name": "sidebar_expert_button_url",
+            "type": "text",
+            "default_value": "/contact/",
+            "wrapper": { "width": "50" }
+        },
+        {
+            "key": "field_sol_sidebar_features",
+            "label": "Sidebar Feature List",
+            "name": "sidebar_features",
+            "type": "repeater",
+            "layout": "block",
+            "button_label": "Add Value Item",
+            "sub_fields": [
+                {
+                    "key": "field_sol_sf_title",
+                    "label": "Title",
+                    "name": "title",
+                    "type": "text",
+                    "wrapper": { "width": "50" }
+                },
+                {
+                    "key": "field_sol_sf_desc",
+                    "label": "Description",
+                    "name": "desc",
+                    "type": "text",
+                    "wrapper": { "width": "50" }
+                },
+                {
+                    "key": "field_sol_sf_icon",
+                    "label": "Icon",
+                    "name": "icon",
+                    "type": "image",
+                    "return_format": "array",
+                    "preview_size": "thumbnail"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "solutions"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true
+}

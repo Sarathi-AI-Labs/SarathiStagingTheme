@@ -21,6 +21,10 @@ get_header();
 			// Example: gallery_section -> gallery-section
 			$template = str_replace( '_', '-', $layout );
 
+			// Conditionally enqueue section assets
+			wp_enqueue_style( 'custom-theme-' . $template );
+			wp_enqueue_script( 'custom-theme-' . $template );
+
 			// Build the template path.
 			$template_path = 'template-parts/flexible-content/' . $template;
 
