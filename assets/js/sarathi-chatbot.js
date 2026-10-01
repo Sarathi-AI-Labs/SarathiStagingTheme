@@ -72,7 +72,8 @@
     conversationId: getOrCreateConversationId(),
     leadInfo: getLeadInfo(),
     history: getChatHistory(),
-    isTyping: false
+    isTyping: false,
+    selectedCard: null
   };
 
   // Web Audio Synthesizer for Subtle Haptic Feedback (Zero External Dependencies)
@@ -834,7 +835,13 @@
       return {
         category: 'Agentic AI Solutions',
         text: `At **Sarathi AI Labs**, we architect autonomous AI agent systems and enterprise intelligence solutions:\n\n- **Autonomous Multi-Agent Swarms**: Goal-oriented AI agents orchestrating end-to-end business operations using LangGraph, CrewAI & AutoGen.\n- **Enterprise RAG Knowledge Systems**: Connect private databases and document repositories with hybrid vector search and zero hallucinations.\n- **Custom Tool-Calling & Automation**: Autonomous API execution across CRM, ERP, finance, and internal databases.\n\nWould you like to schedule a free **AI Architecture Consultation** or see a live agent demonstration?`,
-        chips: ['Book AI Consultation', 'See Tech Stack', 'Get Custom Quote']
+        chips: [
+          'What types of AI agents can Sarathi build?',
+          'Can you build multi-agent systems?',
+          'Can AI agents connect with our existing systems?',
+          'Can you build an enterprise RAG solution?',
+          'How can AI agents automate business workflows?'
+        ]
       };
     }
 
@@ -843,7 +850,13 @@
       return {
         category: 'Web & Cloud Development',
         text: `We engineer fast, scalable web platforms and cloud-native architectures built for high performance:\n\n- **Modern Full-Stack Applications**: High-throughput web applications using Next.js, React, Node.js, Python FastAPI, and headless architectures.\n- **Cloud Infrastructure & Microservices**: Resilient cloud architecture on AWS and GCP with automated Docker & Kubernetes orchestration.\n- **High-Performance APIs & Integrations**: Secure REST/GraphQL gateways, database optimization (PostgreSQL/Redis), and enterprise security.\n\nAre you planning a new web application, modernizing an existing portal, or scaling cloud infrastructure?`,
-        chips: ['Build New Web App', 'Get Custom Quote', 'Talk to Tech Lead']
+        chips: [
+          'Can Sarathi build a web application from scratch?',
+          'Can you modernize our existing web application?',
+          'What frontend and backend technologies do you use?',
+          'Can you build APIs and system integrations?',
+          'Can you help us with cloud infrastructure and deployment?'
+        ]
       };
     }
 
@@ -852,7 +865,13 @@
       return {
         category: 'Professional Training',
         text: `Our industry-grade training programs prepare engineers with hands-on production skills:\n\n- **Agentic AI & LLM Engineering (8 Weeks)**: Multi-agent systems, LangChain, RAG architecture, tool use, and enterprise deployments.\n- **Full-Stack Web Mastery (12 Weeks)**: Next.js, modern backend APIs, cloud deployment, and system architecture.\n- **Enterprise Test Automation (6 Weeks)**: Playwright, Cypress, CI/CD automated test gates, and framework design.\n\nAll programs include **live real-world projects**, **1-on-1 mentor guidance**, and **industry certification**.\n\nWould you like to download the syllabus or schedule a free counseling session?`,
-        chips: ['View Syllabus', 'Schedule Free Counseling', 'Talk to Advisor']
+        chips: [
+          'What does the Agentic AI training program cover?',
+          'Can I see the course syllabus and curriculum?',
+          'Are the training programs hands-on?',
+          'What are the prerequisites for the training?',
+          'Can I speak with a training advisor?'
+        ]
       };
     }
 
@@ -861,7 +880,13 @@
       return {
         category: 'AI Test Automation',
         text: `We deliver intelligent test automation frameworks and AI-assisted quality engineering to guarantee zero-bug releases:\n\n- **End-to-End Test Automation**: Robust Playwright and Cypress test suites running across desktop and mobile browsers.\n- **AI-Powered Visual & Regression Testing**: Intelligent visual change detection and self-healing test locators.\n- **CI/CD Quality Gates**: Automated continuous testing integrated with GitHub Actions, GitLab CI, and Docker pipelines.\n- **API & Load Performance**: Comprehensive Postman/Newman and k6 load simulation suites.\n\nWould you like a free **QA Framework Audit** for your application or to discuss custom test automation?`,
-        chips: ['Get Free QA Audit', 'Tools We Support', 'Talk to QA Lead']
+        chips: [
+          'Can Sarathi build automated end-to-end test suites using Playwright?',
+          'Do you integrate test automation with GitHub Actions CI/CD pipelines?',
+          'How do AI-assisted self-healing test locators work?',
+          'Can you perform load and API performance testing?',
+          'Can I request a free QA framework audit for my application?'
+        ]
       };
     }
 
@@ -870,7 +895,11 @@
       return {
         category: 'AI Insights & Blog',
         text: `You can find **Sarathi AI Labs'** latest engineering articles, tutorials, and architectural insights directly on our blog:\n\n[Explore Blog & Insights](/blog/)\n\nWe regularly publish deep-dives into autonomous agents, enterprise RAG architectures, and modern cloud engineering.`,
-        chips: ['Agentic AI Solutions', 'Web & Cloud Development', 'Professional Training']
+        chips: [
+          'How can Sarathi AI Labs help my business with Agentic AI and intelligent automation?',
+          'What web and cloud development solutions does Sarathi AI Labs provide?',
+          'What professional AI and technology training programs does Sarathi AI Labs offer?'
+        ]
       };
     }
 
@@ -879,7 +908,11 @@
       return {
         category: 'Contact',
         text: `Our technical advisory team is ready to assist you. You can reach us directly at **contact@sarathiai.com** or book a consultation.\n\nWould you like us to schedule a call with a specialist?`,
-        chips: ['Yes, sure!', 'Send Email', 'No, thanks.']
+        chips: [
+          'How can I schedule a consultation?',
+          'Can we set up a Google Meet or Zoom discussion?',
+          'What is the direct contact email or phone number for your team?'
+        ]
       };
     }
 
@@ -921,9 +954,11 @@
         category: 'Get a Quote',
         text: `We would love to discuss your project and provide a tailored scope and quote! 💼\n\nPlease share:\n- A brief summary of your project or requirements\n- Your target timeline or budget (optional)\n- Your preferred contact email or phone number\n\nOur solutions team will analyze your needs and get back to you with a comprehensive proposal within 24 hours.`,
         chips: [
-          'Request a custom project estimate',
-          'What is your typical project timeline?',
-          'Book a 30-minute scope consultation'
+          'What information do you need to prepare a project estimate?',
+          'What is the typical process for starting a project?',
+          'Can I discuss my requirements with a Sarathi expert?',
+          'Can I start with a proof of concept?',
+          'How can I schedule a consultation?'
         ]
       };
     }
@@ -932,88 +967,390 @@
     return {
       category: 'Sarathi Concierge',
       text: `Hi there! I can empower you with **Agentic AI Solutions**, **Web & Cloud Development**, **Professional Training**, or **AI Test Automation**.\n\nWhich area would you like to explore?`,
-      chips: ['Agentic AI Solutions', 'Web & Cloud Development', 'AI Test Automation']
+      chips: [
+        'How can Sarathi AI Labs help my business with Agentic AI and intelligent automation?',
+        'What web and cloud development solutions does Sarathi AI Labs provide?',
+        'What professional AI and technology training programs does Sarathi AI Labs offer?',
+        'I have a project idea and would like to discuss my requirements and get a quote from Sarathi AI Labs. How should I get started?'
+      ]
     };
   }
 
   // Dynamic Contextual Recommended Questions Generator
   function getRecommendedQuestions(userQuery = '', aiResponseText = '') {
-    const q = (userQuery + ' ' + aiResponseText).toLowerCase();
+    const q = ((userQuery || '') + ' ' + (aiResponseText || '')).toLowerCase();
+    const cleanUserQuery = (userQuery || '').toLowerCase().trim();
 
-    const recommendationPools = {
-      quote: [
-        'Request a custom project estimate',
-        'What is your typical project timeline?',
-        'Book a 30-minute scope consultation',
-        'What details do you need for a proposal?',
-        'Talk to a solutions architect'
+    // Collect all past user questions from history to guarantee we never repeat them
+    const askedQuestions = new Set();
+    if (state && Array.isArray(state.history)) {
+      state.history.forEach(m => {
+        if (m && m.sender === 'user' && m.text) {
+          askedQuestions.add(m.text.toLowerCase().trim());
+        }
+      });
+    }
+    if (cleanUserQuery) {
+      askedQuestions.add(cleanUserQuery);
+    }
+
+    // Determine the overarching category or active card
+    let activeCard = state && state.selectedCard ? state.selectedCard : null;
+    if (!activeCard && state && Array.isArray(state.history)) {
+      const firstUserMsg = state.history.find(m => m && m.sender === 'user' && m.text);
+      if (firstUserMsg) {
+        const fText = firstUserMsg.text.toLowerCase();
+        if (fText.includes('agentic') || fText.includes('autonomous') || fText.includes('intelligent automation')) {
+          activeCard = 'agentic';
+        } else if (fText.includes('web & cloud') || fText.includes('web and cloud') || fText.includes('cloud development')) {
+          activeCard = 'web';
+        } else if (fText.includes('professional ai and technology') || fText.includes('training program') || fText.includes('professional training')) {
+          activeCard = 'training';
+        } else if (fText.includes('project idea') || fText.includes('get a quote') || fText.includes('discuss my requirements')) {
+          activeCard = 'quote';
+        }
+      }
+    }
+
+    // Comprehensive contextual question pools organized by topic and subtopic
+    const pools = {
+      // 1. AGENTIC AI SOLUTIONS
+      agentic_initial: [
+        'What types of AI agents can Sarathi build?',
+        'Can you build multi-agent systems?',
+        'Can AI agents connect with our existing systems?',
+        'Can you build an enterprise RAG solution?',
+        'How can AI agents automate business workflows?'
       ],
-      agentic: [
-        'How do multi-agent swarms communicate?',
-        'Can we connect private enterprise databases?',
-        'What LLM models and frameworks do you use?',
-        'How does custom tool-calling work?',
-        'Book a free AI architecture consultation'
+      agentic_rag: [
+        'Can RAG work with our private documents?',
+        'Can RAG connect to our databases?',
+        'How does enterprise RAG work?',
+        'Can Sarathi AI Labs build an enterprise RAG solution using our private business data?',
+        'Can I discuss my RAG use case with your team?'
       ],
-      web: [
-        'What frontend & backend frameworks do you use?',
-        'Can you help migrate our infrastructure to AWS/GCP?',
-        'How do you optimize API latency & caching?',
-        'What is your typical web project timeline?',
-        'Request a custom project estimate'
+      agentic_multi_agent: [
+        'What frameworks do you use to build multi-agent systems?',
+        'How do multi-agent swarms collaborate on tasks?',
+        'Can multi-agent systems handle complex business processes?',
+        'Can I see a demo of a multi-agent system?',
+        'Can we discuss our multi-agent requirements with your team?'
       ],
-      training: [
-        'Can I see the full syllabus & curriculum?',
-        'Are training sessions live with mentors?',
-        'Do you provide hands-on project portfolio reviews?',
-        'What are the prerequisites to enroll?',
-        'Schedule a free 1-on-1 counseling call'
+      agentic_integrations: [
+        'How do AI agents securely connect to our existing APIs?',
+        'Can AI agents execute automated workflows across our CRM and database?',
+        'What security and governance measures are in place for tool execution?',
+        'Can you build a proof of concept connecting our systems?',
+        'Can I schedule a consultation to discuss system integration?'
       ],
-      test: [
-        'Do you support Playwright and GitHub Actions CI/CD?',
-        'Can you automate our existing manual test cases?',
-        'How do AI self-healing test locators work?',
-        'Do you perform load and API performance testing?',
-        'Request a free QA framework audit'
+      agentic_workflows: [
+        'Which business workflows can AI agents automate most effectively?',
+        'Can AI agents handle customer support and operations?',
+        'What is the typical deployment timeline for an AI agent?',
+        'Can Sarathi help us identify high-impact automation opportunities?',
+        'Can I speak with a Sarathi AI expert about my project?'
       ],
-      contact: [
-        'How soon can we schedule a technical consultation?',
-        'Can we set up a Google Meet or Zoom call?',
-        'What is your team contact email and phone?',
-        'Talk to a solutions architect'
+
+      // 2. WEB & CLOUD DEVELOPMENT
+      web_initial: [
+        'Can Sarathi build a web application from scratch?',
+        'Can you modernize our existing web application?',
+        'What frontend and backend technologies do you use?',
+        'Can you build APIs and system integrations?',
+        'Can you help us with cloud infrastructure and deployment?'
       ],
+      web_cloud: [
+        'Can Sarathi AI Labs help us build or scale our cloud infrastructure?',
+        'Do you deploy and manage cloud applications on AWS and GCP?',
+        'How do you handle containerization with Docker and Kubernetes?',
+        'Can you help automate our CI/CD deployment pipelines?',
+        'Can we schedule a consultation to assess our cloud architecture?'
+      ],
+      web_tech_stack: [
+        'What frontend and backend frameworks do you recommend for high performance?',
+        'Do you build full-stack web applications using Next.js and Python or Node.js?',
+        'How do you ensure application security and database optimization?',
+        'Can you help modernize our existing tech stack?',
+        'Can I discuss our technical architecture with a lead developer?'
+      ],
+      web_modernization: [
+        'What is your approach to modernizing legacy web platforms?',
+        'Can you migrate monolithic applications to modern microservices?',
+        'How do you minimize downtime during system migration?',
+        'Can Sarathi conduct an architecture and code audit of our system?',
+        'Can we schedule a consultation to discuss modernization?'
+      ],
+      web_apis: [
+        'Do you design custom REST and GraphQL APIs?',
+        'How do you secure API gateways and manage authentication?',
+        'Can you integrate third-party platforms and web services?',
+        'Can we discuss our API integration requirements?',
+        'Can I discuss my project requirements with a Sarathi engineer?'
+      ],
+      web_scratch: [
+        'What is the development process for building a web application from scratch?',
+        'How quickly can Sarathi build an MVP or working prototype?',
+        'Do you handle UI/UX design along with full-stack engineering?',
+        'What information do you need to prepare a project estimate?',
+        'How can I schedule a consultation to discuss our project?'
+      ],
+
+      // 3. PROFESSIONAL TRAINING
+      training_initial: [
+        'What does the Agentic AI training program cover?',
+        'Can I see the course syllabus and curriculum?',
+        'Are the training programs hands-on?',
+        'What are the prerequisites for the training?',
+        'Can I speak with a training advisor?'
+      ],
+      training_syllabus: [
+        'Can I see the syllabus and curriculum for the Agentic AI training program?',
+        'What hands-on tools like LangChain and CrewAI are included in the curriculum?',
+        'Do participants build production-grade AI agents during the bootcamp?',
+        'What is the duration and weekly schedule of the Agentic AI program?',
+        'Can I speak with a training advisor about enrolling?'
+      ],
+      training_hands_on: [
+        'What real-world projects will I build during the training?',
+        'Are mentoring sessions conducted live with industry experts?',
+        'Do you provide code reviews and portfolio assistance?',
+        'Do graduates receive an industry-recognized certificate from Sarathi AI Labs?',
+        'Can I speak with a training advisor?'
+      ],
+      training_prerequisites: [
+        'Do I need prior programming experience to enroll in the AI training?',
+        'Which programming languages are recommended before starting?',
+        'Is the program suitable for working professionals and software engineers?',
+        'Can I schedule a quick profile evaluation with an advisor?',
+        'When does the next training cohort start?'
+      ],
+      training_advisor: [
+        'Can I schedule a free 1-on-1 counseling session with a training advisor?',
+        'When does the next training cohort start?',
+        'What are the batch timings and flexible learning options?',
+        'Do you offer corporate training programs for engineering teams?',
+        'Can you share the enrollment process and course details?'
+      ],
+      training_other_courses: [
+        'What is covered in the Full-Stack Web Development training?',
+        'What tools are taught in the Enterprise Test Automation program?',
+        'Do you provide customized corporate training for engineering teams?',
+        'How can I enroll in the upcoming training cohort?',
+        'Can I speak with a training advisor?'
+      ],
+
+      // 4. GET A QUOTE
+      quote_initial: [
+        'What information do you need to prepare a project estimate?',
+        'What is the typical process for starting a project?',
+        'Can I discuss my requirements with a Sarathi expert?',
+        'Can I start with a proof of concept?',
+        'How can I schedule a consultation?'
+      ],
+      quote_estimate: [
+        'What details do you need to prepare a comprehensive project estimate?',
+        'Can we sign an NDA before sharing our project requirements?',
+        'How long does it take to receive a project proposal and scope?',
+        'Can I discuss my requirements with a Sarathi expert?',
+        'How can I schedule a consultation?'
+      ],
+      quote_poc: [
+        'Can I start with a proof of concept before full commitment?',
+        'What is the typical timeline to deliver an initial prototype?',
+        'What are the deliverables included in a proof of concept?',
+        'Can we schedule a discovery call to define the POC scope?',
+        'Can I speak with a Sarathi AI expert about my project?'
+      ],
+      quote_process: [
+        'What is the typical process and methodology for starting a project?',
+        'What engagement models does Sarathi AI Labs offer?',
+        'How does the team handle sprint milestones and communication?',
+        'Can I start with a proof of concept?',
+        'How can I schedule a consultation?'
+      ],
+      quote_consultation: [
+        'How can I schedule a 30-minute consultation with a Sarathi expert?',
+        'Can we set up a Google Meet or Zoom discussion this week?',
+        'What is the direct contact email or phone number for the solutions team?',
+        'Can I share our project brief directly in this chat?',
+        'What information do you need to prepare a project estimate?'
+      ],
+
+      // 5. TEST AUTOMATION
+      test_automation: [
+        'Can Sarathi build automated end-to-end test suites using Playwright?',
+        'Do you integrate test automation with GitHub Actions CI/CD pipelines?',
+        'How do AI-assisted self-healing test locators work?',
+        'Can you perform load and API performance testing?',
+        'Can I request a free QA framework audit for my application?'
+      ],
+
+      // General exploration
       general: [
-        'Tell me about Agentic AI Solutions',
-        'What Web & Cloud Development do you offer?',
-        'How does your Test Automation work?',
-        'Can you provide a custom project quote?',
-        'Can I speak with a technical advisor?'
+        'How can Sarathi AI Labs help my business with Agentic AI and intelligent automation?',
+        'What web and cloud development solutions does Sarathi AI Labs provide?',
+        'What professional AI and technology training programs does Sarathi AI Labs offer?',
+        'I have a project idea and would like to discuss my requirements and get a quote from Sarathi AI Labs. How should I get started?'
       ]
     };
 
-    let pool = recommendationPools.general;
-    if (q.includes('quote') || q.includes('quate') || q.includes('quotation') || q.includes('pricing') || q.includes('price') || q.includes('cost') || q.includes('budget') || q.includes('estimate') || q.includes('proposal')) {
-      pool = recommendationPools.quote;
-    } else if (q.includes('agentic') || q.includes('autonomous') || q.includes('rag') || q.includes('swarm') || q.includes('llm') || q.includes('agent')) {
-      pool = recommendationPools.agentic;
-    } else if (q.includes('web') || q.includes('cloud') || q.includes('fullstack') || q.includes('frontend') || q.includes('backend') || q.includes('api') || q.includes('devops') || q.includes('next.js') || q.includes('react')) {
-      pool = recommendationPools.web;
-    } else if (q.includes('training') || q.includes('course') || q.includes('bootcamp') || q.includes('learn') || q.includes('syllabus') || q.includes('enroll') || q.includes('curriculum')) {
-      pool = recommendationPools.training;
-    } else if (q.includes('test') || q.includes('automation') || q.includes('qa') || q.includes('playwright') || q.includes('selenium') || q.includes('bug') || q.includes('cypress') || q.includes('quality')) {
-      pool = recommendationPools.test;
-    } else if (q.includes('contact') || q.includes('talk') || q.includes('call') || q.includes('email') || q.includes('phone') || q.includes('advisor') || q.includes('meet') || q.includes('human') || q.includes('hire')) {
-      pool = recommendationPools.contact;
+    let selectedPoolKey = null;
+
+    // Detect if this is the initial card question
+    const isCard1Initial = cleanUserQuery.includes('how can sarathi ai labs help my business with agentic ai');
+    const isCard2Initial = cleanUserQuery.includes('what web and cloud development solutions does sarathi ai labs provide');
+    const isCard3Initial = cleanUserQuery.includes('what professional ai and technology training programs does sarathi ai labs offer');
+    const isCard4Initial = cleanUserQuery.includes('i have a project idea and would like to discuss my requirements and get a quote');
+
+    if (isCard1Initial) {
+      selectedPoolKey = 'agentic_initial';
+      if (state) state.selectedCard = 'agentic';
+    } else if (isCard2Initial) {
+      selectedPoolKey = 'web_initial';
+      if (state) state.selectedCard = 'web';
+    } else if (isCard3Initial) {
+      selectedPoolKey = 'training_initial';
+      if (state) state.selectedCard = 'training';
+    } else if (isCard4Initial) {
+      selectedPoolKey = 'quote_initial';
+      if (state) state.selectedCard = 'quote';
+    } else {
+      // Determine by user query and response context
+      const isRAG = q.includes('rag') || q.includes('private document') || q.includes('enterprise rag') || q.includes('vector') || q.includes('retrieval') || q.includes('hallucination');
+      const isMultiAgent = q.includes('multi-agent') || q.includes('multi agent') || q.includes('swarm') || q.includes('swarms') || q.includes('langgraph') || q.includes('crewai') || q.includes('autogen');
+      const isIntegration = q.includes('connect with our existing') || q.includes('connect to our existing') || q.includes('system integration') || q.includes('tool-calling') || q.includes('tool execution') || q.includes('crm') || q.includes('erp');
+      const isWorkflows = q.includes('automate business workflow') || q.includes('types of ai agent') || q.includes('types of agent') || q.includes('what types') || q.includes('workflow automation');
+
+      const isCloud = q.includes('cloud infrastructure') || q.includes('aws') || q.includes('gcp') || q.includes('kubernetes') || q.includes('docker') || q.includes('devops') || q.includes('deployment pipeline') || q.includes('scale our cloud');
+      const isTechStack = q.includes('frontend and backend') || q.includes('technologies do you use') || q.includes('tech stack') || q.includes('next.js') || q.includes('fastapi') || q.includes('react');
+      const isModernize = q.includes('modernize') || q.includes('legacy') || q.includes('re-platform') || q.includes('migration') || q.includes('monolith');
+      const isAPIs = q.includes('build apis') || q.includes('graphql') || q.includes('rest api') || q.includes('api integration');
+      const isScratch = q.includes('web application from scratch') || q.includes('from scratch') || q.includes('build an mvp') || q.includes('new web');
+
+      const isSyllabus = q.includes('syllabus') || q.includes('curriculum') || q.includes('agentic ai training program cover') || q.includes('course syllabus');
+      const isHandsOn = q.includes('hands-on') || q.includes('hands on') || q.includes('real-world project') || q.includes('mentor') || q.includes('certificate') || q.includes('certification');
+      const isPrereq = q.includes('prerequisite') || q.includes('eligibility') || q.includes('prior programming') || q.includes('background is required');
+      const isAdvisor = q.includes('training advisor') || q.includes('counseling') || q.includes('enroll') || q.includes('cohort') || q.includes('batch timing');
+      const isOtherCourses = q.includes('full-stack web mastery') || q.includes('enterprise test automation course') || q.includes('corporate training');
+
+      const isEstimate = q.includes('project estimate') || q.includes('prepare a project') || q.includes('nda') || q.includes('proposal') || q.includes('details do you need');
+      const isPOC = q.includes('proof of concept') || q.includes('poc') || q.includes('prototype');
+      const isProcess = q.includes('typical process') || q.includes('starting a project') || q.includes('engagement model') || q.includes('discovery session');
+      const isConsultation = q.includes('schedule a consultation') || q.includes('discuss my requirements with a sarathi expert') || q.includes('book a') || q.includes('zoom') || q.includes('google meet');
+
+      const isTestQA = q.includes('playwright') || q.includes('cypress') || q.includes('test automation') || q.includes('qa framework') || q.includes('self-healing');
+
+      // Match subtopics with highest specificity
+      if (isRAG) {
+        selectedPoolKey = 'agentic_rag';
+      } else if (isMultiAgent) {
+        selectedPoolKey = 'agentic_multi_agent';
+      } else if (isIntegration && (activeCard === 'agentic' || q.includes('ai agent') || q.includes('agent'))) {
+        selectedPoolKey = 'agentic_integrations';
+      } else if (isWorkflows) {
+        selectedPoolKey = 'agentic_workflows';
+      } else if (isCloud) {
+        selectedPoolKey = 'web_cloud';
+      } else if (isTechStack) {
+        selectedPoolKey = 'web_tech_stack';
+      } else if (isModernize) {
+        selectedPoolKey = 'web_modernization';
+      } else if (isAPIs) {
+        selectedPoolKey = 'web_apis';
+      } else if (isScratch) {
+        selectedPoolKey = 'web_scratch';
+      } else if (isSyllabus) {
+        selectedPoolKey = 'training_syllabus';
+      } else if (isHandsOn) {
+        selectedPoolKey = 'training_hands_on';
+      } else if (isPrereq) {
+        selectedPoolKey = 'training_prerequisites';
+      } else if (isAdvisor) {
+        selectedPoolKey = 'training_advisor';
+      } else if (isOtherCourses) {
+        selectedPoolKey = 'training_other_courses';
+      } else if (isEstimate) {
+        selectedPoolKey = 'quote_estimate';
+      } else if (isPOC) {
+        selectedPoolKey = 'quote_poc';
+      } else if (isProcess) {
+        selectedPoolKey = 'quote_process';
+      } else if (isConsultation) {
+        selectedPoolKey = 'quote_consultation';
+      } else if (isTestQA) {
+        selectedPoolKey = 'test_automation';
+      } else if (activeCard === 'agentic' || q.includes('agentic') || q.includes('agent')) {
+        selectedPoolKey = 'agentic_initial';
+      } else if (activeCard === 'web' || q.includes('web') || q.includes('cloud')) {
+        selectedPoolKey = 'web_initial';
+      } else if (activeCard === 'training' || q.includes('training') || q.includes('course') || q.includes('bootcamp')) {
+        selectedPoolKey = 'training_initial';
+      } else if (activeCard === 'quote' || q.includes('quote') || q.includes('pricing') || q.includes('cost')) {
+        selectedPoolKey = 'quote_initial';
+      } else {
+        selectedPoolKey = 'general';
+      }
     }
 
-    // Filter out options that closely match the query to avoid redundant recommendations
-    const cleanUserQuery = userQuery.toLowerCase().trim();
-    const filtered = pool.filter(opt => opt.toLowerCase().trim() !== cleanUserQuery);
-    const poolToUse = filtered.length >= 2 ? filtered : pool;
+    const primaryList = pools[selectedPoolKey] || pools.general;
 
-    // Shuffle and return 2-3 distinct recommendations
-    const shuffled = [...poolToUse].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, 3);
+    // Filter out any questions already asked in this conversation or identical to current query
+    const result = primaryList.filter(qText => {
+      const norm = qText.toLowerCase().trim();
+      return !askedQuestions.has(norm);
+    });
+
+    // If result has fewer than 3 questions, supplement from closely related pools of the same category
+    if (result.length < 3) {
+      let fallbackCategoryPool = [];
+      if (selectedPoolKey.startsWith('agentic')) {
+        fallbackCategoryPool = [
+          ...pools.agentic_initial,
+          ...pools.agentic_rag,
+          ...pools.agentic_multi_agent,
+          ...pools.agentic_integrations,
+          ...pools.agentic_workflows
+        ];
+      } else if (selectedPoolKey.startsWith('web')) {
+        fallbackCategoryPool = [
+          ...pools.web_initial,
+          ...pools.web_cloud,
+          ...pools.web_tech_stack,
+          ...pools.web_modernization,
+          ...pools.web_apis,
+          ...pools.web_scratch
+        ];
+      } else if (selectedPoolKey.startsWith('training')) {
+        fallbackCategoryPool = [
+          ...pools.training_initial,
+          ...pools.training_syllabus,
+          ...pools.training_hands_on,
+          ...pools.training_prerequisites,
+          ...pools.training_advisor,
+          ...pools.training_other_courses
+        ];
+      } else if (selectedPoolKey.startsWith('quote')) {
+        fallbackCategoryPool = [
+          ...pools.quote_initial,
+          ...pools.quote_estimate,
+          ...pools.quote_poc,
+          ...pools.quote_process,
+          ...pools.quote_consultation
+        ];
+      } else {
+        fallbackCategoryPool = pools.general;
+      }
+
+      fallbackCategoryPool.forEach(qText => {
+        const norm = qText.toLowerCase().trim();
+        if (!askedQuestions.has(norm) && !result.includes(qText)) {
+          result.push(qText);
+        }
+      });
+    }
+
+    // Limit to 3-5 questions
+    return result.slice(0, 5);
   }
 
   // Helper to determine if lead details (Name, and at least one of Email or Phone) are complete
@@ -1896,12 +2233,26 @@
       });
     }
 
+    // Natural-language questions mapped to each of the 4 cards
+    const CARD_QUESTIONS = {
+      'Agentic AI Solutions': 'How can Sarathi AI Labs help my business with Agentic AI and intelligent automation?',
+      'Web & Cloud Development': 'What web and cloud development solutions does Sarathi AI Labs provide?',
+      'Professional Training': 'What professional AI and technology training programs does Sarathi AI Labs offer?',
+      'Get a Quote': 'I have a project idea and would like to discuss my requirements and get a quote from Sarathi AI Labs. How should I get started?'
+    };
+
     // Topic Card Click Handlers
     document.querySelectorAll('.sarathi-topic-card').forEach(card => {
       card.addEventListener('click', (e) => {
         const topic = card.getAttribute('data-topic');
         if (topic) {
-          handleSendMessage(topic);
+          if (topic === 'Agentic AI Solutions') state.selectedCard = 'agentic';
+          else if (topic === 'Web & Cloud Development') state.selectedCard = 'web';
+          else if (topic === 'Professional Training') state.selectedCard = 'training';
+          else if (topic === 'Get a Quote') state.selectedCard = 'quote';
+
+          const question = CARD_QUESTIONS[topic] || topic;
+          handleSendMessage(question);
         }
       });
     });
@@ -2068,7 +2419,7 @@
           };
 
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 25000);
+          const timeoutId = setTimeout(() => controller.abort(), 90000);
           let response;
 
           try {
@@ -2092,25 +2443,56 @@
               try {
                 data = JSON.parse(rawText);
               } catch {
-                data = { answer: rawText };
+                data = rawText;
               }
             }
 
-            let textContent = '';
-            if (typeof data === 'string') {
-              textContent = data;
-            } else if (data && typeof data === 'object') {
-              const item = Array.isArray(data) ? data[0] : data;
-              if (typeof item === 'string') {
-                textContent = item;
-              } else if (item && typeof item === 'object') {
-                textContent = item.answer || item.output || item.response || item.text || item.message || item.content || (item.data && (item.data.answer || item.data.text || item.data.output)) || '';
+            // Resilient extractor for AI agent response structures
+            function extractAgentOutput(val) {
+              if (val === null || val === undefined) return '';
+              if (typeof val === 'string') {
+                const s = val.trim();
+                if ((s.startsWith('{') && s.endsWith('}')) || (s.startsWith('[') && s.endsWith(']'))) {
+                  try {
+                    const parsed = JSON.parse(s);
+                    const sub = extractAgentOutput(parsed);
+                    if (sub) return sub;
+                  } catch (e) {}
+                }
+                return s;
               }
+              if (Array.isArray(val)) {
+                for (const elem of val) {
+                  const sub = extractAgentOutput(elem);
+                  if (sub) return sub;
+                }
+                return '';
+              }
+              if (typeof val === 'object') {
+                const keys = ['output', 'answer', 'response', 'text', 'message', 'content', 'result'];
+                for (const k of keys) {
+                  if (val[k] !== undefined && val[k] !== null) {
+                    const sub = extractAgentOutput(val[k]);
+                    if (sub) return sub;
+                  }
+                }
+                if (val.data) {
+                  const sub = extractAgentOutput(val.data);
+                  if (sub) return sub;
+                }
+                if (val.body) {
+                  const sub = extractAgentOutput(val.body);
+                  if (sub) return sub;
+                }
+              }
+              return '';
             }
+
+            const textContent = extractAgentOutput(data);
 
             if (textContent && textContent.trim()) {
-              const followUpChips = (data && data.chips && data.chips.length > 0)
-                ? data.chips
+              const followUpChips = (data && data.chips && Array.isArray(data.chips) && data.chips.length > 0 && data.chips.every(c => typeof c === 'string' && c.trim().length > 15 && c.includes(' ')))
+                ? data.chips.slice(0, 5)
                 : getRecommendedQuestions(userText, textContent);
 
               aiResult = {
@@ -2119,13 +2501,32 @@
                 sources: (data && data.sources) || [],
                 chips: followUpChips
               };
+            } else {
+              // The webhook responded with 200 OK but without agent text (e.g. missing 'Respond to Webhook' node)
+              aiResult = {
+                category: 'Sarathi AI Agent',
+                text: "The AI agent workflow executed, but no response text was returned to the webhook.\n\n*Tip for n8n:* Please ensure your workflow has a **Respond to Webhook** node connected directly after the **AI Agent** node with `{{ $json }}` so the agent's output is delivered back to the chat.",
+                sources: [],
+                chips: getRecommendedQuestions(userText, '')
+              };
             }
+          } else {
+            aiResult = {
+              category: 'Sarathi AI Agent',
+              text: `AI agent service returned status ${response.status} (${response.statusText}). Please check your n8n workflow execution logs.`,
+              sources: [],
+              chips: getRecommendedQuestions(userText, '')
+            };
           }
         }
 
         if (!aiResult) {
-          await new Promise(r => setTimeout(r, 500));
-          aiResult = generateFallbackResponse(userText);
+          aiResult = {
+            category: 'Sarathi AI Agent',
+            text: "No response was received from the AI Agent. Please verify your n8n webhook setup and active status.",
+            sources: [],
+            chips: getRecommendedQuestions(userText, '')
+          };
         }
 
         // Ensure contextual recommended questions are provided for subsequent exchanges
@@ -2136,7 +2537,7 @@
         const botMsg = {
           id: 'msg_' + (Date.now() + 1),
           sender: 'assistant',
-          category: aiResult.category || 'AI Response',
+          category: aiResult.category || 'Sarathi AI Agent',
           text: aiResult.text,
           sources: aiResult.sources || [],
           chips: aiResult.chips || [],
@@ -2149,15 +2550,19 @@
         playHapticTone('receive');
 
       } catch (err) {
-        console.warn('API error, falling back to local intelligence', err);
-        const fallback = generateFallbackResponse(userText);
+        console.error('AI Agent error:', err);
+        const isTimeout = err && err.name === 'AbortError';
+        const errorText = isTimeout
+          ? "The AI Agent took longer than 90 seconds to respond. Please check the AI Agent node execution in n8n."
+          : "Unable to reach the AI agent service. Please verify that your n8n webhook URL is active and accessible.";
+
         state.history.push({
           id: 'msg_' + (Date.now() + 1),
           sender: 'assistant',
-          category: fallback.category || 'AI Response',
-          text: fallback.text,
-          sources: fallback.sources,
-          chips: getRecommendedQuestions(userText, fallback.text || ''),
+          category: 'Sarathi AI Agent',
+          text: errorText,
+          sources: [],
+          chips: getRecommendedQuestions(userText, errorText),
           time: formatTime(new Date()),
           feedback: null
         });
@@ -2270,14 +2675,16 @@
         if (isBot) {
           let chipsHtml = '';
           if (isLatestBot && !state.isTyping) {
-            let chipsToShow = (msg.chips && Array.isArray(msg.chips) && msg.chips.length > 0) ? msg.chips.slice(0, 3) : [];
-            if (chipsToShow.length === 0) {
+            let chipsToShow = (msg.chips && Array.isArray(msg.chips) && msg.chips.length > 0) ? msg.chips : [];
+            const hasInvalidChips = chipsToShow.some(c => typeof c !== 'string' || c.trim().length < 15 || !c.includes(' '));
+            if (chipsToShow.length === 0 || hasInvalidChips) {
               const lastUserMsg = [...state.history].reverse().find(m => m.sender === 'user');
               const lastUserText = lastUserMsg ? lastUserMsg.text : '';
-              chipsToShow = getRecommendedQuestions(lastUserText, msg.text).slice(0, 3);
+              chipsToShow = getRecommendedQuestions(lastUserText, msg.text);
               msg.chips = chipsToShow;
               saveChatHistory();
             }
+            chipsToShow = chipsToShow.slice(0, 5);
 
             if (chipsToShow && chipsToShow.length > 0) {
               chipsHtml = `
