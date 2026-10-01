@@ -331,7 +331,25 @@
       );
 
       // --- PRIORITY 1: Match Exact URL Path Destination ---
-      // 1. About Page (/about, /about-us)
+      // 1. Consultation & Demo Booking (/book-consultation, /consult, /demo, /schedule)
+      if (
+        normPath.includes('consult') ||
+        normPath.includes('demo') ||
+        normPath.includes('schedule') ||
+        normPath === '#consultation'
+      ) {
+        return {
+          category: 'consultation',
+          href: isInternal ? '/book-consultation/' : href,
+          badge: 'Complimentary Consultation',
+          title: isGenericTitle ? 'Book a Consultation' : linkTitle,
+          subtitle: 'Schedule a 30-min strategy & feasibility call',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`
+        };
+      }
+
+      // 2. About Page (/about, /about-us)
       if (normPath.includes('/about') || normPath.includes('about-us') || normPath === 'about') {
         return {
           category: 'about',
@@ -344,20 +362,20 @@
         };
       }
 
-      // 2. Contact Page (/contact, /contact-us)
+      // 3. Contact Page (/contact, /contact-us)
       if (normPath.includes('/contact') || normPath.includes('contact-us') || normPath === 'contact') {
         return {
           category: 'contact',
           href: isInternal ? (normPath.startsWith('/') ? href : '/contact/') : href,
           badge: 'Direct Connect',
-          title: isGenericTitle ? 'Contact Page' : linkTitle,
+          title: isGenericTitle ? 'Contact Us Directly' : linkTitle,
           subtitle: 'Call, email or visit our office',
           isInternal,
           icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`
         };
       }
 
-      // 3. Blog & Articles (/blog, /articles, /news)
+      // 4. Blog & Articles (/blog, /articles, /news)
       if (normPath.includes('/blog') || normPath.includes('/article') || normPath.includes('/news') || normPath === 'blog') {
         return {
           category: 'blog',
@@ -370,11 +388,11 @@
         };
       }
 
-      // 4. Training & Courses (/training, /courses, /bootcamp)
-      if (normPath.includes('/training') || normPath.includes('/course') || normPath.includes('/bootcamp') || normPath === 'training') {
+      // 5. Training & Courses (/trainings, /training, /courses, /bootcamp)
+      if (normPath.includes('/training') || normPath.includes('/trainings') || normPath.includes('/course') || normPath.includes('/bootcamp') || normPath === 'training' || normPath === 'trainings') {
         return {
           category: 'training',
-          href: isInternal ? (normPath.startsWith('/') ? href : '/training/') : href,
+          href: isInternal ? '/trainings/' : href,
           badge: 'Professional Training',
           title: isGenericTitle ? 'Explore Training & Courses' : linkTitle,
           subtitle: 'Master Agentic AI & Full-Stack engineering',
@@ -383,91 +401,21 @@
         };
       }
 
-      // 5. Solutions & Services (/solutions, /services)
-      if (normPath.includes('/solution') || normPath.includes('/service') || normPath.includes('/agentic') || normPath === 'solutions') {
+      // 6. Services (/services)
+      if (normPath.includes('/service') || normPath === 'services') {
         return {
           category: 'solutions',
-          href: isInternal ? (normPath.startsWith('/') ? href : '/solutions/') : href,
-          badge: 'AI & Cloud Solutions',
-          title: isGenericTitle ? 'Explore AI Solutions & Services' : linkTitle,
-          subtitle: 'Autonomous agents, custom RAG & cloud',
+          href: isInternal ? '/services/' : href,
+          badge: 'Engineering Services',
+          title: isGenericTitle ? 'Explore Engineering Services' : linkTitle,
+          subtitle: 'End-to-end AI and cloud delivery',
           isInternal,
           icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`
         };
       }
 
-      // 6. Careers & Jobs (/careers, /job)
-      if (normPath.includes('/career') || normPath.includes('/job') || normPath === 'careers') {
-        return {
-          category: 'careers',
-          href: isInternal ? (normPath.startsWith('/') ? href : '/careers/') : href,
-          badge: 'Join Sarathi AI',
-          title: isGenericTitle ? 'View Open Roles & Careers' : linkTitle,
-          subtitle: 'Grow with our innovative AI engineering team',
-          isInternal,
-          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`
-        };
-      }
-
-      // 7. Consultation & Demo Booking (#consultation, /book-demo)
-      if (normPath.includes('consult') || normPath.includes('demo') || normPath.includes('schedule')) {
-        return {
-          category: 'consultation',
-          href: isInternal ? '#consultation' : href,
-          badge: 'Complimentary Consultation',
-          title: isGenericTitle ? 'Book an AI Architecture Call' : linkTitle,
-          subtitle: '30-min strategy & feasibility roadmap',
-          isInternal,
-          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`
-        };
-      }
-
-      // --- PRIORITY 2: Match Link Title Intent ---
-      if (normTitle.includes('about')) {
-        return {
-          category: 'about',
-          href: isInternal ? (normPath.startsWith('/') ? href : '/about/') : href,
-          badge: 'About Sarathi AI',
-          title: isGenericTitle ? 'About Sarathi AI Labs' : linkTitle,
-          subtitle: 'Who we are, our mission & leadership',
-          isInternal,
-          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`
-        };
-      }
-      if (normTitle.includes('contact') || normTitle.includes('reach')) {
-        return {
-          category: 'contact',
-          href: isInternal ? '/contact/' : href,
-          badge: 'Direct Connect',
-          title: isGenericTitle ? 'Contact Us Directly' : linkTitle,
-          subtitle: 'Call, email or visit our office',
-          isInternal,
-          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`
-        };
-      }
-      if (normTitle.includes('blog') || normTitle.includes('article') || normTitle.includes('news')) {
-        return {
-          category: 'blog',
-          href: isInternal ? '/blog/' : href,
-          badge: 'AI Insights & Blog',
-          title: isGenericTitle ? 'Explore Blog & Insights' : linkTitle,
-          subtitle: 'Read latest AI trends & engineering articles',
-          isInternal,
-          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line></svg>`
-        };
-      }
-      if (normTitle.includes('training') || normTitle.includes('course') || normTitle.includes('bootcamp')) {
-        return {
-          category: 'training',
-          href: isInternal ? '/training/' : href,
-          badge: 'Professional Training',
-          title: isGenericTitle ? 'Explore Training & Courses' : linkTitle,
-          subtitle: 'Master Agentic AI & Full-Stack engineering',
-          isInternal,
-          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>`
-        };
-      }
-      if (normTitle.includes('solution') || normTitle.includes('service')) {
+      // 7. Solutions (/solutions)
+      if (normPath.includes('/solution') || normPath.includes('/agentic') || normPath === 'solutions') {
         return {
           category: 'solutions',
           href: isInternal ? '/solutions/' : href,
@@ -479,42 +427,192 @@
         };
       }
 
-      // --- PRIORITY 3: Context Preceding Link ---
-      if (normText.includes('about page') || normText.includes('about us')) {
+      // 8. Careers & Jobs (/career, /careers, /job)
+      if (normPath.includes('/career') || normPath.includes('/job') || normPath === 'careers' || normPath === 'career') {
+        return {
+          category: 'careers',
+          href: isInternal ? '/career/' : href,
+          badge: 'Join Sarathi AI',
+          title: isGenericTitle ? 'View Open Roles & Careers' : linkTitle,
+          subtitle: 'Grow with our innovative AI engineering team',
+          isInternal,
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`
+        };
+      }
+
+      // --- PRIORITY 2: Match Link Title Intent ---
+      // 1. Consultation & Demo Booking
+      if (
+        normTitle.includes('consult') ||
+        normTitle.includes('book') ||
+        normTitle.includes('schedule') ||
+        normTitle.includes('demo') ||
+        normTitle.includes('meeting') ||
+        normTitle.includes('call')
+      ) {
+        return {
+          category: 'consultation',
+          href: (isInternal || normPath === '/' || !href || href === '#') ? '/book-consultation/' : href,
+          badge: 'Complimentary Consultation',
+          title: isGenericTitle ? 'Book a Consultation' : linkTitle,
+          subtitle: 'Schedule a 30-min strategy & feasibility call',
+          isInternal: (isInternal || normPath === '/' || !href || href === '#'),
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`
+        };
+      }
+
+      // 2. About
+      if (normTitle.includes('about') || normTitle.includes('who we are') || normTitle.includes('our mission')) {
         return {
           category: 'about',
-          href: isInternal ? '/about/' : href,
+          href: (isInternal || normPath === '/' || !href || href === '#') ? '/about/' : href,
           badge: 'About Sarathi AI',
           title: isGenericTitle ? 'About Sarathi AI Labs' : linkTitle,
           subtitle: 'Who we are, our mission & leadership',
-          isInternal,
+          isInternal: (isInternal || normPath === '/' || !href || href === '#'),
           icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`
         };
       }
-      if (normText.includes('contact page') || normText.includes('reach us') || normText.includes('channels:')) {
+
+      // 3. Contact
+      if (normTitle.includes('contact') || normTitle.includes('reach') || normTitle.includes('touch') || normTitle.includes('support')) {
         return {
           category: 'contact',
-          href: isInternal ? '/contact/' : href,
+          href: (isInternal || normPath === '/' || !href || href === '#') ? '/contact/' : href,
           badge: 'Direct Connect',
-          title: isGenericTitle ? 'Contact Page' : linkTitle,
+          title: isGenericTitle ? 'Contact Us Directly' : linkTitle,
           subtitle: 'Call, email or visit our office',
-          isInternal,
+          isInternal: (isInternal || normPath === '/' || !href || href === '#'),
           icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`
         };
       }
-      if (normText.includes('our blog') || normText.includes('latest articles')) {
+
+      // 4. Blog & Articles
+      if (normTitle.includes('blog') || normTitle.includes('article') || normTitle.includes('news') || normTitle.includes('insights')) {
         return {
           category: 'blog',
-          href: isInternal ? '/blog/' : href,
+          href: (isInternal || normPath === '/' || !href || href === '#') ? '/blog/' : href,
           badge: 'AI Insights & Blog',
           title: isGenericTitle ? 'Explore Blog & Insights' : linkTitle,
           subtitle: 'Read latest AI trends & engineering articles',
-          isInternal,
+          isInternal: (isInternal || normPath === '/' || !href || href === '#'),
           icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line></svg>`
         };
       }
 
-      // --- PRIORITY 4: External or General Destination ---
+      // 5. Training & Courses
+      if (normTitle.includes('training') || normTitle.includes('course') || normTitle.includes('bootcamp')) {
+        return {
+          category: 'training',
+          href: (isInternal || normPath === '/' || !href || href === '#') ? '/trainings/' : href,
+          badge: 'Professional Training',
+          title: isGenericTitle ? 'Explore Training & Courses' : linkTitle,
+          subtitle: 'Master Agentic AI & Full-Stack engineering',
+          isInternal: (isInternal || normPath === '/' || !href || href === '#'),
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>`
+        };
+      }
+
+      // 6. Services
+      if (normTitle.includes('service')) {
+        return {
+          category: 'solutions',
+          href: (isInternal || normPath === '/' || !href || href === '#') ? '/services/' : href,
+          badge: 'Engineering Services',
+          title: isGenericTitle ? 'Explore Engineering Services' : linkTitle,
+          subtitle: 'End-to-end AI and cloud delivery',
+          isInternal: (isInternal || normPath === '/' || !href || href === '#'),
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`
+        };
+      }
+
+      // 7. Solutions
+      if (normTitle.includes('solution')) {
+        return {
+          category: 'solutions',
+          href: (isInternal || normPath === '/' || !href || href === '#') ? '/solutions/' : href,
+          badge: 'AI & Cloud Solutions',
+          title: isGenericTitle ? 'Explore AI Solutions & Services' : linkTitle,
+          subtitle: 'Autonomous agents, custom RAG & cloud',
+          isInternal: (isInternal || normPath === '/' || !href || href === '#'),
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`
+        };
+      }
+
+      // 8. Careers & Jobs
+      if (normTitle.includes('career') || normTitle.includes('job') || normTitle.includes('hiring') || normTitle.includes('role')) {
+        return {
+          category: 'careers',
+          href: (isInternal || normPath === '/' || !href || href === '#') ? '/career/' : href,
+          badge: 'Join Sarathi AI',
+          title: isGenericTitle ? 'View Open Roles & Careers' : linkTitle,
+          subtitle: 'Grow with our innovative AI engineering team',
+          isInternal: (isInternal || normPath === '/' || !href || href === '#'),
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`
+        };
+      }
+
+      // --- PRIORITY 3: Context Preceding Link ---
+      // 1. Consultation Context
+      if (
+        normText.includes('consultation') ||
+        normText.includes('book a call') ||
+        normText.includes('schedule a call') ||
+        normText.includes('book a consultation') ||
+        normText.includes('schedule a consultation') ||
+        normText.includes('book a meeting')
+      ) {
+        return {
+          category: 'consultation',
+          href: (isInternal || normPath === '/' || !href || href === '#') ? '/book-consultation/' : href,
+          badge: 'Complimentary Consultation',
+          title: isGenericTitle ? 'Book a Consultation' : linkTitle,
+          subtitle: 'Schedule a 30-min strategy & feasibility call',
+          isInternal: (isInternal || normPath === '/' || !href || href === '#'),
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`
+        };
+      }
+
+      // 2. About Context
+      if (normText.includes('about page') || normText.includes('about us') || normText.includes('who we are')) {
+        return {
+          category: 'about',
+          href: (isInternal || normPath === '/' || !href || href === '#') ? '/about/' : href,
+          badge: 'About Sarathi AI',
+          title: isGenericTitle ? 'About Sarathi AI Labs' : linkTitle,
+          subtitle: 'Who we are, our mission & leadership',
+          isInternal: (isInternal || normPath === '/' || !href || href === '#'),
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`
+        };
+      }
+
+      // 3. Contact Context
+      if (normText.includes('contact page') || normText.includes('reach us') || normText.includes('get in touch') || normText.includes('channels:')) {
+        return {
+          category: 'contact',
+          href: (isInternal || normPath === '/' || !href || href === '#') ? '/contact/' : href,
+          badge: 'Direct Connect',
+          title: isGenericTitle ? 'Contact Us Directly' : linkTitle,
+          subtitle: 'Call, email or visit our office',
+          isInternal: (isInternal || normPath === '/' || !href || href === '#'),
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>`
+        };
+      }
+
+      // 4. Blog Context
+      if (normText.includes('our blog') || normText.includes('latest articles') || normText.includes('check blogs') || normText.includes('check our blog') || normText.includes('read our blog')) {
+        return {
+          category: 'blog',
+          href: (isInternal || normPath === '/' || !href || href === '#') ? '/blog/' : href,
+          badge: 'AI Insights & Blog',
+          title: isGenericTitle ? 'Explore Blog & Insights' : linkTitle,
+          subtitle: 'Read latest AI trends & engineering articles',
+          isInternal: (isInternal || normPath === '/' || !href || href === '#'),
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line></svg>`
+        };
+      }
+
+      // --- PRIORITY 4: External Destination ---
       if (!isInternal && href && href !== '#') {
         let domain = '';
         try { domain = new URL(href).hostname.replace(/^www\./i, ''); } catch (e) {}
@@ -529,15 +627,15 @@
         };
       }
 
-      // --- PRIORITY 5: Default Fallback ---
+      // --- PRIORITY 5: Default Internal Fallback (Homepage / General) ---
       return {
         category: 'about',
-        href: isInternal ? (normPath.startsWith('/') ? href : '/about/') : href,
-        badge: 'About Sarathi AI',
-        title: isGenericTitle ? 'About Sarathi AI Labs' : linkTitle,
-        subtitle: 'Who we are, our mission & leadership',
-        isInternal,
-        icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`
+        href: isInternal ? (normPath && normPath !== '/' ? href : '/') : (href || '/'),
+        badge: 'Sarathi AI Labs',
+        title: isGenericTitle ? 'Visit Sarathi AI Labs' : linkTitle,
+        subtitle: 'AI-first solutions & intelligent automation',
+        isInternal: true,
+        icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>`
       };
     }
 
@@ -2984,6 +3082,13 @@
 
         const link = e.target.closest('a[href]');
         if (link) {
+          const href = link.getAttribute('href');
+          if (href === '#consultation' && !document.getElementById('consultation')) {
+            e.preventDefault();
+            try { safeStorage.setItem(CONFIG.storageKeyOpen, 'true'); } catch (err) {}
+            window.location.href = '/book-consultation/';
+            return;
+          }
           const target = link.getAttribute('target');
           if (!target || target === '_self') {
             try {
@@ -2993,6 +3098,15 @@
         }
       });
     }
+
+    // Global interceptor for any #consultation CTA link on page
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a[href="#consultation"]');
+      if (link && !document.getElementById('consultation')) {
+        e.preventDefault();
+        window.location.href = '/book-consultation/';
+      }
+    });
 
     // Render Initial State
     renderChatHistory();

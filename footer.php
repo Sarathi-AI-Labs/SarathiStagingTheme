@@ -177,8 +177,8 @@ if ( empty( $footer_cta_description ) && '' !== $footer_cta_description ) {
 if ( empty( $footer_cta_button_text ) && '' !== $footer_cta_button_text ) {
 	$footer_cta_button_text = 'Book Now';
 }
-if ( empty( $footer_cta_button_url ) && '' !== $footer_cta_button_url ) {
-	$footer_cta_button_url = '#';
+if ( empty( $footer_cta_button_url ) ) {
+	$footer_cta_button_url = '/book-consultation/';
 }
 
 // Copyright text

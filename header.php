@@ -102,7 +102,7 @@ $header_cta = get_field('header_consultation_cta', 'option');
 				</nav>
 				<?php
 				// Safe fallbacks for the CTA button
-				$cta_url = '#consultation';
+				$cta_url = '/book-consultation/';
 				$cta_text = 'Book a Consultation';
 				$cta_target = '_self';
 
